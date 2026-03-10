@@ -1,0 +1,46 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "courses": "Courses",
+    "why": "Why Us",
+    "testimonials": "Testimonials",
+    "contact": "Contact",
+    "formations": "Courses",
+    "inscription": "Apply",
+    "team": "Team",
+    "contactPage": "Contact (Page)"
+  },
+  "pages": {
+    "formations": {
+      "title": "Our Courses",
+      "subtitle": "Hands-on programs to master languages.",
+      "cards": {
+        "english": "General English",
+        "business": "Business English",
+        "chinese": "Chinese (Mandarin)",
+        "spanish": "Spanish",
+        "french": "French (FLE)",
+        "prep": "TOEFL/IELTS Prep"
+      },
+      "cta": "Apply"
+    },
+    "equipe": {
+      "title": "Our Team",
+      "subtitle": "Experienced and passionate trainers.",
+      "roleTrainer": "Trainer",
+      "roleCoordinator": "Coordinator",
+      "roleDirector": "Director"
+    },
+    "contact": {
+      "title": "Contact us",
+      "subtitle": "Got a question? Write to us.",
+      "name": "Full name",
+      "email": "Email",
+      "message": "Your message",
+      "send": "Send",
+      "success": "Message sent successfully!",
+      "error": "Error while sending. Please try again."
+    }
+  }
+}

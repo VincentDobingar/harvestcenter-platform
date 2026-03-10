@@ -1,0 +1,18 @@
+{
+  "home": {
+    "title": "Welcome to Harvest Center",
+    "subtitle": "Language training and personal development center"
+  },
+  "about": {
+    "title": "About Us",
+    "description": "Harvest Center is a place dedicated to language learning and professional training."
+  },
+  "courses": {
+    "title": "Our Courses",
+    "description": "We offer courses in English, Chinese, Spanish, French, and more."
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Have questions? Send us a message."
+  }
+}

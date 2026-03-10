@@ -1,0 +1,46 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "courses": "Formations",
+    "why": "Pourquoi nous",
+    "testimonials": "Témoignages",
+    "contact": "Contact",
+    "formations": "Formations",
+    "inscription": "Inscription",
+    "team": "Équipe",
+    "contactPage": "Contact (Page)"
+  },
+  "pages": {
+    "formations": {
+      "title": "Nos Formations",
+      "subtitle": "Des programmes pratiques pour maîtriser les langues.",
+      "cards": {
+        "english": "Anglais Général",
+        "business": "Anglais Professionnel",
+        "chinese": "Chinois (Mandarin)",
+        "spanish": "Espagnol",
+        "french": "Français (FLE)",
+        "prep": "Préparation TOEFL/IELTS"
+      },
+      "cta": "S'inscrire"
+    },
+    "equipe": {
+      "title": "Notre Équipe",
+      "subtitle": "Des formateurs expérimentés et passionnés.",
+      "roleTrainer": "Formateur·rice",
+      "roleCoordinator": "Coordinateur·rice",
+      "roleDirector": "Directeur·trice"
+    },
+    "contact": {
+      "title": "Nous contacter",
+      "subtitle": "Une question ? Écrivez-nous.",
+      "name": "Nom complet",
+      "email": "Email",
+      "message": "Votre message",
+      "send": "Envoyer",
+      "success": "Message envoyé avec succès !",
+      "error": "Erreur lors de l'envoi. Veuillez réessayer."
+    }
+  }
+}
