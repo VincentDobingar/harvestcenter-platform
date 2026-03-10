@@ -1,0 +1,18 @@
+{
+  "home": {
+    "title": "Bienvenue au Harvest Center",
+    "subtitle": "Centre de formation en langues et développement personnel"
+  },
+  "about": {
+    "title": "À propos de nous",
+    "description": "Harvest Center est un établissement dédié à l'apprentissage des langues et à la formation professionnelle."
+  },
+  "courses": {
+    "title": "Nos Formations",
+    "description": "Nous offrons des cours en anglais, chinois, espagnol, français et plus encore."
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "subtitle": "Vous avez des questions ? Envoyez-nous un message."
+  }
+}

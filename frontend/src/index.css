@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+/* Déclare la couleur du logo comme token Tailwind v4 */
+@theme {
+  --color-brand: #1F75BB;
+  --color-brand-700: #155b94;
+  --color-brand-800: #0d4c80;
+}
+
+/* ——— Base ——— */
+@layer base {
+  /* Titres en bleu du logo */
+  h1, h2, h3, h4 { @apply text-brand; }
+
+  /* NE PAS styliser tous les <a> globalement, ça casse la nav */
+  /* a { ... }  ← supprimé */
+
+  /* Focus des champs en brand */
+  input:focus,
+  select:focus,
+  textarea:focus { @apply ring-2 ring-brand outline-none; }
+
+  /* Swiper : couleur du thème */
+  :root { --swiper-theme-color: #1F75BB; }
+}
+
+/* ——— Helpers réutilisables ——— */
+@layer components {
+  .btn-brand { @apply inline-flex items-center justify-center rounded-xl bg-brand text-white px-4 py-2 font-semibold hover:bg-brand-700 transition; }
+  .btn-outline-brand { @apply inline-flex items-center justify-center rounded-xl border border-brand text-brand px-4 py-2 font-semibold hover:bg-brand/5 transition; }
+  .link-brand { @apply text-brand hover:underline; }
+  .badge-brand { @apply inline-flex items-center gap-1 text-xs bg-brand/10 text-brand rounded-full px-2 py-0.5; }
+  .card-title { @apply text-brand font-semibold; }
+}
+
+body {
+  background-color: #f3f4f6;
+}

@@ -1,0 +1,5 @@
+{
+  "API_BASE_URL": "https://harvestcentertd.org/api",
+  "API_PREFIX": "/api",
+  "MOCK_DASHBOARD": false
+}

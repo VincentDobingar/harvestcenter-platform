@@ -1,0 +1,72 @@
+{
+  "info": {
+    "name": "HarvestCenter API - Complete",
+    "_postman_id": "harvestcenter-full",
+    "description": "Collection complète pour tester toutes les routes HarvestCenter avec JWT et rôle",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": {"mode":"raw","raw":"{\"email\":\"student@example.com\",\"password\":\"pass123\",\"role\":\"student\"}"},
+            "url":{"raw":"http://localhost:5000/api/auth/register","protocol":"http","host":["localhost"],"port":"5000","path":["api","auth","register"] }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method":"POST",
+            "header":[{"key":"Content-Type","value":"application/json"}],
+            "body":{"mode":"raw","raw":"{\"email\":\"student@example.com\",\"password\":\"pass123\"}"},
+            "url":{"raw":"http://localhost:5000/api/auth/login","protocol":"http","host":["localhost"],"port":"5000","path":["api","auth","login"]}
+          },
+          "event":[
+            {
+              "listen":"test",
+              "script":{"exec":["var jsonData = pm.response.json();","pm.environment.set(\"token\", jsonData.token || jsonData.access_token);"]}
+            }
+          ]
+        },
+        {
+          "name": "Me",
+          "request": {
+            "method":"GET",
+            "header":[{"key":"Authorization","value":"Bearer {{token}}"}],
+            "url":{"raw":"http://localhost:5000/api/auth/me","protocol":"http","host":["localhost"],"port":"5000","path":["api","auth","me"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "SuperAdmin",
+      "item": [
+        {
+          "name": "Dashboard",
+          "request": {
+            "method":"GET",
+            "header":[{"key":"Authorization","value":"Bearer {{token}}"}],
+            "url":{"raw":"http://localhost:5000/api/superadmin/dashboard","protocol":"http","host":["localhost"],"port":"5000","path":["api","superadmin","dashboard"]}
+          },
+          "event":[
+            {"listen":"test","script":{"exec":["pm.test(\"Status is 200\", function () { pm.response.to.have.status(200); });"]}}
+          ]
+        },
+        {
+          "name": "Create News",
+          "request": {
+            "method":"POST",
+            "header":[{"key":"Authorization","value":"Bearer {{token}}"}],
+            "body":{"mode":"formdata","formdata":[{"key":"title","value":"Titre News","type":"text"},{"key":"content","value":"Contenu news","type":"text"}]},
+            "url":{"raw":"http://localhost:5000/api/superadmin/news","protocol":"http","host":["localhost"],"port":"5000","path":["api","superadmin","news"]}
+          }
+        }
+      ]
+    }
+  ]
+}

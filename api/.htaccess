@@ -1,0 +1,22 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home2/sc2djem5820/public_html/api"
+PassengerBaseURI "/"
+PassengerNodejs "/home2/sc2djem5820/nodevenv/public_html/api/20/bin/node"
+PassengerAppType node
+PassengerStartupFile server.js
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+
+Options -MultiViews
+RewriteEngine On
+
+<IfModule mod_headers.c>
+  SetEnvIf Origin "^https://(www\.)?harvestcentertd\.org$" ACAO=$0
+
+  Header always set Access-Control-Allow-Origin "%{ACAO}e" env=ACAO
+  Header always set Access-Control-Allow-Credentials "true" env=ACAO
+  Header always set Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS" env=ACAO
+  Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With" env=ACAO
+  Header always set Vary "Origin"
+</IfModule>
+
+# Laisser Passenger/Node gérer les routes
