@@ -1,18 +1,17 @@
 // src/pages/admin/AdminCourseAssign.jsx
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import api from "@/utils/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 
-/**
- * AdminCourseAssign
- * Props:
- * - courseId
- * - courseTitle
- * - onClose()
- * - onAssign(courseId, teacherId)  -> handler called after successful assignment
- */
-export default function AdminCourseAssign({ courseId, courseTitle, onClose = () => {}, onAssign = () => {} }) {
+export default function AdminCourseAssign({
+  courseId,
+  courseTitle,
+  onClose = () => {},
+  onAssign = () => {},
+}) {
+  const { t } = useTranslation();
   const [teachers, setTeachers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -28,27 +27,30 @@ export default function AdminCourseAssign({ courseId, courseTitle, onClose = () 
     setError(null);
     try {
       const res = await api.get("/api/admin/teachers");
-      // backend returns array
-      setTeachers(res.data ?? []);
-      if ((res.data ?? []).length > 0) setSelected((res.data ?? [])[0].id);
+      const rows = res.data ?? [];
+      setTeachers(rows);
+      if (rows.length > 0) setSelected(rows[0].id);
     } catch (err) {
       console.error("fetchTeachers error", err);
-      setError("Impossible de charger la liste des formateurs.");
+      setError(t("adminCourseAssign.errors.load"));
     } finally {
       setLoading(false);
     }
   }
 
   async function handleAssign() {
-    if (!selected) return setError("Choisir un formateur.");
+    if (!selected) return setError(t("adminCourseAssign.errors.choose"));
     setSubmitting(true);
     setError(null);
+
     try {
-      await api.post(`/api/admin/courses/${courseId}/assign`, { teacher_id: Number(selected) });
+      await api.post(`/api/admin/courses/${courseId}/assign`, {
+        teacher_id: Number(selected),
+      });
       onAssign(courseId, selected);
     } catch (err) {
       console.error("assign error", err);
-      setError(err?.response?.data?.error || "Erreur lors de l'assignation.");
+      setError(err?.response?.data?.error || t("adminCourseAssign.errors.assign"));
     } finally {
       setSubmitting(false);
     }
@@ -59,31 +61,44 @@ export default function AdminCourseAssign({ courseId, courseTitle, onClose = () 
       <div className="w-full max-w-xl">
         <Card>
           <CardHeader>
-            Assigner un formateur — {courseTitle || `Cours #${courseId}`}
+            {t("adminCourseAssign.title")} — {courseTitle || `${t("adminCourseAssign.course")} #${courseId}`}
           </CardHeader>
+
           <CardContent>
             {loading ? (
-              <div>Chargement des formateurs…</div>
+              <div>{t("adminCourseAssign.loading")}</div>
             ) : (
               <>
-                {error && <div className="mb-3 text-sm text-red-600">{error}</div>}
+                {error && (
+                  <div className="mb-3 text-sm text-red-600">{error}</div>
+                )}
+
                 <div className="mb-3">
-                  <label className="block text-sm mb-1">Choisir un formateur</label>
+                  <label className="block text-sm mb-1">
+                    {t("adminCourseAssign.chooseTeacher")}
+                  </label>
+
                   <select
                     className="w-full border rounded p-2"
                     value={selected ?? ""}
                     onChange={(e) => setSelected(e.target.value)}
                   >
-                    <option value="" disabled>-- Sélectionner --</option>
-                    {teachers.map((t) => (
-                      <option key={t.id} value={t.id}>
-                        {t.full_name ?? t.name ?? t.email ?? `#${t.id}`}
+                    <option value="" disabled>
+                      {t("adminCourseAssign.select")}
+                    </option>
+                    {teachers.map((teacher) => (
+                      <option key={teacher.id} value={teacher.id}>
+                        {teacher.full_name ||
+                          teacher.name ||
+                          teacher.email ||
+                          `#${teacher.id}`}
                       </option>
                     ))}
                   </select>
                 </div>
+
                 <div className="text-xs text-gray-500">
-                  Si la liste est vide, vérifie que des utilisateurs ont bien le rôle formateur.
+                  {t("adminCourseAssign.helper")}
                 </div>
               </>
             )}
@@ -91,9 +106,20 @@ export default function AdminCourseAssign({ courseId, courseTitle, onClose = () 
 
           <CardFooter>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={onClose} disabled={submitting}>Annuler</Button>
-              <Button onClick={handleAssign} disabled={submitting || loading}>
-                {submitting ? "Assignation…" : "Assigner"}
+              <Button
+                variant="outline"
+                onClick={onClose}
+                disabled={submitting}
+              >
+                {t("common.cancel")}
+              </Button>
+              <Button
+                onClick={handleAssign}
+                disabled={submitting || loading}
+              >
+                {submitting
+                  ? t("adminCourseAssign.assigning")
+                  : t("adminCourseAssign.assign")}
               </Button>
             </div>
           </CardFooter>

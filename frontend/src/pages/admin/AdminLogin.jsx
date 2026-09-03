@@ -1,50 +1,68 @@
 // 📁 /pages/admin/AdminLogin.jsx
 import { useState } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
-import api from "@/utils/api";
+import { Link, useLocation } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
+import { useAuth } from "@/context/AuthContext";
 
 export default function AdminLogin() {
-  const [form, setForm] = useState({ email: "", password: "", remember: true });
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+    remember: true,
+  });
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/admin";
+  const { login, gotoByRole } = useAuth();
 
-  const onChange = (e) => {
+  const from = location.state?.from?.pathname;
+
+  function onChange(e) {
     const { name, type, checked, value } = e.target;
-    setForm((f) => ({ ...f, [name]: type === "checkbox" ? checked : value }));
-  };
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  }
 
-  const onSubmit = async (e) => {
+  async function onSubmit(e) {
     e.preventDefault();
-    if (!form.email || !form.password) {
+
+    if (!form.email.trim() || !form.password.trim()) {
       toast.error("Email et mot de passe requis.");
       return;
     }
+
     try {
       setLoading(true);
-      const { data } = await api.post("/admin/login", {
-        email: form.email,
-        motdepasse: form.password,
-      });
 
-      // data: { token, role, ... }
-      const storage = form.remember ? localStorage : sessionStorage;
-      storage.setItem("adminToken", data?.token);
-      if (data?.role) storage.setItem("adminRole", data.role);
+      const loggedUser = await login(
+        form.email.trim().toLowerCase(),
+        form.password
+      );
 
       toast.success("Connexion réussie !");
-      navigate(from, { replace: true });
+
+      if (from) {
+        window.location.href = from;
+        return;
+      }
+
+      gotoByRole(loggedUser);
     } catch (err) {
-      console.error(err);
-      const msg = err?.response?.data?.message || "Échec de connexion.";
-      toast.error(msg);
+      console.error("Admin login error:", err);
+
+      const message =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Échec de connexion.";
+
+      toast.error(message);
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
@@ -53,8 +71,14 @@ export default function AdminLogin() {
         className="w-full max-w-md bg-white p-6 rounded-2xl shadow space-y-4"
       >
         <div className="text-center">
-          <img src="/images/logo-harvest.jpg" alt="Harvest Center" className="h-12 mx-auto mb-2" />
-          <h1 className="text-xl font-semibold text-[#1F75BB]">Espace Admin</h1>
+          <img
+            src="/images/logo-harvest.jpg"
+            alt="Harvest Center"
+            className="h-12 mx-auto mb-2"
+          />
+          <h1 className="text-xl font-semibold text-[#1F75BB]">
+            Espace Admin
+          </h1>
         </div>
 
         <div>
@@ -70,7 +94,9 @@ export default function AdminLogin() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Mot de passe</label>
+          <label className="block text-sm font-medium mb-1">
+            Mot de passe
+          </label>
           <input
             type="password"
             name="password"
@@ -91,7 +117,11 @@ export default function AdminLogin() {
             />
             Se souvenir de moi
           </label>
-          <Link to="/admin/forgot" className="text-sm text-[#1F75BB] hover:underline">
+
+          <Link
+            to="/admin/forgot"
+            className="text-sm text-[#1F75BB] hover:underline"
+          >
             Mot de passe oublié ?
           </Link>
         </div>
