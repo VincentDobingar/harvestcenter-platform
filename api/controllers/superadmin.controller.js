@@ -1,440 +1,513 @@
-import bcrypt from "bcryptjs";
+// controllers/superadmin.controller.js
+import fs from "fs";
+import fsp from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
 import db from "../config/db.js";
 
-/* ================================
-   CREATE ADMIN
-================================ */
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const NEWS_UPLOAD_DIR = path.join(__dirname, "../uploads/news");
 
-export const createAdmin = async (req, res) => {
-  const { first_name, last_name, email, password, role } = req.body;
+function slugify(text = "") {
+  return String(text)
+    .toLowerCase()
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
-  try {
+function normalizeBool(value, defaultValue = true) {
+  if (typeof value === "boolean") return value;
+  if (value === 1 || value === "1" || value === "true") return true;
+  if (value === 0 || value === "0" || value === "false") return false;
+  return defaultValue;
+}
 
-    if (!["admin", "finance", "secretary"].includes(role)) {
-      return res.status(400).json({ message: "Rôle invalide" });
+function splitFullName(fullName = "") {
+  const parts = String(fullName).trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return { first_name: "", last_name: "" };
+  if (parts.length === 1) return { first_name: parts[0], last_name: "" };
+
+  const first_name = parts.shift();
+  const last_name = parts.join(" ");
+  return { first_name, last_name };
+}
+
+async function makeUniqueNewsSlug(title, currentId = null) {
+  const base = slugify(title) || "news";
+  let slug = base;
+  let i = 1;
+
+  while (true) {
+    let sql = "SELECT id FROM news WHERE slug = ?";
+    const params = [slug];
+
+    if (currentId) {
+      sql += " AND id <> ?";
+      params.push(currentId);
     }
 
-    const [existing] = await db.query(
-      "SELECT id FROM users WHERE email=?",
-      [email]
-    );
+    const [rows] = await db.query(sql, params);
+    if (!rows.length) return slug;
 
-    if (existing.length)
-      return res.status(400).json({ message: "Email déjà utilisé" });
+    slug = `${base}-${i}`;
+    i++;
+  }
+}
 
-    const hashedPassword = await bcrypt.hash(password, 12);
+async function deleteLocalNewsImage(imageUrl) {
+  if (!imageUrl || !imageUrl.startsWith("/uploads/news/")) return;
 
-    await db.query(
-      `INSERT INTO users
-       (first_name, last_name, email, password, role, status)
-       VALUES (?, ?, ?, ?, ?, 'active')`,
-      [first_name, last_name, email, hashedPassword, role]
-    );
+  const fileName = path.basename(imageUrl);
+  const fullPath = path.join(NEWS_UPLOAD_DIR, fileName);
 
-    res.status(201).json({
-      message: `${role} créé avec succès`
+  try {
+    if (fs.existsSync(fullPath)) {
+      await fsp.unlink(fullPath);
+    }
+  } catch (error) {
+    console.error("deleteLocalNewsImage error:", error);
+  }
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+export const getSuperAdminStats = async (_req, res) => {
+  try {
+    const [[usersRow]] = await db.query(`SELECT COUNT(*) AS total FROM users`);
+    const [[newsRow]] = await db.query(`SELECT COUNT(*) AS total FROM news`);
+    const [[oppsRow]] = await db.query(`SELECT COUNT(*) AS total FROM opportunities`);
+
+    return res.json({
+      success: true,
+      users: Number(usersRow?.total || 0),
+      news: Number(newsRow?.total || 0),
+      opportunities: Number(oppsRow?.total || 0),
     });
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Erreur création admin" });
+  } catch (error) {
+    console.error("getSuperAdminStats error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Erreur lors du chargement des statistiques.",
+    });
   }
 };
 
-/* ================================
-   ACTIVATE USER
-================================ */
-
-export const activateUser = async (req, res) => {
-  const userId = req.params.id;
-
-  await db.query(
-    "UPDATE users SET status='active' WHERE id=?",
-    [userId]
-  );
-
-  res.json({ message: "Utilisateur activé" });
-};
-
-/* ================================
-   DELETE USER
-================================ */
-
-export const deleteUser = async (req, res) => {
-  const userId = req.params.id;
-
-  await db.query(
-    "DELETE FROM users WHERE id=?",
-    [userId]
-  );
-
-  res.json({ message: "Utilisateur supprimé" });
-};
-
-/* ======================================================
-   SUPERADMIN - GESTION NEWS
-====================================================== */
-
-export const createNews = async (req, res) => {
+/* =========================
+   USERS
+   Compatible avec une table users
+   contenant first_name, last_name, email, role, status
+========================= */
+export const listUsers = async (_req, res) => {
   try {
-    const { title, content, is_active = true } = req.body;
-    
-    if (!title || !content) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Titre et contenu obligatoires" 
+    const [rows] = await db.query(`
+      SELECT
+        id,
+        CONCAT_WS(' ', first_name, last_name) AS name,
+        email,
+        role,
+        CASE WHEN status = 'active' THEN 1 ELSE 0 END AS is_active,
+        created_at
+      FROM users
+      ORDER BY created_at DESC
+    `);
+
+    return res.json({
+      success: true,
+      rows,
+    });
+  } catch (error) {
+    console.error("listUsers error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Erreur lors du chargement des utilisateurs.",
+    });
+  }
+};
+
+export const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const [rows] = await db.query(
+      `
+      SELECT
+        id,
+        CONCAT_WS(' ', first_name, last_name) AS name,
+        email,
+        role,
+        CASE WHEN status = 'active' THEN 1 ELSE 0 END AS is_active,
+        created_at
+      FROM users
+      WHERE id = ?
+      LIMIT 1
+      `,
+      [id]
+    );
+
+    if (!rows.length) {
+      return res.status(404).json({
+        success: false,
+        message: "Utilisateur introuvable.",
       });
     }
 
-    const [result] = await db.query(
-      `INSERT INTO news (title, content, is_active, created_by, created_at) 
-       VALUES (?, ?, ?, ?, NOW())`,
-      [title, content, is_active, req.user?.id || 1]
+    return res.json({
+      success: true,
+      data: rows[0],
+    });
+  } catch (error) {
+    console.error("getUserById error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Erreur lors du chargement de l'utilisateur.",
+    });
+  }
+};
+
+export const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, email, role, is_active } = req.body;
+
+    const [existingRows] = await db.query(
+      `SELECT id FROM users WHERE id = ? LIMIT 1`,
+      [id]
     );
 
-    res.status(201).json({
-      success: true,
-      message: "News créée avec succès",
-      data: { id: result.insertId, title }
-    });
+    if (!existingRows.length) {
+      return res.status(404).json({
+        success: false,
+        message: "Utilisateur introuvable.",
+      });
+    }
 
+    const { first_name, last_name } = splitFullName(name);
+    const status = normalizeBool(is_active, true) ? "active" : "inactive";
+
+    await db.query(
+      `
+      UPDATE users
+      SET
+        first_name = ?,
+        last_name = ?,
+        email = ?,
+        role = ?,
+        status = ?
+      WHERE id = ?
+      `,
+      [
+        first_name || null,
+        last_name || null,
+        email || null,
+        role || "student",
+        status,
+        id,
+      ]
+    );
+
+    return res.json({
+      success: true,
+      message: "Utilisateur mis à jour avec succès.",
+    });
   } catch (error) {
-    console.error('💥 createNews ERROR:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: "Erreur création news" 
+    console.error("updateUser error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Erreur lors de la mise à jour de l'utilisateur.",
     });
   }
 };
 
-/* ======================================================
-   SUPERADMIN - LISTE NEWS (PAGINÉE)
-====================================================== */
-export const getAllNews = async (req, res) => {
+export const deleteUser = async (req, res) => {
   try {
-    const { page = 1, limit = 20, active_only = 'false', search = '' } = req.query;
-    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const { id } = req.params;
 
-    const query = `
-      SELECT n.*, 
-             CONCAT(u.first_name, ' ', u.last_name) as author_name,
-             (SELECT COUNT(*) FROM news WHERE ${active_only === 'true' ? 'is_active = 1' : '1=1'}) as total_count
-      FROM news n 
-      LEFT JOIN users u ON n.created_by = u.id
-      WHERE (n.title LIKE ? OR n.content LIKE ?)
-      ${active_only === 'true' ? 'AND n.is_active = 1' : ''}
-      ORDER BY n.created_at DESC 
-      LIMIT ? OFFSET ?
-    `;
+    const [existingRows] = await db.query(
+      `SELECT id FROM users WHERE id = ? LIMIT 1`,
+      [id]
+    );
 
-    const countQuery = `SELECT COUNT(*) as total FROM news WHERE ${active_only === 'true' ? 'is_active = 1' : '1=1'} AND (title LIKE ? OR content LIKE ?)`; 
-    const [countResult] = await db.query(countQuery, [`%${search}%`, `%${search}%`]);
+    if (!existingRows.length) {
+      return res.status(404).json({
+        success: false,
+        message: "Utilisateur introuvable.",
+      });
+    }
 
-    const [news] = await db.query(query, [`%${search}%`, `%${search}%`, parseInt(limit), offset]);
+    await db.query(`DELETE FROM users WHERE id = ?`, [id]);
 
-    res.json({
+    return res.json({
       success: true,
-      data: news,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        total: countResult[0].total,
-        total_pages: Math.ceil(countResult[0].total / limit)
-      }
+      message: "Utilisateur supprimé avec succès.",
     });
-
   } catch (error) {
-    console.error('💥 getAllNews ERROR:', error);
-    res.status(500).json({ success: false, message: "Erreur liste news" });
+    console.error("deleteUser error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Erreur lors de la suppression de l'utilisateur.",
+    });
   }
 };
 
-/* ======================================================
-   SUPERADMIN - NEWS PAR ID
-====================================================== */
+/* =========================
+   NEWS - ADMIN / SUPERADMIN
+   Compatible avec la table news :
+   title, slug, content, excerpt, image_url, video_url,
+   media_type, is_active, created_by, updated_by, created_at, updated_at
+========================= */
+export const getAllNews = async (_req, res) => {
+  try {
+    const [rows] = await db.query(`
+      SELECT *
+      FROM news
+      ORDER BY created_at DESC
+    `);
+
+    return res.json({
+      success: true,
+      rows,
+    });
+  } catch (error) {
+    console.error("getAllNews error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Erreur lors du chargement des news.",
+    });
+  }
+};
+
 export const getNewsById = async (req, res) => {
   try {
     const { id } = req.params;
-    
-    const [news] = await db.query(
-      `SELECT n.*, 
-              CONCAT(u.first_name, ' ', u.last_name) as author_name,
-              nm.file_name as media_filename
-       FROM news n 
-       LEFT JOIN users u ON n.created_by = u.id
-       LEFT JOIN news_media nm ON n.id = nm.news_id
-       WHERE n.id = ?`,
+
+    const [rows] = await db.query(
+      `
+      SELECT *
+      FROM news
+      WHERE id = ?
+      LIMIT 1
+      `,
       [id]
     );
 
-    if (!news.length) {
-      return res.status(404).json({ success: false, message: "News non trouvée" });
+    if (!rows.length) {
+      return res.status(404).json({
+        success: false,
+        message: "News introuvable.",
+      });
     }
 
-    res.json({
+    return res.json({
       success: true,
-      data: news[0]
+      data: rows[0],
     });
-
   } catch (error) {
-    console.error('💥 getNewsById ERROR:', error);
-    res.status(500).json({ success: false, message: "Erreur news" });
+    console.error("getNewsById error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Erreur lors du chargement de la news.",
+    });
   }
 };
 
-/* ======================================================
-   SUPERADMIN - UPDATE NEWS (avec nouveau média optionnel)
-====================================================== */
+export const createNews = async (req, res) => {
+  try {
+    const {
+      title,
+      content,
+      excerpt = "",
+      is_active = true,
+    } = req.body;
+
+    if (!title || !String(title).trim()) {
+      if (req.file) {
+        await deleteLocalNewsImage(`/uploads/news/${req.file.filename}`);
+      }
+
+      return res.status(400).json({
+        success: false,
+        message: "Le titre est obligatoire.",
+      });
+    }
+
+    const safeTitle = String(title).trim();
+    const slug = await makeUniqueNewsSlug(safeTitle);
+    const image_url = req.file ? `/uploads/news/${req.file.filename}` : null;
+
+    const [result] = await db.query(
+      `
+      INSERT INTO news (
+        title,
+        slug,
+        content,
+        excerpt,
+        image_url,
+        video_url,
+        media_type,
+        is_active,
+        created_by,
+        updated_by,
+        created_at,
+        updated_at
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+      `,
+      [
+        safeTitle,
+        slug,
+        content || "",
+        excerpt || null,
+        image_url,
+        null,
+        image_url ? "image" : "none",
+        normalizeBool(is_active, true) ? 1 : 0,
+        req.user?.id || null,
+        req.user?.id || null,
+      ]
+    );
+
+    return res.status(201).json({
+      success: true,
+      message: "News créée avec succès.",
+      data: {
+        id: result.insertId,
+        slug,
+        image_url,
+      },
+    });
+  } catch (error) {
+    if (req.file) {
+      await deleteLocalNewsImage(`/uploads/news/${req.file.filename}`);
+    }
+
+    console.error("createNews error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Erreur lors de la création de la news.",
+    });
+  }
+};
+
 export const updateNews = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, content, excerpt, is_active } = req.body;
+    const {
+      title,
+      content,
+      excerpt,
+      is_active = true,
+    } = req.body;
 
-    if (!title || !content) {
-      return res.status(400).json({ success: false, message: "Titre et contenu obligatoires" });
-    }
-
-    let media_url = null;
-    let media_type = 'none';
-
-    // Nouveau média uploadé ?
-    if (req.file) {
-      media_url = `/uploads/news/${req.file.filename}`;
-      media_type = req.file.mimetype.startsWith('video/') ? 'video' : 'image';
-      
-      console.log(`📁 Nouveau média: ${req.file.originalname} → ${media_url}`);
-    }
-
-    // Générer nouveau slug
-    const slug = title
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/[\s_-]+/g, '-')
-      .replace(/^-+|-+$/g, '')
-      .substring(0, 100);
-
-    // UPDATE avec média conditionnel
-    const updates = {
-      title, slug, content, excerpt: excerpt || null,
-      is_active: is_active === 'true' || is_active === true,
-      updated_by: req.user?.id || 1,
-      updated_at: new Date()
-    };
-
-    // Ajouter média si uploadé
-    if (media_url) {
-      updates.image_url = media_type === 'image' ? media_url : null;
-      updates.video_url = media_type === 'video' ? media_url : null;
-      updates.media_type = media_type;
-    }
-
-    const [result] = await db.query(
-      `UPDATE news SET ${Object.keys(updates).map(key => `${key} = ?`).join(', ')}
-       WHERE id = ?`,
-      [...Object.values(updates), id]
-    );
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ success: false, message: "News non trouvée" });
-    }
-
-    // Récupérer news mise à jour
-    const [[updatedNews]] = await db.query(
-      `SELECT id, title, slug, excerpt, image_url, video_url, 
-              media_type, is_active, updated_at 
-       FROM news WHERE id = ?`,
+    const [existingRows] = await db.query(
+      `SELECT * FROM news WHERE id = ? LIMIT 1`,
       [id]
     );
 
-    res.json({
-      success: true,
-      message: "✅ News mise à jour",
-      data: updatedNews
-    });
+    if (!existingRows.length) {
+      if (req.file) {
+        await deleteLocalNewsImage(`/uploads/news/${req.file.filename}`);
+      }
 
-  } catch (error) {
-    console.error('💥 updateNews ERROR:', error);
-    
-    // Nettoyer nouveau fichier si erreur
-    if (req.file) {
-      const fs = await import('fs');
-      const path = await import('path');
-      const filePath = path.join(process.cwd(), 'public', req.file.path);
-      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+      return res.status(404).json({
+        success: false,
+        message: "News introuvable.",
+      });
     }
 
-    res.status(500).json({ success: false, message: "Erreur mise à jour news" });
+    const existing = existingRows[0];
+    const safeTitle = title?.trim() || existing.title;
+    const slug = await makeUniqueNewsSlug(safeTitle, id);
+
+    let image_url = existing.image_url;
+    if (req.file) {
+      await deleteLocalNewsImage(existing.image_url);
+      image_url = `/uploads/news/${req.file.filename}`;
+    }
+
+    await db.query(
+      `
+      UPDATE news
+      SET
+        title = ?,
+        slug = ?,
+        content = ?,
+        excerpt = ?,
+        image_url = ?,
+        media_type = ?,
+        is_active = ?,
+        updated_by = ?,
+        updated_at = NOW()
+      WHERE id = ?
+      `,
+      [
+        safeTitle,
+        slug,
+        content ?? existing.content,
+        excerpt ?? existing.excerpt,
+        image_url,
+        image_url ? "image" : "none",
+        normalizeBool(is_active, existing.is_active) ? 1 : 0,
+        req.user?.id || null,
+        id,
+      ]
+    );
+
+    return res.json({
+      success: true,
+      message: "News mise à jour avec succès.",
+      data: {
+        id: Number(id),
+        slug,
+        image_url,
+      },
+    });
+  } catch (error) {
+    if (req.file) {
+      await deleteLocalNewsImage(`/uploads/news/${req.file.filename}`);
+    }
+
+    console.error("updateNews error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Erreur lors de la mise à jour de la news.",
+    });
   }
 };
 
-/* ======================================================
-   SUPERADMIN - SUPPRIMER NEWS
-====================================================== */
 export const deleteNews = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Récupérer news pour supprimer média
-    const [[news]] = await db.query(
-      `SELECT image_url, video_url FROM news WHERE id = ?`,
+    const [existingRows] = await db.query(
+      `SELECT id, image_url FROM news WHERE id = ? LIMIT 1`,
       [id]
     );
 
-    if (!news) {
-      return res.status(404).json({ success: false, message: "News non trouvée" });
+    if (!existingRows.length) {
+      return res.status(404).json({
+        success: false,
+        message: "News introuvable.",
+      });
     }
 
-    // Supprimer fichiers média
-    if (news.image_url || news.video_url) {
-      const fs = await import('fs');
-      const path = await import('path');
-      
-      const mediaPath = path.join(process.cwd(), 'public', news.image_url || news.video_url);
-      if (fs.existsSync(mediaPath)) {
-        fs.unlinkSync(mediaPath);
-        console.log(`🗑️ Média supprimé: ${mediaPath}`);
-      }
-    }
+    await deleteLocalNewsImage(existingRows[0].image_url);
+    await db.query(`DELETE FROM news WHERE id = ?`, [id]);
 
-    // Supprimer news + médias liés
-    await db.query(
-      `DELETE FROM news_media WHERE news_id = ?`,
-      [id]
-    );
-    const [result] = await db.query(`DELETE FROM news WHERE id = ?`, [id]);
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ success: false, message: "News non supprimée" });
-    }
-
-    res.json({
+    return res.json({
       success: true,
-      message: "✅ News supprimée définitivement",
-      data: { deleted_id: id }
+      message: "News supprimée avec succès.",
     });
-
   } catch (error) {
-    console.error('💥 deleteNews ERROR:', error);
-    res.status(500).json({ success: false, message: "Erreur suppression news" });
-  }
-};
-
-
-/* ======================================================
-   SUPERADMIN DASHBOARD - STATISTIQUES RÉELLES
-====================================================== */
-
-export const getSuperAdminStats = async (req, res) => {
-  try {
-    const now = new Date();
-    const last30Days = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-    
-    // 1. USERS TOTAUX + PAR RÔLE
-    const [[totalUsers]] = await db.query("SELECT COUNT(*) as count FROM users");
-    const [[students]] = await db.query("SELECT COUNT(*) as count FROM users WHERE role='student'");
-    const [[teachers]] = await db.query("SELECT COUNT(*) as count FROM users WHERE role='teacher'");
-    const [[admins]] = await db.query("SELECT COUNT(*) as count FROM users WHERE role IN ('admin', 'superadmin')");
-
-    // 2. FORMATIONS
-    const [[totalFormations]] = await db.query("SELECT COUNT(*) as count FROM formations");
-    const [[activeFormations]] = await db.query("SELECT COUNT(*) as count FROM formations WHERE status='active'");
-
-    // 3. INSCRIPTIONS (30 derniers jours)
-    const [[recentInscriptions]] = await db.query(`
-      SELECT COUNT(*) as count 
-      FROM inscriptions 
-      WHERE created_at >= ?
-    `, [last30Days]);
-
-    // 4. PAIEMENTS
-    const [[totalPayments]] = await db.query("SELECT COUNT(*) as count, SUM(amount) as total FROM payments WHERE status='completed'");
-    const [[pendingPayments]] = await db.query("SELECT COUNT(*) as count FROM payments WHERE status='pending'");
-
-    // 5. NOTES MOYENNE
-    const [[avgGrade]] = await db.query(`
-      SELECT AVG(grade) as average 
-      FROM grades 
-      WHERE grade IS NOT NULL
-    `);
-
-    // 6. UTILISATEURS ACTIFS (connexions récentes)
-    const [[activeUsers]] = await db.query(`
-      SELECT COUNT(DISTINCT user_id) as count 
-      FROM login_logs 
-      WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-    `);
-
-    // 7. REVENUS MENSUELS
-    const [[monthlyRevenue]] = await db.query(`
-      SELECT SUM(amount) as total 
-      FROM payments 
-      WHERE status='completed' 
-      AND MONTH(created_at) = MONTH(NOW())
-      AND YEAR(created_at) = YEAR(NOW())
-    `);
-
-    const stats = {
-      // Utilisateurs
-      users: {
-        total: totalUsers.count,
-        students: students.count,
-        teachers: teachers.count,
-        admins: admins.count,
-        active_7d: activeUsers.count
-      },
-      
-      // Formations
-      formations: {
-        total: totalFormations.count,
-        active: activeFormations.count
-      },
-      
-      // Inscriptions
-      inscriptions: {
-        total_30d: recentInscriptions.count
-      },
-      
-      // Paiements
-      payments: {
-        total: totalPayments.count,
-        total_amount: parseFloat(totalPayments.total || 0),
-        monthly_revenue: parseFloat(monthlyRevenue.total || 0),
-        pending: pendingPayments.count
-      },
-      
-      // Performance académique
-      grades: {
-        average: parseFloat(avgGrade.average || 0).toFixed(2)
-      },
-      
-      // Métriques globales
-      metrics: {
-        total_revenue: parseFloat(totalPayments.total || 0),
-        avg_grade: parseFloat(avgGrade.average || 0).toFixed(2),
-        user_growth_30d: 12.5, // À calculer si besoin
-        completion_rate: 78.3   // À calculer si besoin
-      },
-      
-      // Période
-      period: {
-        from: last30Days.toISOString().split('T')[0],
-        to: now.toISOString().split('T')[0]
-      }
-    };
-
-    res.json({
-      success: true,
-      data: stats,
-      timestamp: new Date().toISOString()
-    });
-
-  } catch (error) {
-    console.error('💥 SuperAdminStats ERROR:', error);
-    res.status(500).json({
+    console.error("deleteNews error:", error);
+    return res.status(500).json({
       success: false,
-      message: 'Erreur statistiques',
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+      message: "Erreur lors de la suppression de la news.",
     });
   }
 };

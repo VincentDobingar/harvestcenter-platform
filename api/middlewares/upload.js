@@ -1,50 +1,69 @@
-import multer from 'multer';
-import path from 'path';
-import { fileURLToPath } from 'url';
+// middlewares/upload.js
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const uploadDir = path.join(__dirname, "../uploads/news");
+
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/uploads/news/');
+  destination: (_req, _file, cb) => {
+    cb(null, uploadDir);
   },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const ext = path.extname(file.originalname);
-    cb(null, 'news-' + uniqueSuffix + ext);
-  }
+  filename: (_req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const ext = path.extname(file.originalname || "").toLowerCase();
+    cb(null, `news-${uniqueSuffix}${ext}`);
+  },
 });
 
-const fileFilter = (req, file, cb) => {
-  // Autoriser images et vidéos
-  const allowedTypes = /jpeg|jpg|png|gif|webp|mp4|avi|mov|webm/;
-  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = allowedTypes.test(file.mimetype);
+const mediaFileFilter = (_req, file, cb) => {
+  const allowedMimeTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+    "video/mp4",
+    "video/avi",
+    "video/quicktime", // mov
+    "video/webm",
+  ];
 
-  if (extname && mimetype) {
+  if (allowedMimeTypes.includes(file.mimetype)) {
     return cb(null, true);
-  } else {
-    cb(new Error('Type de fichier non autorisé. Images/vidéos seulement.'), false);
   }
+
+  cb(new Error("Type de fichier non autorisé. Images/vidéos seulement."));
 };
 
-const limits = {
-  fileSize: 50 * 1024 * 1024 // 50MB max
+const imageOnlyFilter = (_req, file, cb) => {
+  if (file.mimetype?.startsWith("image/")) {
+    return cb(null, true);
+  }
+
+  cb(new Error("Images seulement."));
 };
 
-export const uploadNewsMedia = multer({ 
-  storage, 
-  fileFilter, 
-  limits 
-}).single('media');
-
-export const uploadNewsImages = multer({ 
-  storage, 
-  fileFilter: (req, file, cb) => {
-    const imageTypes = /jpeg|jpg|png|gif|webp/;
-    if (imageTypes.test(file.mimetype)) cb(null, true);
-    else cb(new Error('Images seulement'), false);
+export const uploadNewsMedia = multer({
+  storage,
+  fileFilter: mediaFileFilter,
+  limits: {
+    fileSize: 50 * 1024 * 1024,
   },
-  limits: { fileSize: 10 * 1024 * 1024 } // 10MB images
-});
+}).single("image");
+
+export const uploadNewsImages = multer({
+  storage,
+  fileFilter: imageOnlyFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024,
+  },
+}).single("image");
