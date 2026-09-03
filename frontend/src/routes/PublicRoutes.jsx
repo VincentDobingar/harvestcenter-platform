@@ -1,6 +1,5 @@
+// routes/PublicRoutes.jsx
 import React, { lazy, Suspense } from "react";
-import { Navigate } from "react-router-dom";
-
 import MainLayout from "@/layouts/MainLayout";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import ProtectedRoute from "@/routes/ProtectedRoute";
@@ -15,10 +14,15 @@ import About from "@/pages/About";
 import Contact from "@/pages/public/Contact";
 import Courses from "@/pages/public/Formations";
 import Equipe from "@/pages/Equipe";
-import Bourses from "@/pages/Bourses";
+import Inscription from "@/pages/Inscription";
 import Galerie from "@/pages/public/Galerie";
 import NotFound from "@/pages/NotFound";
 import Account from "@/pages/auth/Account";
+import Unauthorized from "@/pages/Unauthorized";
+import Opportunities from "@/pages/Opportunities";
+import Actualites from "@/pages/Actualites";
+import ActualiteDetail from "@/pages/ActualiteDetail";
+import OpportunityDetail from "@/pages/OpportunityDetail"; 
 
 // Dashboard core
 const DashboardIndex = lazy(() => import("@/pages/dashboard/DashboardIndex"));
@@ -42,17 +46,20 @@ export const publicRoutes = [
       { index: true, element: <Home /> },
       { path: "about", element: <About /> },
       { path: "equipe", element: <Equipe /> },
-      { path: "bourses", element: <Bourses /> },
+      { path: "opportunites", element: <Opportunities /> },
+      { path: "actualites", element: <Actualites /> },
+      { path: "actualites/opportunites/:slug", element: <OpportunityDetail /> },
+      { path: "actualites/:type/:slug", element: <ActualiteDetail /> },
       { path: "galerie", element: <Galerie /> },
       { path: "contact", element: <Contact /> },
       { path: "courses", element: <Courses /> },
+      { path: "inscription", element: <Inscription /> },
 
       { path: "account", element: <Account /> },
       { path: "login", element: <Account /> },
       { path: "register", element: <Account /> },
 
       {
-        path: "",
         element: <ProtectedRoute />,
         children: [
           {
@@ -60,7 +67,6 @@ export const publicRoutes = [
             element: <DashboardLayout />,
             children: [
               { index: true, element: withSuspense(DashboardIndex) },
-
               { path: "profile", element: withSuspense(Profile) },
               { path: "my-courses", element: withSuspense(MyCourses) },
               { path: "assignments", element: withSuspense(Assignments) },
@@ -76,6 +82,7 @@ export const publicRoutes = [
         ],
       },
 
+      { path: "unauthorized", element: <Unauthorized /> },
       { path: "*", element: <NotFound /> },
     ],
   },

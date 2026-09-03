@@ -3,8 +3,10 @@ import RequireRole from "@/components/RequireRole";
 import PageLoader from "@/components/ui/PageLoader";
 import { Suspense } from "react";
 
+import Assignments from "@/pages/Assignments";
+import AssignmentDetail from "@/pages/AssignmentDetail";
+
 const StudentDashboard = lazy(() => import("@/pages/student/StudentDashboard"));
-const StudentAssignments = lazy(() => import("@/pages/student/StudentAssignments"));
 const StudentPayments = lazy(() => import("@/pages/student/StudentPayments"));
 const Inscription = lazy(() => import("@/pages/Inscription"));
 
@@ -27,7 +29,15 @@ export const studentRoutes = [
     path: "student/assignments",
     element: (
       <RequireRole allowed={["student", "etudiant"]}>
-        {withSuspense(StudentAssignments)}
+        <Assignments />
+      </RequireRole>
+    ),
+  },
+  {
+    path: "student/assignments/:id",
+    element: (
+      <RequireRole allowed={["student", "etudiant"]}>
+        <AssignmentDetail />
       </RequireRole>
     ),
   },
