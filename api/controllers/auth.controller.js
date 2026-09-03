@@ -226,3 +226,116 @@ export const me = async (req, res) => {
     return res.status(500).json({ message: "Erreur serveur" });
   }
 };
+
+export const refreshToken = async (req, res) => {
+  const token = req.cookies?.refresh_token;
+
+  if (!token) {
+    return res.status(401).json({ message: "Session expirée" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+
+    const [rows] = await db.query(
+      `SELECT * FROM refresh_tokens WHERE token=? AND user_id=? AND expires_at > NOW()`,
+      [token, decoded.id]
+    );
+
+    if (!rows.length) {
+      return res.status(401).json({ message: "Session invalide" });
+    }
+
+    const [userRows] = await db.query(
+      "SELECT * FROM users WHERE id=?",
+      [decoded.id]
+    );
+
+    const user = userRows[0];
+
+    if (!user || user.status !== "active") {
+      return res.status(403).json({ message: "Compte non actif" });
+    }
+
+    const normalizedUser = {
+      ...user,
+      role: normalizeRole(user.role),
+    };
+
+    const accessToken = generateAccessToken(normalizedUser);
+
+    res.cookie("access_token", accessToken, {
+      ...cookieOptions,
+      maxAge: ACCESS_EXPIRES,
+    });
+
+    return res.json({ message: "Session rafraîchie" });
+  } catch (err) {
+    console.error("REFRESH TOKEN ERROR:", err);
+    return res.status(401).json({ message: "Session invalide" });
+  }
+};
+
+export const logout = async (req, res) => {
+  const token = req.cookies?.refresh_token;
+
+  try {
+    if (token) {
+      await db.query("DELETE FROM refresh_tokens WHERE token=?", [token]);
+    }
+
+    res.clearCookie("access_token", cookieOptions);
+    res.clearCookie("refresh_token", cookieOptions);
+
+    return res.json({ message: "Déconnexion réussie" });
+  } catch (err) {
+    console.error("LOGOUT ERROR:", err);
+    return res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+
+export const sessions = async (req, res) => {
+  const userId = req.user?.id;
+
+  if (!userId) {
+    return res.status(401).json({ message: "Non connecté" });
+  }
+
+  try {
+    const [rows] = await db.query(
+      `SELECT id, user_agent, ip_address, created_at, expires_at
+       FROM refresh_tokens WHERE user_id=? ORDER BY created_at DESC`,
+      [userId]
+    );
+
+    return res.json({ sessions: rows });
+  } catch (err) {
+    console.error("SESSIONS ERROR:", err);
+    return res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+
+export const deleteSession = async (req, res) => {
+  const userId = req.user?.id;
+  const { id } = req.params;
+
+  if (!userId) {
+    return res.status(401).json({ message: "Non connecté" });
+  }
+
+  try {
+    const [result] = await db.query(
+      "DELETE FROM refresh_tokens WHERE id=? AND user_id=?",
+      [id, userId]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Session introuvable" });
+    }
+
+    return res.json({ message: "Session révoquée" });
+  } catch (err) {
+    console.error("DELETE SESSION ERROR:", err);
+    return res.status(500).json({ message: "Erreur serveur" });
+  }
+};
