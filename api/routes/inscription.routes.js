@@ -1,21 +1,25 @@
+// routes/inscription.routes.js
 import express from "express";
-import * as inscriptionController from "../controllers/inscription.controller.js";
-import { requireAuth } from "../middlewares/auth.middleware.js";
+import {
+  getFormationOptions,
+  getDeprecatedLevels,
+  getDeprecatedTimeSlots,
+  createInscriptionRequest,
+} from "../controllers/inscription.controller.js";
+
+// Adapte l'import selon ton projet
+import { requireAuth } from "../middlewares/requireAuth.js";
 
 const router = express.Router();
 
-router.get("/options/sessions", inscriptionController.getAcademicSessionsOptions);
-router.get("/options/formations", inscriptionController.getFormationsOptions);
-router.get("/options/courses/:formationId", inscriptionController.getCoursesOptionsByFormation);
-router.get("/options/classes/:courseId", inscriptionController.getClassesOptionsByCourse);
-router.get("/options/timeslots/:classId/:courseId", inscriptionController.getTimeSlotsOptionsByClassAndCourse);
+// Options utilisées par le nouveau formulaire
+router.get("/options/formations", getFormationOptions);
 
-router.post("/request", requireAuth("student"), inscriptionController.createInscriptionRequest);
+// Endpoints legacy temporaires
+router.get("/options/niveaux/:module_id", getDeprecatedLevels);
+router.get("/options/timeslots/:niveau_id", getDeprecatedTimeSlots);
 
-router.put(
-  "/approve/:id",
-  requireAuth("admin", "superadmin"),
-  inscriptionController.approveInscription
-);
+// Soumission
+router.post("/request", requireAuth, createInscriptionRequest);
 
 export default router;

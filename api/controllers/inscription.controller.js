@@ -1,253 +1,296 @@
+// controllers/inscription.controller.js
 import db from "../config/db.js";
 
-/* =====================================
-   CREATE INSCRIPTION REQUEST
-===================================== */
-export const createInscriptionRequest = async (req, res) => {
-  try {
-    const data = req.body;
+const PHONE_REGEX = /^\+?\d{8,15}$/;
 
-    await db.query(
-      `INSERT INTO inscription_requests
-      (
+function toStr(value) {
+  return String(value ?? "").trim();
+}
+
+function toNullableStr(value) {
+  const v = String(value ?? "").trim();
+  return v ? v : null;
+}
+
+function toPositiveInt(value, fallback = null) {
+  const n = Number(value);
+  return Number.isInteger(n) && n > 0 ? n : fallback;
+}
+
+function normalizeDate(value) {
+  if (!value) return null;
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toISOString().slice(0, 10);
+}
+
+function computeAge(dateStr) {
+  const birthDate = new Date(dateStr);
+  if (Number.isNaN(birthDate.getTime())) return null;
+
+  const now = new Date();
+  let age = now.getFullYear() - birthDate.getFullYear();
+  const monthDiff = now.getMonth() - birthDate.getMonth();
+
+  if (
+    monthDiff < 0 ||
+    (monthDiff === 0 && now.getDate() < birthDate.getDate())
+  ) {
+    age--;
+  }
+
+  return age;
+}
+
+// GET /inscription/options/formations
+export async function getFormationOptions(_req, res) {
+  try {
+    const [rows] = await db.execute(
+      `
+      SELECT
+        id,
+        name AS label
+      FROM formations
+      WHERE status = 'active'
+      ORDER BY name ASC
+      `
+    );
+
+    return res.json({
+      formations: rows || [],
+    });
+  } catch (error) {
+    console.error("Erreur getFormationOptions:", error);
+    return res.status(500).json({
+      message: "Erreur lors du chargement des formations.",
+      formations: [],
+    });
+  }
+}
+
+// GET /inscription/options/niveaux/:module_id
+// laissé uniquement pour compatibilité temporaire avec d'anciens builds
+export async function getDeprecatedLevels(_req, res) {
+  return res.json({
+    niveaux: [],
+    deprecated: true,
+    message: "Cet endpoint n'est plus utilisé.",
+  });
+}
+
+// GET /inscription/options/timeslots/:niveau_id
+// laissé uniquement pour compatibilité temporaire avec d'anciens builds
+export async function getDeprecatedTimeSlots(_req, res) {
+  return res.json({
+    timeSlots: [],
+    deprecated: true,
+    message: "Cet endpoint n'est plus utilisé.",
+  });
+}
+
+// POST /inscription/request
+export async function createInscriptionRequest(req, res) {
+  const conn = await db.getConnection();
+
+  try {
+    const userId =
+      req.user?.id ||
+      req.user?.userId ||
+      req.user?.student_id ||
+      null;
+
+    if (!userId) {
+      return res.status(401).json({
+        message: "Utilisateur non authentifié.",
+      });
+    }
+
+    const role = String(req.user?.role || "").toLowerCase();
+    if (role && role !== "student") {
+      return res.status(403).json({
+        message: "Cette page est réservée aux étudiants.",
+      });
+    }
+
+    const payload = {
+      session_id: toPositiveInt(req.body.session_id, 1),
+      module_id: toPositiveInt(req.body.module_id),
+      niveau_langue: toStr(req.body.niveau_langue),
+      horaire_prefere: toStr(req.body.horaire_prefere),
+      quartier: toStr(req.body.quartier),
+      arrondissement: toStr(req.body.arrondissement),
+      telephone: toStr(req.body.telephone),
+      whatsapp: toNullableStr(req.body.whatsapp),
+      email: toStr(req.body.email).toLowerCase(),
+      nom: toStr(req.body.nom),
+      prenom: toStr(req.body.prenom),
+      sexe: toStr(req.body.sexe).toUpperCase(),
+      date_naissance: normalizeDate(
+        req.body.date_naissance || req.body.dateNaissance
+      ),
+      lieu_naissance: toStr(req.body.lieu_naissance || req.body.lieuNaissance),
+      accept_fees: req.body.acceptFees ? 1 : 0,
+    };
+
+    const required = [
+      ["module_id", payload.module_id],
+      ["niveau_langue", payload.niveau_langue],
+      ["horaire_prefere", payload.horaire_prefere],
+      ["nom", payload.nom],
+      ["prenom", payload.prenom],
+      ["sexe", payload.sexe],
+      ["date_naissance", payload.date_naissance],
+      ["lieu_naissance", payload.lieu_naissance],
+      ["quartier", payload.quartier],
+      ["arrondissement", payload.arrondissement],
+      ["telephone", payload.telephone],
+      ["email", payload.email],
+    ];
+
+    const missing = required.filter(([, value]) => !value).map(([key]) => key);
+
+    if (missing.length > 0) {
+      return res.status(400).json({
+        message: "Veuillez remplir tous les champs obligatoires.",
+        missing,
+      });
+    }
+
+    if (!["M", "F"].includes(payload.sexe)) {
+      return res.status(400).json({
+        message: "La valeur du sexe est invalide.",
+      });
+    }
+
+    const age = computeAge(payload.date_naissance);
+    if (age === null) {
+      return res.status(400).json({
+        message: "La date de naissance est invalide.",
+      });
+    }
+
+    if (age < 10) {
+      return res.status(400).json({
+        message: "L’âge minimum requis est de 10 ans.",
+      });
+    }
+
+    if (!PHONE_REGEX.test(payload.telephone)) {
+      return res.status(400).json({
+        message: "Le numéro de téléphone est invalide.",
+      });
+    }
+
+    if (payload.whatsapp && !PHONE_REGEX.test(payload.whatsapp)) {
+      return res.status(400).json({
+        message: "Le numéro WhatsApp est invalide.",
+      });
+    }
+
+    if (!payload.accept_fees) {
+      return res.status(400).json({
+        message: "Vous devez accepter les frais d’inscription.",
+      });
+    }
+
+    // Vérifie qu'il n'existe pas déjà une demande pending pour cet étudiant et cette formation
+    const [existing] = await conn.execute(
+      `
+      SELECT id
+      FROM inscription_requests
+      WHERE user_id = ?
+        AND module_id = ?
+        AND status = 'pending'
+      LIMIT 1
+      `,
+      [userId, payload.module_id]
+    );
+
+    if (existing.length > 0) {
+      return res.status(409).json({
+        message: "Une demande en attente existe déjà pour cette formation.",
+      });
+    }
+
+    const [result] = await conn.execute(
+      `
+      INSERT INTO inscription_requests (
+        user_id,
         session_id,
         module_id,
-        course_id,
-        niveau_id,
-        time_slot_id,
+        niveau_langue,
+        horaire_prefere,
+        quartier,
+        arrondissement,
+        telephone,
+        whatsapp,
+        email,
         nom,
         prenom,
         sexe,
         date_naissance,
         lieu_naissance,
-        telephone,
-        whatsapp,
-        email,
-        quartier,
-        arrondissement
+        accept_fees,
+        status,
+        created_at,
+        updated_at
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', NOW(), NOW())
+      `,
       [
-        data.session_id,
-        data.module_id,     // formation
-        data.course_id,     // cours
-        data.niveau_id,     // classe
-        data.time_slot_id,  // créneau
-        data.nom,
-        data.prenom,
-        data.sexe,
-        data.date_naissance,
-        data.lieuNaissance,
-        data.telephone,
-        data.whatsapp,
-        data.email,
-        data.quartier,
-        data.arrondissement,
+        userId,
+        payload.session_id,
+        payload.module_id,
+        payload.niveau_langue,
+        payload.horaire_prefere,
+        payload.quartier,
+        payload.arrondissement,
+        payload.telephone,
+        payload.whatsapp,
+        payload.email,
+        payload.nom,
+        payload.prenom,
+        payload.sexe,
+        payload.date_naissance,
+        payload.lieu_naissance,
+        payload.accept_fees,
       ]
     );
 
-    return res.json({
-      message: "Demande enregistrée",
+    return res.status(201).json({
+      message: "Votre demande d’inscription a bien été envoyée.",
+      data: {
+        id: result.insertId,
+      },
     });
-  } catch (err) {
-    console.error("CREATE INSCRIPTION REQUEST ERROR:", err);
+  } catch (error) {
+    console.error("Erreur createInscriptionRequest:", error);
     return res.status(500).json({
-      message: "Erreur serveur",
+      message: "Une erreur est survenue lors de l’envoi de la demande.",
     });
+  } finally {
+    conn.release();
   }
-};
+}
 
-/* =====================================
-   APPROVE INSCRIPTION
-===================================== */
-export const approveInscription = async (req, res) => {
+export const getFormationOptions = async (_req, res) => {
   try {
-    const { id } = req.params;
-
-    const [[request]] = await db.query(
-      "SELECT * FROM inscription_requests WHERE id = ?",
-      [id]
-    );
-
-    if (!request) {
-      return res.status(404).json({ message: "Demande introuvable" });
-    }
-
-    if (request.status === "approved") {
-      return res.status(400).json({ message: "Déjà validée" });
-    }
-
-    const [studentResult] = await db.query(
-      `INSERT INTO students
-      (
-        session_id,
-        module_id,
-        course_id,
-        niveau_id,
-        time_slot_id,
-        nom,
-        prenom,
-        email
-      )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        request.session_id,
-        request.module_id,
-        request.course_id,
-        request.niveau_id,
-        request.time_slot_id,
-        request.nom,
-        request.prenom,
-        request.email,
-      ]
-    );
-
-    const studentId = studentResult.insertId;
-
-    await db.query(
-      `INSERT INTO payments (student_id, amount, status)
-       VALUES (?, ?, 'pending')`,
-      [studentId, 50000]
-    );
-
-    await db.query(
-      "UPDATE inscription_requests SET status = 'approved' WHERE id = ?",
-      [id]
-    );
-
-    return res.json({
-      message: "Inscription validée avec succès",
-    });
-  } catch (err) {
-    console.error("APPROVE INSCRIPTION ERROR:", err);
-    return res.status(500).json({
-      message: "Erreur validation inscription",
-    });
-  }
-};
-
-/* =====================================
-   OPTIONS - ACADEMIC SESSIONS
-===================================== */
-export const getAcademicSessionsOptions = async (req, res) => {
-  try {
-    const [sessions] = await db.query(`
-      SELECT id, name AS label
-      FROM academic_sessions
-      WHERE status = 'open'
-      ORDER BY start_date DESC, id DESC
-    `);
-
-    return res.json({ sessions });
-  } catch (err) {
-    console.error("ACADEMIC SESSIONS OPTIONS ERROR:", err);
-    return res.status(500).json({ message: "Erreur serveur" });
-  }
-};
-
-/* =====================================
-   OPTIONS - FORMATIONS
-===================================== */
-export const getFormationsOptions = async (req, res) => {
-  try {
-    const [formations] = await db.query(`
-      SELECT id, title AS label
-      FROM formations
-      ORDER BY title ASC
-    `);
-
-    return res.json({ formations });
-  } catch (err) {
-    console.error("FORMATIONS OPTIONS ERROR:", err);
-    return res.status(500).json({ message: "Erreur serveur" });
-  }
-};
-
-/* =====================================
-   OPTIONS - COURSES BY FORMATION
-===================================== */
-export const getCoursesOptionsByFormation = async (req, res) => {
-  try {
-    const { formationId } = req.params;
-
-    const [courses] = await db.query(
-      `
-      SELECT id, title AS label
-      FROM courses
-      WHERE formation_id = ?
-      ORDER BY title ASC
-      `,
-      [formationId]
-    );
-
-    return res.json({ courses });
-  } catch (err) {
-    console.error("COURSES OPTIONS ERROR:", err);
-    return res.status(500).json({ message: "Erreur serveur" });
-  }
-};
-
-/* =====================================
-   OPTIONS - CLASSES BY COURSE
-===================================== */
-export const getClassesOptionsByCourse = async (req, res) => {
-  try {
-    const { courseId } = req.params;
-
-    const [classes] = await db.query(
-      `
-      SELECT
-        cl.id,
-        CONCAT(cl.name, ' - ', COALESCE(cl.level, 'Niveau')) AS label
-      FROM classes cl
-      INNER JOIN courses c ON c.class_id = cl.id
-      WHERE c.id = ?
-      ORDER BY cl.name ASC, cl.level ASC
-      `,
-      [courseId]
-    );
-
-    return res.json({ classes });
-  } catch (err) {
-    console.error("CLASSES OPTIONS ERROR:", err);
-    return res.status(500).json({ message: "Erreur serveur" });
-  }
-};
-
-/* =====================================
-   OPTIONS - TIMESLOTS BY CLASS + COURSE
-===================================== */
-export const getTimeSlotsOptionsByClassAndCourse = async (req, res) => {
-  try {
-    const { classId, courseId } = req.params;
-
-    const [timeSlots] = await db.query(
-      `
+    const [rows] = await db.query(`
       SELECT
         id,
-        CONCAT(
-          day,
-          ' ',
-          TIME_FORMAT(start_time, '%H:%i'),
-          ' - ',
-          TIME_FORMAT(end_time, '%H:%i'),
-          CASE
-            WHEN room IS NOT NULL AND room <> '' THEN CONCAT(' / Salle ', room)
-            ELSE ''
-          END
-        ) AS label
-      FROM timetables
-      WHERE class_id = ? AND course_id = ?
-      ORDER BY
-        FIELD(day, 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'),
-        start_time ASC
-      `,
-      [classId, courseId]
-    );
+        title AS label
+      FROM courses
+      ORDER BY title ASC
+    `);
 
-    return res.json({ timeSlots });
-  } catch (err) {
-    console.error("TIMESLOTS OPTIONS ERROR:", err);
-    return res.status(500).json({ message: "Erreur serveur" });
+    return res.json({
+      formations: rows,
+    });
+  } catch (error) {
+    console.error("getFormationOptions error:", error);
+    return res.status(500).json({
+      message: "Erreur lors du chargement des cours.",
+      formations: [],
+    });
   }
 };
