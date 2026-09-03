@@ -1,29 +1,24 @@
 import { useTranslation } from "react-i18next";
 
-export default function LangSelector() {
-  const { i18n, t } = useTranslation();
+export default function LanguageSwitcher() {
+  const { i18n } = useTranslation();
 
   const currentLang = i18n.resolvedLanguage?.startsWith("en") ? "en" : "fr";
 
   const changeLanguage = (lang) => {
     i18n.changeLanguage(lang);
-    document.documentElement.lang = lang;
   };
 
   return (
-    <div
-      className="inline-flex items-center rounded-full border border-gray-300 bg-white p-1"
-      aria-label={t("langSelector.ariaLabel")}
-    >
+    <div className="flex items-center gap-2 rounded-full border border-gray-300 p-1">
       <button
         type="button"
         onClick={() => changeLanguage("fr")}
-        className={`px-3 py-1 text-xs md:text-sm rounded-full font-medium transition ${
+        className={`px-3 py-1 rounded-full text-sm font-medium transition ${
           currentLang === "fr"
-            ? "bg-brand text-white"
+            ? "bg-green-600 text-white"
             : "text-gray-700 hover:bg-gray-100"
         }`}
-        aria-pressed={currentLang === "fr"}
       >
         FR
       </button>
@@ -31,12 +26,11 @@ export default function LangSelector() {
       <button
         type="button"
         onClick={() => changeLanguage("en")}
-        className={`px-3 py-1 text-xs md:text-sm rounded-full font-medium transition ${
+        className={`px-3 py-1 rounded-full text-sm font-medium transition ${
           currentLang === "en"
-            ? "bg-brand text-white"
+            ? "bg-green-600 text-white"
             : "text-gray-700 hover:bg-gray-100"
         }`}
-        aria-pressed={currentLang === "en"}
       >
         EN
       </button>

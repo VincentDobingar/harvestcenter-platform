@@ -1,55 +1,47 @@
-// 📁 src/components/HomeTestimonial.jsx
-import Section from "@/components/ui/Section";
+// src/components/HomeTestimonial.jsx
+import React from "react";
+import { useTranslation } from "react-i18next";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Quote, Star } from "lucide-react";
+import { Quote, Star, MessageSquareQuote } from "lucide-react";
 
-// ➜ Remplace les chemins par tes vraies images dans /public/images/testimonials/
 const testimonials = [
   {
     name: "Amina Idriss",
-    role: "IELTS 7.0",
+    key: "amina",
     photo: "/images/testimonials/amina.png",
-    text:
-      "J’ai obtenu mon IELTS 7.0 grâce aux cours du soir. La méthode est très pratique et centrée sur l’oral.",
     rating: 5,
   },
   {
     name: "Mahamat Saleh",
-    role: "Business English",
+    key: "mahamat",
     photo: "/images/testimonials/mahamat.jpg",
-    text:
-      "Cours orientés métier, ça m’a aidé au travail dès la 1ère semaine. Groupes réduits = progression rapide.",
     rating: 5,
   },
   {
     name: "Sonia Nd.",
-    role: "HSK (Mandarin)",
+    key: "sonia",
     photo: "/images/testimonials/sonia.png",
-    text:
-      "Très bon accompagnement pour HSK. Les formateurs sont disponibles, on pratique vraiment la langue.",
     rating: 4,
   },
   {
     name: "Ousmane T.",
-    role: "Espagnol A2→B1",
+    key: "ousmane",
     photo: "/images/testimonials/yacinth.png",
-    text:
-      "Horaires flexibles (week-end), parfait pour moi. Les supports sont clairs et variés.",
     rating: 4,
   },
 ];
 
-function Stars({ n = 5 }) {
+function Stars({ n = 5, label }) {
   return (
-    <div className="flex gap-1" aria-label={`Note ${n} sur 5`}>
+    <div className="flex gap-1" aria-label={label}>
       {[...Array(5)].map((_, i) => (
         <Star
           key={i}
           className={`w-4 h-4 ${
-            i < n ? "text-yellow-500 fill-yellow-500" : "text-gray-300"
+            i < n ? "text-yellow-400 fill-yellow-400" : "text-white/20"
           }`}
         />
       ))}
@@ -58,71 +50,134 @@ function Stars({ n = 5 }) {
 }
 
 function Avatar({ src, alt }) {
-  const fallback = "/images/testimonials/default-avatar.jpg"; // ➜ ajoute ce fichier dans public
+  const fallback = "/images/testimonials/default-avatar.jpg";
+
   const onError = (e) => {
     if (e.currentTarget.src.endsWith("default-avatar.jpg")) return;
     e.currentTarget.src = fallback;
   };
+
   return (
     <img
       src={src}
       alt={alt}
       onError={onError}
-      className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover ring-2 ring-white shadow"
+      className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover ring-4 ring-white/20 shadow-lg"
       loading="lazy"
     />
   );
 }
 
-function TestimonialCard({ t }) {
+function TestimonialCard({ item, t }) {
   return (
-    <article className="bg-white rounded-2xl shadow hover:shadow-md transition overflow-hidden border border-transparent hover:border-brand/30">
-      <div className="p-6">
-        <div className="flex items-center gap-4">
-          <Avatar src={t.photo} alt={t.name} />
-          <div>
-            {/* titre harmonisé : bleu du logo */}
-            <h3 className="text-base md:text-lg font-semibold text-brand">
-              {t.name}
-            </h3>
-            <p className="text-sm text-gray-500">{t.role}</p>
-            <Stars n={t.rating} />
+    <article className="h-full rounded-[2rem] border border-white/10 bg-white/10 backdrop-blur-md shadow-xl transition-all duration-300 hover:-translate-y-1 hover:bg-white/[0.14] overflow-hidden">
+      <div className="p-6 md:p-7 h-full flex flex-col">
+        <div className="flex items-start gap-4">
+          <Avatar
+            src={item.photo}
+            alt={t("home.testimonials.photoAlt", {
+              name: item.name,
+              defaultValue: item.name,
+            })}
+          />
+
+          <div className="flex-1 min-w-0">
+            <h3 className="text-lg font-bold text-white">{item.name}</h3>
+
+            <p className="text-sm text-white/65">
+              {t(`home.testimonials.items.${item.key}.role`, {
+                defaultValue: "",
+              })}
+            </p>
+
+            <div className="mt-2">
+              <Stars
+                n={item.rating}
+                label={t("home.testimonials.ratingAria", {
+                  n: item.rating,
+                  defaultValue: `${item.rating}/5`,
+                })}
+              />
+            </div>
           </div>
-          {/* icône citation teinte brand douce */}
-          <Quote className="ml-auto w-6 h-6 text-brand/20" />
+
+          <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center shrink-0 border border-white/10">
+            <Quote className="w-5 h-5 text-sky-300" />
+          </div>
         </div>
-        <p className="mt-4 text-gray-700 leading-relaxed">“{t.text}”</p>
+
+        <p className="mt-6 text-white/85 leading-8 italic flex-1">
+          “
+          {t(`home.testimonials.items.${item.key}.text`, {
+            defaultValue: "",
+          })}
+          ”
+        </p>
       </div>
     </article>
   );
 }
 
 export default function HomeTestimonial() {
+  const { t } = useTranslation();
+
   return (
-    <Section
+    <section
       id="temoignages"
-      title="Ils nous recommandent"
-      subtitle="La meilleure preuve de la qualité, ce sont les résultats de nos apprenants."
-      centered
+      className="relative overflow-hidden bg-slate-950 px-4 py-16 md:py-20"
     >
-      <Swiper
-        modules={[Autoplay, Pagination]}
-        autoplay={{ delay: 3500, disableOnInteraction: false }}
-        loop
-        pagination={{ clickable: true }}
-        breakpoints={{
-          0: { slidesPerView: 1, spaceBetween: 16 },
-          768: { slidesPerView: 2, spaceBetween: 20 },
-          1024: { slidesPerView: 3, spaceBetween: 24 },
-        }}
-        className="!pb-8"
-      >
-        {testimonials.map((t, i) => (
-          <SwiperSlide key={i}>
-            <TestimonialCard t={t} />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </Section>
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.20),transparent_30%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(14,165,233,0.14),transparent_28%)]" />
+
+      <div
+        aria-hidden
+        className="absolute -top-16 right-0 h-72 w-72 rounded-full bg-white/10 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="absolute -bottom-16 left-0 h-72 w-72 rounded-full bg-blue-400/10 blur-3xl"
+      />
+
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <header className="max-w-3xl mx-auto text-center mb-10 md:mb-12">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/10 px-4 py-2 text-sm font-semibold text-white/90">
+            <MessageSquareQuote className="w-4 h-4" />
+            {t("home.testimonials.badge", {
+              defaultValue: "Learner testimonials",
+            })}
+          </span>
+
+          <h2 className="mt-5 text-3xl md:text-4xl font-bold tracking-tight text-white">
+            {t("home.testimonials.title")}
+          </h2>
+
+          <p className="mt-4 text-white/75 text-base md:text-lg leading-8">
+            {t("home.testimonials.subtitle")}
+          </p>
+        </header>
+
+        <div className="min-w-0">
+          <Swiper
+            modules={[Autoplay, Pagination]}
+            autoplay={{ delay: 3500, disableOnInteraction: false }}
+            loop={testimonials.length > 3}
+            pagination={{ clickable: true }}
+            breakpoints={{
+              0: { slidesPerView: 1, spaceBetween: 16 },
+              768: { slidesPerView: 2, spaceBetween: 20 },
+              1024: { slidesPerView: 3, spaceBetween: 24 },
+            }}
+            className="!pb-12 [&_.swiper-pagination-bullet]:bg-white/40 [&_.swiper-pagination-bullet-active]:!bg-white"
+          >
+            {testimonials.map((item) => (
+              <SwiperSlide key={item.key} className="!h-auto">
+                <TestimonialCard item={item} t={t} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      </div>
+    </section>
   );
 }

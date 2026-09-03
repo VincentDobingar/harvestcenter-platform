@@ -1,33 +1,42 @@
-// 📁 src/components/Navbar.jsx
+// src/components/Navbar.jsx
+
 import React, { useEffect, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import LangSelector from "@/components/LangSelector";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const nav = useNavigate();
-  const { user, booting, logout } = useAuth();
+  const { user, booting, logout, normalizeRole, getDashboardPath } = useAuth();
+  const { t } = useTranslation();
 
   useEffect(() => {
     setOpen(false);
   }, [location.pathname, location.hash]);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 16);
+    onScroll();
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const links = [
-    { label: "Accueil", to: "/", type: "route" },
-    { label: "Présentation", to: "/about", type: "route" },
-    { label: "Bourses", to: "/bourses", type: "route" },
-    { label: "Formations", to: "/courses", type: "route" },
-    { label: "Contact", to: "/contact", type: "route" },
+    { labelKey: "nav.home", to: "/", type: "route" },
+    { labelKey: "nav.about", to: "/about", type: "route" },
+    { labelKey: "nav.opportunities", to: "/opportunites", type: "route" },
+    { labelKey: "nav.courses", to: "/courses", type: "route" },
+    { labelKey: "nav.contact", to: "/contact", type: "route" },
   ];
 
-  const baseLink = "px-3 py-2 text-sm font-medium rounded hover:bg-gray-100 transition";
-  const activeLink = "text-brand";
-  const inactiveLink = "text-gray-700";
-
-  const isStudent = String(user?.role || "").toLowerCase() === "student";
+  const role = normalizeRole(user?.role);
+  const isStudent = role === "student";
+  const dashboardPath = getDashboardPath(role);
 
   async function handleLogout() {
     await logout();
@@ -35,139 +44,180 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="relative">
-      {/* Desktop */}
-      <div className="hidden md:flex items-center gap-2">
-        {links.map((l) =>
-          l.type === "hash" ? (
-            <a key={l.label} href={l.to} className={`${baseLink} ${inactiveLink}`}>
-              {l.label}
-            </a>
-          ) : (
-            <NavLink
-              key={l.label}
-              to={l.to}
-              className={({ isActive }) =>
-                `${baseLink} ${isActive ? activeLink : inactiveLink}`
-              }
-              end={l.to === "/"}
-            >
-              {l.label}
-            </NavLink>
-          )
-        )}
+    <header className="sticky top-0 z-50 px-3 md:px-4 pt-3">
+      <div
+        className={`max-w-7xl mx-auto rounded-2xl md:rounded-3xl transition-all duration-300 ${
+          scrolled
+            ? "bg-white/90 backdrop-blur-xl shadow-xl border border-slate-200"
+            : "bg-white/80 backdrop-blur-md border border-slate-100 shadow-sm"
+        }`}
+      >
+        <div className="flex items-center justify-between px-4 md:px-6 py-3">
+          <Link to="/" className="flex items-center gap-3 shrink-0">
+            <img
+              src="/images/logo-harvest.jpg"
+              alt="Harvest Center"
+              className="h-11 w-auto rounded-xl object-cover"
+            />
+            <div className="hidden sm:block">
+              <div className="text-sm font-bold text-slate-900 leading-none">
+                Harvest Center
+              </div>
+              <div className="text-xs text-slate-500 mt-1">
+                Language - Culture - Education
+              </div>
+            </div>
+          </Link>
 
-        {!booting && (
-          <>
-            {!user ? (
-              <Link to="/account" className="ml-2 btn-outline-brand">
-                Connexion
-              </Link>
-            ) : (
+          <nav className="hidden lg:flex items-center gap-2">
+            {links.map((l) => (
+              <NavLink
+                key={l.labelKey}
+                to={l.to}
+                end={l.to === "/"}
+                className={({ isActive }) =>
+                  `px-4 py-2 rounded-xl text-sm font-medium transition ${
+                    isActive
+                      ? "bg-blue-50 text-blue-700"
+                      : "text-slate-700 hover:bg-slate-100"
+                  }`
+                }
+              >
+                {t(l.labelKey)}
+              </NavLink>
+            ))}
+          </nav>
+
+          <div className="hidden lg:flex items-center gap-2">
+            <LangSelector />
+
+            {!booting && !user && (
+              <>
+                <Link
+                  to="/account"
+                  className="px-4 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100 transition"
+                >
+                  {t("auth.login")}
+                </Link>
+                <Link
+                  to="/inscription"
+                  className="inline-flex items-center rounded-xl bg-blue-600 text-white px-4 py-2 text-sm font-semibold hover:bg-blue-700 transition"
+                >
+                  {t("auth.apply")}
+                </Link>
+              </>
+            )}
+
+            {!booting && user && (
               <>
                 {isStudent && (
                   <Link
                     to="/dashboard/student/inscription"
-                    className="btn"
+                    className="inline-flex items-center rounded-xl bg-blue-600 text-white px-4 py-2 text-sm font-semibold hover:bg-blue-700 transition"
                   >
-                    S'inscrire
+                    {t("auth.apply")}
                   </Link>
                 )}
 
-                <div className="ml-2 flex items-center gap-2">
-                  <Link to="/dashboard" className="btn-outline-brand">
-                    Mon espace
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="px-3 py-2 text-sm rounded hover:bg-gray-100"
-                  >
-                    Déconnexion
-                  </button>
-                </div>
+                <Link
+                  to={dashboardPath}
+                  className="px-4 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100 transition"
+                >
+                  {t("auth.dashboard")}
+                </Link>
+
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 transition"
+                >
+                  {t("auth.logout")}
+                </button>
               </>
             )}
-          </>
-        )}
+          </div>
 
-        <div className="ml-2">
-          <LangSelector />
+          <button
+            onClick={() => setOpen((v) => !v)}
+            className="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-xl hover:bg-slate-100 transition"
+            aria-label={t("common.toggleMenu")}
+          >
+            {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
-      </div>
 
-      {/* Mobile toggle */}
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded hover:bg-gray-100"
-        aria-label="Ouvrir le menu"
-      >
-        {open ? <X /> : <Menu />}
-      </button>
-
-      {/* Mobile menu */}
-      {open && (
-        <div className="absolute right-0 mt-2 w-60 bg-white rounded-xl shadow-lg p-2 md:hidden">
-          <div className="flex flex-col">
-            {links.map((l) =>
-              l.type === "hash" ? (
-                <a
-                  key={l.label}
-                  href={l.to}
-                  className="px-3 py-2 rounded hover:bg-gray-100 text-gray-700"
-                >
-                  {l.label}
-                </a>
-              ) : (
+        {open && (
+          <div className="lg:hidden border-t border-slate-200 px-4 pb-4 pt-3">
+            <div className="flex flex-col gap-2">
+              {links.map((l) => (
                 <NavLink
-                  key={l.label}
+                  key={l.labelKey}
                   to={l.to}
+                  end={l.to === "/"}
                   className={({ isActive }) =>
-                    `px-3 py-2 rounded hover:bg-gray-100 ${
-                      isActive ? "text-brand" : "text-gray-700"
+                    `px-4 py-3 rounded-2xl text-sm font-medium transition ${
+                      isActive
+                        ? "bg-blue-50 text-blue-700"
+                        : "text-slate-700 hover:bg-slate-100"
                     }`
                   }
-                  end={l.to === "/"}
                 >
-                  {l.label}
+                  {t(l.labelKey)}
                 </NavLink>
-              )
-            )}
+              ))}
 
-            {!booting && (
-              <>
-                {!user ? (
-                  <Link to="/account" className="mt-2 btn-outline-brand">
-                    Connexion
+              <div className="pt-2">
+                <LangSelector />
+              </div>
+
+              {!booting && !user && (
+                <>
+                  <Link
+                    to="/account"
+                    className="mt-2 px-4 py-3 rounded-2xl border border-slate-200 text-slate-700 font-medium"
+                  >
+                    {t("auth.login")}
                   </Link>
-                ) : (
-                  <>
-                    {isStudent && (
-                      <Link to="/dashboard/student/inscription" className="mt-2 btn-brand">
-                        S’inscrire
-                      </Link>
-                    )}
+                  <Link
+                    to="/inscription"
+                    className="inline-flex items-center justify-between mt-2 px-4 py-3 rounded-2xl bg-blue-600 text-white font-semibold"
+                  >
+                    {t("auth.apply")}
+                    <ChevronRight className="w-4 h-4" />
+                  </Link>
+                </>
+              )}
 
-                    <Link to="/dashboard" className="mt-2 btn-outline-brand">
-                      Mon espace
-                    </Link>
-
-                    <button
-                      onClick={handleLogout}
-                      className="mt-2 px-3 py-2 rounded text-left hover:bg-gray-100 text-red-600"
+              {!booting && user && (
+                <>
+                  {isStudent && (
+                    <Link
+                      to="/dashboard/student/inscription"
+                      className="inline-flex items-center justify-between mt-2 px-4 py-3 rounded-2xl bg-blue-600 text-white font-semibold"
                     >
-                      Déconnexion
-                    </button>
-                  </>
-                )}
-              </>
-            )}
+                      {t("auth.apply")}
+                      <ChevronRight className="w-4 h-4" />
+                    </Link>
+                  )}
 
-            <div className="mt-2">
-              <LangSelector />
+                  <Link
+                    to={dashboardPath}
+                    className="mt-2 px-4 py-3 rounded-2xl border border-slate-200 text-slate-700 font-medium"
+                  >
+                    {t("auth.dashboard")}
+                  </Link>
+
+                  <button
+                    onClick={handleLogout}
+                    className="mt-2 px-4 py-3 rounded-2xl text-left bg-red-50 text-red-600 font-medium"
+                  >
+                    {t("auth.logout")}
+                  </button>
+                </>
+              )}
             </div>
           </div>
-        </div>
-      )}
-    </nav>
+        )}
+      </div>
+    </header>
   );
 }

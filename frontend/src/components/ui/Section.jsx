@@ -1,19 +1,36 @@
 // 📁 src/components/ui/Section.jsx
-
-export default function Section({ id, title, subtitle, centered = false, children }) {
+export default function Section({
+  id,
+  title,
+  subtitle,
+  centered = false,
+  children,
+  className = "",
+  contentClassName = "",
+}) {
   return (
-    <section id={id} className="px-4 py-12">
+    <section id={id} className={`px-4 py-16 md:py-20 ${className}`}>
       {(title || subtitle) && (
-        <header className={`max-w-5xl mx-auto ${centered ? "text-center" : ""} mb-8`}>
+        <header
+          className={`max-w-4xl mx-auto mb-10 md:mb-12 ${
+            centered ? "text-center" : ""
+          }`}
+        >
           {title && (
-            <h2 className="text-2xl md:text-3xl font-extrabold text-brand">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
               {title}
             </h2>
           )}
-          {subtitle && <p className="mt-2 text-gray-600">{subtitle}</p>}
+
+          {subtitle && (
+            <p className="mt-4 text-slate-600 text-base md:text-lg leading-8">
+              {subtitle}
+            </p>
+          )}
         </header>
       )}
-      <div className="max-w-6xl mx-auto">{children}</div>
+
+      <div className={`max-w-7xl mx-auto ${contentClassName}`}>{children}</div>
     </section>
   );
 }
