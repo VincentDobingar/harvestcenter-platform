@@ -1,110 +1,87 @@
 // src/pages/admin/AdminClassesPage.jsx
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "@/utils/api";
-import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
+import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
-import AdminCourseAssign from "./AdminCourseAssign"; // si tu as déjà ce composant, sinon je peux le générer
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function AdminClassesPage() {
+  const navigate = useNavigate();
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [assigning, setAssigning] = useState(null); // { courseId, courseTitle }
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchClasses();
   }, []);
 
   async function fetchClasses() {
-    setLoading(true);
-    setError(null);
     try {
-      const res = await api.get("/api/admin/classes");
-      const rows = res.data?.rows ?? res.data ?? [];
+      setLoading(true);
+      const res = await api.get("/admin/classes");
+      const rows = Array.isArray(res.data) ? res.data : res.data?.rows ?? [];
       setClasses(rows);
     } catch (err) {
       console.error("fetchClasses error", err);
-      setError("Impossible de charger les classes.");
+      toast.error("Impossible de charger les classes.");
     } finally {
       setLoading(false);
     }
   }
 
-  function openAssign(course) {
-    setAssigning({ courseId: course.id || course.course_id, courseTitle: course.title || course.name });
-  }
-  function closeAssign() {
-    setAssigning(null);
-  }
-
-  async function handleAssign(courseId, teacherId) {
-    try {
-      await api.post(`/api/admin/courses/${courseId}/assign`, { teacher_id: teacherId });
-      // feedback + refresh
-      alert("Cours assigné.");
-      closeAssign();
-      fetchClasses();
-    } catch (err) {
-      console.error("assign error", err);
-      alert("Erreur lors de l'assignation.");
-    }
-  }
-
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold">Gestion des classes</h2>
-        <div className="flex gap-2">
-          <Button onClick={fetchClasses} variant="outline">Rafraîchir</Button>
+    <div className="space-y-6">
+      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">Classes</h1>
+          <p className="mt-1 text-sm text-slate-500">
+            Consultation des classes disponibles.
+          </p>
         </div>
+
+        <Button variant="outline" onClick={fetchClasses}>
+          Actualiser
+        </Button>
       </div>
 
-      {error && <div className="mb-4 text-red-600">{error}</div>}
-
       {loading ? (
-        <div className="py-6 text-center">Chargement…</div>
+        <div className="rounded-2xl border border-slate-200 bg-white p-6">
+          Chargement…
+        </div>
       ) : classes.length === 0 ? (
-        <div className="py-6 text-center text-gray-500">Aucune classe trouvée.</div>
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 text-slate-500">
+          Aucune classe trouvée.
+        </div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {classes.map((c) => (
-            <Card key={c.id} className="overflow-hidden">
-              <CardHeader>{c.title || c.name || `Classe #${c.id}`}</CardHeader>
-              <CardContent>
-                <div className="text-sm text-gray-600 mb-2">{c.description || "—"}</div>
-                <div className="text-xs text-gray-500">Créée : {c.created_at ? new Date(c.created_at).toLocaleString() : "—"}</div>
-                {Array.isArray(c.courses) && c.courses.length > 0 && (
-                  <div className="mt-3">
-                    <div className="text-sm font-semibold">Cours</div>
-                    <ul className="text-sm list-disc pl-5">
-                      {c.courses.slice(0,5).map((cr) => (
-                        <li key={cr.id || cr.course_id}>{cr.title || cr.name || `Cours #${cr.id || cr.course_id}`}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </CardContent>
-              <CardFooter>
-                <div className="flex items-center justify-end gap-2">
-                  <Button onClick={() => window.open(`/admin/classes/${c.id}`, "_self")} variant="outline">Détails</Button>
-                  {/* Exemple: assign first course if exists */}
-                  {Array.isArray(c.courses) && c.courses[0] && (
-                    <Button onClick={() => openAssign(c.courses[0])}>Assigner formateur</Button>
-                  )}
+            <Card key={c.id} className="rounded-2xl shadow-sm">
+              <CardContent className="p-5 space-y-3">
+                <div>
+                  <h2 className="text-lg font-semibold text-slate-900">
+                    {c.name || `Classe #${c.id}`}
+                  </h2>
+                  <p className="text-sm text-slate-500">
+                    Niveau : {c.level || "—"}
+                  </p>
                 </div>
-              </CardFooter>
+
+                <div className="text-sm text-slate-600">
+                  Année académique : {c.academic_year || "—"}
+                </div>
+
+                <div className="flex justify-end">
+                  <Button
+                    variant="outline"
+                    onClick={() => navigate(`/admin/classes/${c.id}`)}
+                  >
+                    Détails
+                  </Button>
+                </div>
+              </CardContent>
             </Card>
           ))}
         </div>
-      )}
-
-      {assigning && (
-        <AdminCourseAssign
-          courseId={assigning.courseId}
-          courseTitle={assigning.courseTitle}
-          onClose={closeAssign}
-          onAssign={handleAssign}
-        />
       )}
     </div>
   );

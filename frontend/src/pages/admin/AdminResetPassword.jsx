@@ -8,53 +8,92 @@ import toast from "react-hot-toast";
 export default function AdminResetPassword() {
   const { token } = useParams();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ p1: "", p2: "" });
+
+  const [form, setForm] = useState({
+    p1: "",
+    p2: "",
+  });
   const [loading, setLoading] = useState(false);
 
-  const submit = async (e) => {
+  async function submit(e) {
     e.preventDefault();
-    if (!form.p1 || form.p1.length < 8) return toast.error("Mot de passe trop court (min. 8).");
-    if (form.p1 !== form.p2) return toast.error("Les mots de passe ne correspondent pas.");
+
+    if (!token) {
+      toast.error("Lien invalide ou expiré.");
+      return;
+    }
+
+    if (!form.p1 || form.p1.length < 8) {
+      toast.error("Mot de passe trop court (min. 8).");
+      return;
+    }
+
+    if (form.p1 !== form.p2) {
+      toast.error("Les mots de passe ne correspondent pas.");
+      return;
+    }
+
     try {
       setLoading(true);
-      await api.post(`/admin/reset-password/${encodeURIComponent(token)}`, { motdepasse: form.p1 });
+
+      await api.post(`/admin/reset-password/${encodeURIComponent(token)}`, {
+        motdepasse: form.p1,
+      });
+
       toast.success("Mot de passe réinitialisé. Connectez-vous.");
       navigate("/admin/login", { replace: true });
-    } catch (e) {
-      console.error(e);
-      const msg = e?.response?.data?.message || "Lien invalide ou expiré.";
-      toast.error(msg);
+    } catch (err) {
+      console.error(err);
+      const message =
+        err?.response?.data?.message || "Lien invalide ou expiré.";
+      toast.error(message);
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <form onSubmit={submit} className="w-full max-w-md bg-white p-6 rounded-2xl shadow space-y-4">
-        <h1 className="text-xl font-semibold text-[#1F75BB] text-center">Réinitialiser le mot de passe</h1>
+      <form
+        onSubmit={submit}
+        className="w-full max-w-md bg-white p-6 rounded-2xl shadow space-y-4"
+      >
+        <h1 className="text-xl font-semibold text-[#1F75BB] text-center">
+          Réinitialiser le mot de passe
+        </h1>
+
         <div>
-          <label className="block text-sm font-medium mb-1">Nouveau mot de passe</label>
+          <label className="block text-sm font-medium mb-1">
+            Nouveau mot de passe
+          </label>
           <input
             type="password"
             className="w-full border px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#1F75BB]"
             value={form.p1}
-            onChange={(e) => setForm((f) => ({ ...f, p1: e.target.value }))}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, p1: e.target.value }))
+            }
             required
             minLength={8}
           />
         </div>
+
         <div>
-          <label className="block text-sm font-medium mb-1">Confirmer le mot de passe</label>
+          <label className="block text-sm font-medium mb-1">
+            Confirmer le mot de passe
+          </label>
           <input
             type="password"
             className="w-full border px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#1F75BB]"
             value={form.p2}
-            onChange={(e) => setForm((f) => ({ ...f, p2: e.target.value }))}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, p2: e.target.value }))
+            }
             required
             minLength={8}
           />
         </div>
+
         <button
           type="submit"
           disabled={loading}
@@ -63,8 +102,12 @@ export default function AdminResetPassword() {
           {loading && <Loader2 className="w-4 h-4 animate-spin" />}
           Réinitialiser
         </button>
+
         <div className="text-center">
-          <Link to="/admin/login" className="text-sm text-[#1F75BB] hover:underline">
+          <Link
+            to="/admin/login"
+            className="text-sm text-[#1F75BB] hover:underline"
+          >
             Retour à la connexion
           </Link>
         </div>
