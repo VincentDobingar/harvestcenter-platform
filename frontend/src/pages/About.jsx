@@ -1,168 +1,283 @@
-import { useState } from "react";
+// src/pages/About.jsx
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Section from "@/components/ui/Section";
-import Modal from "@/components/ui/Modal";
-import { 
-          Award, 
-          BookOpen, 
-          Clock, 
-          Globe, 
-          GraduationCap, 
-          Users, 
-          Target, 
-          Lightbulb, 
-          TrendingUp, 
-          Eye 
-        }
-from "lucide-react";
-
-const DG = {
-  name: "Nom du DG",
-  role: "Directeur Général",
-  photo: "/images/teams/dg.jpg",                 // image rectangulaire (paysage conseillé, ex: 1200x675)
-  banner: "/images/teams/dg.jpg",         // optionnel: grande image pour le modal; sinon 'photo' sera utilisée
-  message:
-    "Bienvenue au Harvest Center. Notre mission est d’accompagner chaque apprenant vers l’excellence linguistique, grâce à des parcours flexibles, des méthodes actives et des résultats concrets.",
-};
+import {
+  Award,
+  BookOpen,
+  Clock,
+  Globe,
+  GraduationCap,
+  Users,
+  Target,
+  Lightbulb,
+  TrendingUp,
+  Eye,
+  ArrowRight,
+} from "lucide-react";
 
 const services = [
-  { icon: GraduationCap, title: "Formations en langues", desc: "Anglais, Mandarin, Espagnol, Français (FLE), A1→C1/C2." },
-  { icon: Clock,           title: "Horaires flexibles",   desc: "Matin, après-midi, soir et week-end." },
-  { icon: BookOpen,        title: "Préparation examens",  desc: "IELTS/TOEFL, HSK : ateliers, simulations, coaching." },
-  { icon: Users,           title: "Petits groupes",       desc: "Pédagogie active, progression rapide." },
-  { icon: Globe,           title: "Immersion & club",     desc: "Clubs de conversation, mises en situation." },
-  { icon: Award,           title: "Attestations",         desc: "Préparation aux certifications reconnues." },
+  {
+    icon: GraduationCap,
+    key: "languages",
+    bullets: ["bullet1", "bullet2", "bullet3"],
+  },
+  {
+    icon: Clock,
+    key: "schedule",
+    bullets: ["bullet1", "bullet2", "bullet3"],
+  },
+  {
+    icon: BookOpen,
+    key: "exams",
+    bullets: ["bullet1", "bullet2", "bullet3"],
+  },
+  {
+    icon: Users,
+    key: "smallGroups",
+    bullets: ["bullet1", "bullet2", "bullet3"],
+  },
+  {
+    icon: Globe,
+    key: "immersion",
+    bullets: ["bullet1", "bullet2", "bullet3"],
+  },
+  {
+    icon: Award,
+    key: "certificates",
+    bullets: ["bullet1", "bullet2", "bullet3"],
+  },
 ];
 
 const visionPoints = [
-  {
-    icon: Target,
-    title: "Excellence mesurable",
-    desc: "Des objectifs clairs, des évaluations régulières et des résultats vérifiables.",
-  },
-  {
-    icon: Lightbulb,
-    title: "Pédagogie active",
-    desc: "Ateliers, mises en situation et projets pour ancrer les acquis par la pratique.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Progression durable",
-    desc: "Parcours modulaires et flexibles pour des acquis solides et utilisables.",
-  },
-  {
-    icon: Eye,
-    title: "Ouverture & impact",
-    desc: "Des langues pour s’ouvrir au monde, évoluer pro et servir sa communauté.",
-  },
+  { icon: Target, key: "excellence" },
+  { icon: Lightbulb, key: "activePedagogy" },
+  { icon: TrendingUp, key: "progress" },
+  { icon: Eye, key: "impact" },
 ];
 
-function Avatar({ src, alt }) {
-  const fallback = "/images/team/default-avatar.jpg";
-  const onError = (e) => {
-    if (!e.currentTarget.src.endsWith("default-avatar.jpg")) e.currentTarget.src = fallback;
-  };
-  return <img src={src} alt={alt} onError={onError} className="w-24 h-24 rounded-full object-cover ring-2 ring-white shadow" loading="lazy" />;
+function PremiumCard({ icon: Icon, title, desc }) {
+  return (
+    <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-blue-200 hover:shadow-xl">
+      <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-50 to-sky-100">
+        <Icon className="h-6 w-6 text-blue-700" />
+      </div>
+
+      <h4 className="text-lg font-bold text-slate-900">{title}</h4>
+      <p className="mt-3 leading-7 text-slate-600">{desc}</p>
+    </article>
+  );
 }
 
 export default function About() {
-  const [openDG, setOpenDG] = useState(false);
-  const Banner = DG.banner || DG.photo;
+  const { t } = useTranslation();
+
+  const tt = (key, defaultValue) => t(key, { defaultValue });
 
   return (
-    <main className="space-y-16 pt-10">
-      <Section id="presentation" title="Présentation du Harvest Center" subtitle="Parcours adaptés et résultats mesurables." centered>
-        <div className="max-w-3xl mx-auto text-gray-700 leading-relaxed space-y-4">
-          <p>Basé à N’Djamena, le Harvest Center forme aux langues pour étudiants, professionnels et organisations. Approche orientée compétences.</p>
-          <p>Petits groupes, créneaux flexibles et ateliers ciblés pour concilier progression rapide et qualité d’accompagnement.</p>
+    <main className="bg-slate-50">
+      <section className="relative overflow-hidden bg-slate-950 text-white">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.25),transparent_35%)]" />
+
+        <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-24">
+          <div className="max-w-3xl">
+            <span className="inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold">
+              Harvest Center
+            </span>
+            <h1 className="mt-5 text-4xl font-extrabold leading-tight md:text-5xl">
+              {tt("aboutPage.presentation.title", "Présentation de Harvest Center")}
+            </h1>
+            <p className="mt-5 text-lg leading-8 text-white/80">
+              {tt(
+                "aboutPage.presentation.subtitle",
+                "Un centre de référence pour l’apprentissage des langues, la formation et l’ouverture internationale."
+              )}
+            </p>
+          </div>
         </div>
-        {/* Image sous le texte, toujours dans la même Section */}
-        <div className="mt-8">
-          <figure className="max-w-5xl mx-auto">
+      </section>
+
+      <Section id="presentation" title="" subtitle="" centered>
+        <div className="mx-auto max-w-3xl space-y-5 leading-8 text-slate-700">
+          <p>
+            {tt(
+              "aboutPage.presentation.p1",
+              "Harvest Center accompagne les apprenants avec une approche moderne, pratique et accessible."
+            )}
+          </p>
+          <p>
+            {tt(
+              "aboutPage.presentation.p2",
+              "Notre ambition est de former des profils compétents, confiants et capables d’évoluer à l’international."
+            )}
+          </p>
+        </div>
+
+        <div className="mt-10">
+          <figure className="mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-2xl">
             <img
-              src="/images/teams/teams.jpg"    // 👉 place ce fichier dans public/images/about/
-              alt="Locaux et apprenants du Harvest Center à N’Djamena"
-              className="w-full h-64 sm:h-80 md:h-[420px] object-cover rounded-xl shadow"
+              src="/images/teams/teams.jpg"
+              alt={tt("aboutPage.presentation.imageAlt", "Équipe Harvest Center")}
+              className="h-72 w-full object-cover sm:h-96 md:h-[460px]"
               loading="lazy"
             />
-            {/* (facultatif) légende */}
-            {/* <figcaption className="mt-2 text-center text-xs text-gray-500">Nos locaux à N’Djamena</figcaption> */}
           </figure>
         </div>
       </Section>
-      {/* Mot du DG — image + texte */}
+
       <Section id="mot-dg" title="" centered={false}>
-        <div className="max-w-6xl mx-auto grid grid-cols-12 gap-8 items-start">
-          {/* Cadre image : plus HAUT, moins LARGe */}
-          <div className="col-span-12 md:col-span-3 flex md:justify-start">
-            <div className="w-[220px] md:w-[260px] h-[360px] md:h-[420px] rounded-md shadow overflow-hidden">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 items-start gap-8 md:grid-cols-[280px_1fr]">
+          <div className="flex justify-center md:justify-start">
+            <div className="w-[240px] overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-2xl md:w-[280px]">
               <img
                 src="/images/teams/dg.png"
-                alt="Directeur Général"
-                className="w-full h-full object-cover object-top"
+                alt={tt("aboutPage.coordinator.imageAlt", "Coordonnateur général")}
+                className="h-[380px] w-full object-cover object-top md:h-[430px]"
               />
             </div>
           </div>
-          {/* Titre + nom + rôle + message */}
-          <div className="col-span-12 md:col-span-9 space-y-3 mt-4 md:mt-8 lg:mt-10">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-brand">
-              Le mot du Coordinateur 
+
+          <div className="space-y-5 rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm md:p-10">
+            <span className="inline-flex rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700">
+              Direction générale
+            </span>
+
+            <h2 className="text-3xl font-extrabold text-slate-900 md:text-4xl">
+              {tt("aboutPage.coordinator.title", "Mot du coordonnateur")}
             </h2>
 
             <div>
-              <h3 className="text-lg font-semibold text-brand">ALLADOUM OUSSOUMRINGAR</h3>
-              <p className="text-sm text-gray-500 -mt-0.5">COORDINATOR - FOUNDER</p>
+              <h3 className="text-lg font-bold text-blue-700">
+                ALLADOUM OUSSOUMRINGAR
+              </h3>
+              <p className="mt-1 text-sm text-slate-500">
+                {tt("aboutPage.coordinator.role", "Coordonnateur général")}
+              </p>
             </div>
 
-            <p className="text-gray-700 leading-relaxed">
-              Bienvenue à Harvest Center. Notre mission est d’accompagner chaque apprenant
-              vers l’excellence linguistique, grâce à des parcours flexibles, des méthodes
-              actives et des résultats concrets.
+            <p className="leading-8 text-slate-700">
+              {tt(
+                "aboutPage.coordinator.message",
+                "Nous croyons en une éducation linguistique de qualité, accessible et tournée vers l’excellence."
+              )}
             </p>
 
-            {/* Lien vers l’équipe, lui aussi un peu plus bas */}
-            <div className="pt-2 md:pt-4 lg:pt-6">
-              <Link to="/equipe" className="inline-flex items-center text-[#1F75BB] font-semibold hover:underline">
-                Découvrir l’équipe →
+            <div className="pt-2">
+              <Link
+                to="/equipe"
+                className="inline-flex items-center gap-2 font-semibold text-blue-700 hover:text-blue-800"
+              >
+                {tt("aboutPage.coordinator.cta", "Découvrir l’équipe")}
+                <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
         </div>
       </Section>
-      {/* —— Notre vision —— */}
+
       <Section
         id="vision"
-        title="Notre vision"
-        subtitle="Former des communicants autonomes, capables d’évoluer dans des contextes académiques et professionnels exigeants."
+        title={tt("aboutPage.vision.title", "Notre vision")}
+        subtitle={tt(
+          "aboutPage.vision.subtitle",
+          "Former, inspirer et ouvrir de nouvelles perspectives."
+        )}
         centered
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {visionPoints.map((v) => {
-            const Icon = v.icon;
-            return (
-              <article key={v.title} className="bg-white rounded-2xl shadow hover:shadow-md transition p-5">
-                <div className="flex items-center gap-3">
-                  <Icon className="w-5 h-5 text-brand-700" />
-                  <h4 className="text-base font-semibold text-brand">{v.title}</h4>
-                </div>
-                <p className="text-gray-600 mt-2">{v.desc}</p>
-              </article>
-            );
-          })}
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {visionPoints.map((v) => (
+            <PremiumCard
+              key={v.key}
+              icon={v.icon}
+              title={tt(
+                `aboutPage.vision.items.${v.key}.title`,
+                v.key === "excellence"
+                  ? "Excellence"
+                  : v.key === "activePedagogy"
+                  ? "Pédagogie active"
+                  : v.key === "progress"
+                  ? "Progression"
+                  : "Impact"
+              )}
+              desc={tt(
+                `aboutPage.vision.items.${v.key}.desc`,
+                "Un engagement fort pour la qualité, la progression et l’impact des apprenants."
+              )}
+            />
+          ))}
         </div>
       </Section>
-      {/* —— Nos services —— */}
-      <Section id="services" title="Nos services" subtitle="Des dispositifs pensés pour votre réussite." centered>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+      <Section
+        id="services"
+        title={tt("aboutPage.services.title", "Nos services")}
+        subtitle={tt(
+          "aboutPage.services.subtitle",
+          "Des formations adaptées aux besoins académiques et professionnels."
+        )}
+        centered
+      >
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
           {services.map((s) => {
             const Icon = s.icon;
+
             return (
-              <article key={s.title} className="bg-white rounded-2xl shadow hover:shadow-md transition p-5">
-                <div className="flex items-center gap-3">
-                  <Icon className="w-5 h-5 text-brand-700" />
-                  <h4 className="text-base font-semibold text-brand">{s.title}</h4>
+              <article
+                key={s.key}
+                className="flex h-full flex-col rounded-[2rem] border border-slate-200 bg-white p-7 shadow-sm transition-all duration-300 hover:border-blue-200 hover:shadow-xl"
+              >
+                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-50 to-sky-100">
+                  <Icon className="h-6 w-6 text-blue-700" />
                 </div>
-                <p className="text-gray-600 mt-2">{s.desc}</p>
+
+                <h3 className="text-xl font-bold text-slate-900">
+                  {tt(
+                    `aboutPage.services.items.${s.key}.title`,
+                    "Programme de formation"
+                  )}
+                </h3>
+
+                <p className="mt-3 leading-7 text-slate-600">
+                  {tt(
+                    `aboutPage.services.items.${s.key}.desc`,
+                    "Un accompagnement de qualité pour apprendre efficacement."
+                  )}
+                </p>
+
+                <ul className="mt-5 space-y-2 text-sm text-slate-600">
+                  {s.bullets.map((bullet) => (
+                    <li key={bullet} className="flex items-start gap-2">
+                      <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-blue-600" />
+                      <span>
+                        {tt(
+                          `aboutPage.services.items.${s.key}.${bullet}`,
+                          "Contenu pédagogique de qualité"
+                        )}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-6 flex flex-wrap gap-3 border-t border-slate-100 pt-5">
+                  <Link
+                    to="/inscription"
+                    className="inline-flex items-center gap-2 rounded-2xl bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-700"
+                  >
+                    {tt(
+                      "aboutPage.services.ctaApply",
+                      "Faire une demande d’inscription"
+                    )}
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+
+                  <Link
+                    to="/courses"
+                    className="inline-flex items-center rounded-2xl border border-blue-200 bg-white px-5 py-3 font-semibold text-blue-700 transition hover:bg-blue-50"
+                  >
+                    {tt("aboutPage.services.ctaLearnMore", "Voir les formations")}
+                  </Link>
+                </div>
               </article>
             );
           })}

@@ -1,5 +1,6 @@
 // src/pages/Inscription.jsx
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Section from "@/components/ui/Section";
 import toast from "react-hot-toast";
 import api from "@/utils/api";
@@ -16,28 +17,27 @@ function splitFullName(full) {
 }
 
 export default function Inscription() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, booting } = useAuth();
 
   const [loadingFormations, setLoadingFormations] = useState(true);
-  const [loadingNiveaux, setLoadingNiveaux] = useState(false);
-  const [loadingTimeSlots, setLoadingTimeSlots] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-
   const [formations, setFormations] = useState([]);
-  const [niveaux, setNiveaux] = useState([]);
-  const [timeSlots, setTimeSlots] = useState([]);
 
   const [nomFromUser, prenomFromUser] = useMemo(() => {
-    const fullName = [user?.last_name, user?.first_name].filter(Boolean).join(" ").trim();
+    const fullName = [user?.last_name, user?.first_name]
+      .filter(Boolean)
+      .join(" ")
+      .trim();
     return splitFullName(fullName);
   }, [user]);
 
   const [form, setForm] = useState({
-    session_id: "1", // à ajuster selon ton modèle réel
+    session_id: "1",
     module_id: "",
-    niveau_id: "",
-    time_slot_id: "",
+    niveau_langue: "",
+    horaire_prefere: "",
     quartier: "",
     arrondissement: "",
     telephone: "",
@@ -68,6 +68,7 @@ export default function Inscription() {
     async function loadFormations() {
       try {
         setLoadingFormations(true);
+
         const res = await api.get("/inscription/options/formations", {
           skipAuthRefresh: true,
         });
@@ -76,7 +77,11 @@ export default function Inscription() {
         setFormations(res.data?.formations || []);
       } catch (err) {
         console.error(err);
-        toast.error("Impossible de charger les formations.");
+        toast.error(
+          t("inscriptionPage.errors.loadFormations", {
+            defaultValue: "Impossible de charger les formations.",
+          })
+        );
       } finally {
         if (!ignore) setLoadingFormations(false);
       }
@@ -87,95 +92,7 @@ export default function Inscription() {
     return () => {
       ignore = true;
     };
-  }, []);
-
-  useEffect(() => {
-    if (!form.module_id) {
-      setNiveaux([]);
-      setTimeSlots([]);
-      setForm((prev) => ({
-        ...prev,
-        niveau_id: "",
-        time_slot_id: "",
-      }));
-      return;
-    }
-
-    let ignore = false;
-
-    async function loadNiveaux() {
-      try {
-        setLoadingNiveaux(true);
-
-        const res = await api.get(`/inscription/options/niveaux/${form.module_id}`, {
-          skipAuthRefresh: true,
-        });
-
-        if (ignore) return;
-
-        setNiveaux(res.data?.niveaux || []);
-        setTimeSlots([]);
-        setForm((prev) => ({
-          ...prev,
-          niveau_id: "",
-          time_slot_id: "",
-        }));
-      } catch (err) {
-        console.error(err);
-        toast.error("Impossible de charger les niveaux.");
-      } finally {
-        if (!ignore) setLoadingNiveaux(false);
-      }
-    }
-
-    loadNiveaux();
-
-    return () => {
-      ignore = true;
-    };
-  }, [form.module_id]);
-
-  useEffect(() => {
-    if (!form.niveau_id) {
-      setTimeSlots([]);
-      setForm((prev) => ({
-        ...prev,
-        time_slot_id: "",
-      }));
-      return;
-    }
-
-    let ignore = false;
-
-    async function loadTimeSlots() {
-      try {
-        setLoadingTimeSlots(true);
-
-        const res = await api.get(`/inscription/options/timeslots/${form.niveau_id}`, {
-          skipAuthRefresh: true,
-        });
-
-        if (ignore) return;
-
-        setTimeSlots(res.data?.timeSlots || []);
-        setForm((prev) => ({
-          ...prev,
-          time_slot_id: "",
-        }));
-      } catch (err) {
-        console.error(err);
-        toast.error("Impossible de charger les créneaux horaires.");
-      } finally {
-        if (!ignore) setLoadingTimeSlots(false);
-      }
-    }
-
-    loadTimeSlots();
-
-    return () => {
-      ignore = true;
-    };
-  }, [form.niveau_id]);
+  }, [t]);
 
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
@@ -189,8 +106,8 @@ export default function Inscription() {
   const validate = () => {
     const required = [
       "module_id",
-      "niveau_id",
-      "time_slot_id",
+      "niveau_langue",
+      "horaire_prefere",
       "nom",
       "prenom",
       "sexe",
@@ -204,7 +121,11 @@ export default function Inscription() {
 
     for (const key of required) {
       if (!String(form[key] || "").trim()) {
-        toast.error("Tous les champs obligatoires doivent être remplis.");
+        toast.error(
+          t("inscriptionPage.errors.required", {
+            defaultValue: "Veuillez remplir tous les champs obligatoires.",
+          })
+        );
         return false;
       }
     }
@@ -213,7 +134,11 @@ export default function Inscription() {
     const now = new Date();
 
     if (Number.isNaN(birthDate.getTime())) {
-      toast.error("Date de naissance invalide.");
+      toast.error(
+        t("inscriptionPage.errors.invalidBirthDate", {
+          defaultValue: "La date de naissance est invalide.",
+        })
+      );
       return false;
     }
 
@@ -228,24 +153,40 @@ export default function Inscription() {
     }
 
     if (age < 10) {
-      toast.error("Âge minimum requis : 10 ans.");
+      toast.error(
+        t("inscriptionPage.errors.minAge", {
+          defaultValue: "L’âge minimum requis est de 10 ans.",
+        })
+      );
       return false;
     }
 
     const phoneRegex = /^\+?\d{8,15}$/;
 
     if (!phoneRegex.test(form.telephone)) {
-      toast.error("Numéro de téléphone invalide.");
+      toast.error(
+        t("inscriptionPage.errors.invalidPhone", {
+          defaultValue: "Le numéro de téléphone est invalide.",
+        })
+      );
       return false;
     }
 
     if (form.whatsapp && !phoneRegex.test(form.whatsapp)) {
-      toast.error("Numéro WhatsApp invalide.");
+      toast.error(
+        t("inscriptionPage.errors.invalidWhatsapp", {
+          defaultValue: "Le numéro WhatsApp est invalide.",
+        })
+      );
       return false;
     }
 
     if (!form.acceptFees) {
-      toast.error("Vous devez accepter les frais d'inscription.");
+      toast.error(
+        t("inscriptionPage.errors.acceptFees", {
+          defaultValue: "Vous devez accepter les frais d’inscription.",
+        })
+      );
       return false;
     }
 
@@ -256,7 +197,11 @@ export default function Inscription() {
     e.preventDefault();
 
     if (!user) {
-      toast.error("Veuillez vous connecter.");
+      toast.error(
+        t("inscriptionPage.errors.loginRequired", {
+          defaultValue: "Vous devez vous connecter avant de continuer.",
+        })
+      );
       navigate("/account", {
         replace: true,
         state: { next: "/dashboard/student/inscription" },
@@ -265,13 +210,25 @@ export default function Inscription() {
     }
 
     if (String(user.role || "").toLowerCase() !== "student") {
-      toast.error("Cette page est réservée aux étudiants.");
+      toast.error(
+        t("inscriptionPage.errors.studentsOnly", {
+          defaultValue: "Cette page est réservée aux étudiants.",
+        })
+      );
       navigate("/dashboard", { replace: true });
       return;
     }
 
     if (!validate()) return;
-    if (!window.confirm("Confirmez-vous votre inscription ?")) return;
+    if (
+      !window.confirm(
+        t("inscriptionPage.confirm", {
+          defaultValue: "Confirmez-vous l’envoi de votre demande ?",
+        })
+      )
+    ) {
+      return;
+    }
 
     try {
       setSubmitting(true);
@@ -280,17 +237,23 @@ export default function Inscription() {
         ...form,
         session_id: Number(form.session_id || 1),
         module_id: Number(form.module_id),
-        niveau_id: Number(form.niveau_id),
-        time_slot_id: Number(form.time_slot_id),
         date_naissance: form.dateNaissance,
       });
 
-      toast.success("Demande envoyée. En attente de validation admin.");
+      toast.success(
+        t("inscriptionPage.success", {
+          defaultValue: "Votre demande d’inscription a bien été envoyée.",
+        })
+      );
       navigate("/dashboard/student", { replace: true });
     } catch (err) {
       console.error(err);
       const message =
-        err?.response?.data?.message || "Erreur lors de l'envoi de la demande.";
+        err?.response?.data?.message ||
+        t("inscriptionPage.errors.submit", {
+          defaultValue: "Une erreur est survenue lors de l’envoi.",
+        });
+
       toast.error(message);
     } finally {
       setSubmitting(false);
@@ -299,154 +262,179 @@ export default function Inscription() {
 
   if (booting || loadingFormations) {
     return (
-      <Section title="Demande d'inscription">
-        <div className="text-center py-10">Chargement...</div>
+      <Section
+        title={t("inscriptionPage.title", {
+          defaultValue: "Inscription",
+        })}
+      >
+        <div className="py-10 text-center">
+          {t("common.loading", { defaultValue: "Chargement..." })}
+        </div>
       </Section>
     );
   }
 
   return (
-    <Section title="Demande d'inscription">
-      <form onSubmit={onSubmit} className="space-y-6 max-w-4xl">
-        <div className="grid md:grid-cols-2 gap-4">
+    <Section
+      title={t("inscriptionPage.title", {
+        defaultValue: "Inscription",
+      })}
+    >
+      <form onSubmit={onSubmit} className="max-w-4xl space-y-6">
+        <div className="grid gap-4 md:grid-cols-2">
           <select
             name="module_id"
             value={form.module_id}
             onChange={handleChange}
-            className="w-full border rounded-xl p-3"
+            className="w-full rounded-xl border p-3"
           >
-            <option value="">Choisir une formation</option>
+            <option value="">
+              {t("inscriptionPage.fields.chooseFormation", {
+                defaultValue: "Choisir une formation",
+              })}
+            </option>
+
             {formations.map((item) => (
               <option key={item.id} value={item.id}>
-                {item.label}
+                {item.label || item.title || item.name}
               </option>
             ))}
           </select>
 
-          <select
-            name="niveau_id"
-            value={form.niveau_id}
+          <input
+            name="niveau_langue"
+            value={form.niveau_langue}
             onChange={handleChange}
-            className="w-full border rounded-xl p-3"
-            disabled={!form.module_id || loadingNiveaux}
-          >
-            <option value="">
-              {loadingNiveaux ? "Chargement des niveaux..." : "Choisir un niveau"}
-            </option>
-            {niveaux.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.label}
-              </option>
-            ))}
-          </select>
+            className="w-full rounded-xl border p-3"
+            placeholder={t("inscriptionPage.fields.languageLevel", {
+              defaultValue: "Niveau de langue (ex: Débutant, Intermédiaire, Avancé)",
+            })}
+          />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4">
-          <select
-            name="time_slot_id"
-            value={form.time_slot_id}
+        <div className="grid gap-4 md:grid-cols-2">
+          <input
+            name="horaire_prefere"
+            value={form.horaire_prefere}
             onChange={handleChange}
-            className="w-full border rounded-xl p-3"
-            disabled={!form.niveau_id || loadingTimeSlots}
-          >
-            <option value="">
-              {loadingTimeSlots ? "Chargement des créneaux..." : "Choisir un créneau horaire"}
-            </option>
-            {timeSlots.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.label}
-              </option>
-            ))}
-          </select>
+            className="w-full rounded-xl border p-3"
+            placeholder={t("inscriptionPage.fields.preferredSchedule", {
+              defaultValue: "Horaire préféré",
+            })}
+          />
 
           <select
             name="sexe"
             value={form.sexe}
             onChange={handleChange}
-            className="w-full border rounded-xl p-3"
+            className="w-full rounded-xl border p-3"
           >
-            <option value="">Sélectionner le sexe</option>
-            <option value="M">Masculin</option>
-            <option value="F">Féminin</option>
+            <option value="">
+              {t("inscriptionPage.fields.chooseGender", {
+                defaultValue: "Choisir le sexe",
+              })}
+            </option>
+            <option value="M">
+              {t("inscriptionPage.fields.male", { defaultValue: "Masculin" })}
+            </option>
+            <option value="F">
+              {t("inscriptionPage.fields.female", { defaultValue: "Féminin" })}
+            </option>
           </select>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid gap-4 md:grid-cols-2">
           <input
             name="nom"
             value={form.nom}
             onChange={handleChange}
-            className="w-full border rounded-xl p-3"
-            placeholder="Nom"
+            className="w-full rounded-xl border p-3"
+            placeholder={t("inscriptionPage.fields.lastName", {
+              defaultValue: "Nom",
+            })}
           />
           <input
             name="prenom"
             value={form.prenom}
             onChange={handleChange}
-            className="w-full border rounded-xl p-3"
-            placeholder="Prénom"
+            className="w-full rounded-xl border p-3"
+            placeholder={t("inscriptionPage.fields.firstName", {
+              defaultValue: "Prénom",
+            })}
           />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid gap-4 md:grid-cols-2">
           <input
             name="email"
             type="email"
             value={form.email}
             onChange={handleChange}
-            className="w-full border rounded-xl p-3"
-            placeholder="Email"
+            className="w-full rounded-xl border p-3"
+            placeholder={t("inscriptionPage.fields.email", {
+              defaultValue: "Email",
+            })}
           />
           <input
             name="telephone"
             value={form.telephone}
             onChange={handleChange}
-            className="w-full border rounded-xl p-3"
-            placeholder="Téléphone"
+            className="w-full rounded-xl border p-3"
+            placeholder={t("inscriptionPage.fields.phone", {
+              defaultValue: "Téléphone",
+            })}
           />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid gap-4 md:grid-cols-2">
           <input
             name="whatsapp"
             value={form.whatsapp}
             onChange={handleChange}
-            className="w-full border rounded-xl p-3"
-            placeholder="WhatsApp"
+            className="w-full rounded-xl border p-3"
+            placeholder={t("inscriptionPage.fields.whatsapp", {
+              defaultValue: "WhatsApp",
+            })}
           />
           <input
             name="dateNaissance"
             type="date"
             value={form.dateNaissance}
             onChange={handleChange}
-            className="w-full border rounded-xl p-3"
+            className="w-full rounded-xl border p-3"
           />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid gap-4 md:grid-cols-2">
           <input
             name="lieuNaissance"
             value={form.lieuNaissance}
             onChange={handleChange}
-            className="w-full border rounded-xl p-3"
-            placeholder="Lieu de naissance"
+            className="w-full rounded-xl border p-3"
+            placeholder={t("inscriptionPage.fields.birthPlace", {
+              defaultValue: "Lieu de naissance",
+            })}
           />
           <input
             name="quartier"
             value={form.quartier}
             onChange={handleChange}
-            className="w-full border rounded-xl p-3"
-            placeholder="Quartier"
+            className="w-full rounded-xl border p-3"
+            placeholder={t("inscriptionPage.fields.neighborhood", {
+              defaultValue: "Quartier",
+            })}
           />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid gap-4 md:grid-cols-2">
           <input
             name="arrondissement"
             value={form.arrondissement}
             onChange={handleChange}
-            className="w-full border rounded-xl p-3"
-            placeholder="Arrondissement"
+            className="w-full rounded-xl border p-3"
+            placeholder={t("inscriptionPage.fields.district", {
+              defaultValue: "Arrondissement",
+            })}
           />
         </div>
 
@@ -458,14 +446,24 @@ export default function Inscription() {
             onChange={handleChange}
             className="mt-1"
           />
-          <span>J’accepte les frais d’inscription non remboursables.</span>
+          <span>
+            {t("inscriptionPage.fields.acceptFees", {
+              defaultValue: "J’accepte les frais liés à l’inscription.",
+            })}
+          </span>
         </label>
 
         <button
           disabled={submitting}
-          className="bg-blue-600 text-white px-6 py-2 rounded"
+          className="rounded bg-blue-600 px-6 py-2 text-white"
         >
-          {submitting ? "Envoi..." : "Envoyer la demande"}
+          {submitting
+            ? t("inscriptionPage.fields.submitting", {
+                defaultValue: "Envoi en cours...",
+              })
+            : t("inscriptionPage.fields.submit", {
+                defaultValue: "Soumettre",
+              })}
         </button>
       </form>
     </Section>

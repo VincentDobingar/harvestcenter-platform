@@ -1,25 +1,28 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import api from "@/utils/api";
 
 export default function StudentRanking() {
+  const { t } = useTranslation();
   const [ranking, setRanking] = useState([]);
 
   useEffect(() => {
-    api.get("/student/ranking")
-      .then(res => setRanking(res.data))
+    api
+      .get("/student/ranking")
+      .then((res) => setRanking(Array.isArray(res.data) ? res.data : []))
       .catch(console.error);
   }, []);
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-xl font-semibold mb-4">🏆 Classement</h1>
+      <h1 className="text-xl font-semibold mb-4">{t("studentRankingPage.title")}</h1>
 
       <table className="w-full border">
         <thead className="bg-gray-100">
           <tr>
-            <th className="p-2">Rang</th>
-            <th className="p-2">Nom</th>
-            <th className="p-2">Moyenne</th>
+            <th className="p-2">{t("studentRankingPage.rank")}</th>
+            <th className="p-2">{t("studentRankingPage.name")}</th>
+            <th className="p-2">{t("studentRankingPage.average")}</th>
           </tr>
         </thead>
         <tbody>

@@ -1,220 +1,290 @@
 // src/pages/student/StudentDashboard.jsx
-import React, { lazy, useEffect, useState } from "react";
-import api from "@/utils/api";
-import { useAuth } from "@/context/AuthContext";
+import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { toAbsoluteUrl } from "@/utils/url";
+import api from "@/utils/api";
 
-/* Chart.js */
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Tooltip,
-  Legend
-} from "chart.js";
-const LineChart = React.lazy(() => import("react-chartjs-2").then(mod => ({ default: mod.Line })));
+function safeArray(value) {
+  return Array.isArray(value) ? value : [];
+}
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Tooltip,
-  Legend
-);
-
-/* helpers */
-const asArray = (v) => (Array.isArray(v) ? v : []);
-const pct = (a, b) => (b > 0 ? Math.round((a / b) * 100) : 0);
+function safeNumber(value, fallback = 0) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
+}
 
 export default function StudentDashboard() {
-  const { user, fetchMe } = useAuth();
+  const { t } = useTranslation();
 
-  const [inscriptions, setInscriptions] = useState([]);
-  const [paiements, setPaiements] = useState([]);
-  const [summary, setSummary] = useState(null);
-
-  const [stats, setStats] = useState(null);
-  const [grades, setGrades] = useState([]);
-  const [ranking, setRanking] = useState([]);
-
-  const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState(null);
+  const [dashboard, setDashboard] = useState(null);
+  const [assignments, setAssignments] = useState([]);
+  const [err, setErr] = useState("");
 
   useEffect(() => {
     let mounted = true;
 
-    async function loadAll() {
-      setLoading(true);
-      setErr(null);
+    async function loadDashboard() {
       try {
-        const [
-          insRes,
-          payRes,
-          profileRes,
-          dashRes,
-          gradesRes,
-          rankingRes
-        ] = await Promise.all([
-          api.get(`/students/${user?.id}/enrollments`).catch(() => ({ data: [] })),
-          api.get(`/profiles/${user?.id}/payments`).catch(() => ({ data: [] })),
-          api.get("/profiles/me").catch(() => ({ data: null })),
-          api.get("/student/dashboard").catch(() => ({ data: null })),
-          api.get("/student/grades").catch(() => ({ data: [] })),
-          api.get("/student/ranking").catch(() => ({ data: [] })),
+        setErr("");
+
+        const [dashboardRes, assignmentsRes] = await Promise.allSettled([
+          api.get("/student/dashboard"),
+          api.get("/assignments"),
         ]);
 
         if (!mounted) return;
 
-        setInscriptions(asArray(insRes.data));
-        setPaiements(asArray(payRes.data));
-        setSummary(profileRes.data);
-        setStats(dashRes?.data?.stats || null);
-        setGrades(asArray(gradesRes.data));
-        setRanking(asArray(rankingRes.data));
+        const dashboardData =
+          dashboardRes.status === "fulfilled"
+            ? dashboardRes.value?.data ?? {}
+            : {};
+
+        const assignmentsData =
+          assignmentsRes.status === "fulfilled"
+            ? assignmentsRes.value?.data ?? []
+            : [];
+
+        setDashboard(dashboardData);
+        setAssignments(safeArray(assignmentsData));
+
+        if (
+          dashboardRes.status === "rejected" &&
+          assignmentsRes.status === "rejected"
+        ) {
+          setErr(
+            t("dashboardStudent.loadError", {
+              defaultValue: "Impossible de charger le tableau de bord étudiant.",
+            })
+          );
+        }
       } catch (e) {
-        console.error(e);
-        if (mounted) setErr("Erreur lors du chargement des données");
-      } finally {
-        if (mounted) setLoading(false);
+        console.error("StudentDashboard load error:", e);
+        if (!mounted) return;
+
+        setDashboard({});
+        setAssignments([]);
+        setErr(
+          t("dashboardStudent.loadError", {
+            defaultValue: "Impossible de charger le tableau de bord étudiant.",
+          })
+        );
       }
     }
 
-    if (user?.id) loadAll();
-    return () => (mounted = false);
-  }, [user]);
+    loadDashboard();
 
-  /* ===== LOGIC ===== */
-  const completionRate = stats ? pct(stats.submitted, stats.total) : 0;
-  const isExcellent = stats && stats.total > 0 && stats.submitted === stats.total;
-  const riskLevel =
-    completionRate >= 80 ? "low" : completionRate >= 50 ? "medium" : "high";
+    return () => {
+      mounted = false;
+    };
+  }, [t]);
 
-  const riskColor = {
-    low: "bg-green-100 text-green-700",
-    medium: "bg-yellow-100 text-yellow-700",
-    high: "bg-red-100 text-red-700",
-  }[riskLevel];
+  const assignmentStats = useMemo(() => {
+    const total =
+      safeNumber(dashboard?.assignments?.total, assignments.length) ||
+      assignments.length;
 
-  const gradeChartData = {
-    labels: grades.map((g) => g.course),
-    datasets: [
-      {
-        label: "Score",
-        data: grades.map((g) => g.score),
-        borderColor: "#2563eb",
-        backgroundColor: "#3b82f6",
-        tension: 0.4,
-      },
-    ],
-  };
+    const submitted =
+      safeNumber(dashboard?.assignments?.submitted) ||
+      safeArray(assignments).filter((a) =>
+        ["submitted", "done", "completed"].includes(
+          String(a.status || "").toLowerCase()
+        )
+      ).length;
 
-  if (loading) return <div className="p-6">Chargement…</div>;
-  if (err) return <div className="p-6 text-red-600">{err}</div>;
+    const late =
+      safeNumber(dashboard?.assignments?.late) ||
+      safeArray(assignments).filter((a) =>
+        ["late", "overdue"].includes(String(a.status || "").toLowerCase())
+      ).length;
+
+    const pending =
+      safeNumber(dashboard?.assignments?.pending) ||
+      Math.max(total - submitted - late, 0);
+
+    const completionRate =
+      safeNumber(dashboard?.assignments?.completionRate) ||
+      (total > 0 ? Math.round((submitted / total) * 100) : 0);
+
+    return {
+      total,
+      submitted,
+      pending,
+      late,
+      completionRate,
+    };
+  }, [dashboard, assignments]);
+
+  const averageScore = useMemo(() => {
+    const score =
+      dashboard?.grades?.score ??
+      dashboard?.grades?.average ??
+      dashboard?.average_score;
+
+    if (score !== undefined && score !== null && score !== "") {
+      return safeNumber(score);
+    }
+
+    return null;
+  }, [dashboard]);
+
+  const ranking = dashboard?.ranking ?? dashboard?.classRanking ?? null;
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
+    <div className="max-w-6xl mx-auto p-4 space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold">
+          {t("dashboardStudent.title", { defaultValue: "Espace étudiant" })}
+        </h1>
+        <p className="text-gray-500">
+          {t("dashboardStudent.subtitle", {
+            defaultValue: "Tableau de bord académique",
+          })}
+        </p>
+      </div>
 
-      {/* ===== HEADER ===== */}
-      <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Espace étudiant</h1>
-        <p className="text-gray-500">Tableau de bord académique</p>
-      </header>
+      {err && <div className="text-red-600 text-sm">{err}</div>}
 
-      {/* ===== PDF EXPORT ===== */}
-      <button
-        onClick={() => window.open("/student/dashboard/export-pdf")}
-        className="px-3 py-2 bg-purple-600 text-white rounded mb-4"
-      >
-        📄 Télécharger PDF
-      </button>
-
-      {/* ===== STATS ASSIGNMENTS ===== */}
-      {stats && (
-        <section className="mb-6 bg-white p-4 rounded shadow">
-          <h2 className="font-semibold mb-4">📊 Assignments</h2>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-            <StatCard title="Total" value={stats.total} color="bg-blue-500" />
-            <StatCard title="Submitted" value={stats.submitted} color="bg-green-500" />
-            <StatCard title="Pending" value={stats.pending} color="bg-yellow-400 text-black" />
-            <StatCard title="Late" value={stats.late} color="bg-red-500" />
+      <div className="grid md:grid-cols-3 gap-4">
+        <Link
+          to="/dashboard/student/assignments"
+          className="rounded-2xl bg-white shadow p-5 border hover:shadow-md transition"
+        >
+          <div className="text-sm text-gray-500">
+            {t("dashboardStudent.myAssignments", {
+              defaultValue: "📝 Mes devoirs",
+            })}
           </div>
+          <div className="mt-2 text-3xl font-bold">{assignmentStats.total}</div>
+        </Link>
 
-          {/* Completion */}
-          <div className="mt-4">
-            <div className="flex justify-between text-sm mb-1">
-              <span>Taux de complétion</span>
-              <span>{completionRate}%</span>
-            </div>
-            <div className="w-full bg-gray-200 h-2 rounded">
-              <div className="h-2 bg-blue-600 rounded" style={{ width: `${completionRate}%` }} />
-            </div>
+        <Link
+          to="/dashboard/my-courses"
+          className="rounded-2xl bg-white shadow p-5 border hover:shadow-md transition"
+        >
+          <div className="text-sm text-gray-500">
+            {t("dashboardStudent.myCourses", {
+              defaultValue: "📚 Mes cours",
+            })}
           </div>
+          <div className="mt-2 text-3xl font-bold">
+            {safeNumber(dashboard?.courses_count ?? dashboard?.courses?.length ?? 0)}
+          </div>
+        </Link>
 
-          {/* Badge */}
-          {isExcellent && (
-            <div className="mt-3 inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">
-              🏆 Excellent – Tous les devoirs soumis
+        <div className="rounded-2xl bg-white shadow p-5 border">
+          <div className="text-sm text-gray-500">
+            {t("dashboardStudent.classRanking", {
+              defaultValue: "🏆 Classement de la classe",
+            })}
+          </div>
+          <div className="mt-2 text-3xl font-bold">
+            {ranking?.position ?? "—"}
+          </div>
+          {!ranking?.position && (
+            <div className="mt-1 text-sm text-gray-500">
+              {t("dashboardStudent.noRanking", {
+                defaultValue: "Aucun classement disponible.",
+              })}
             </div>
           )}
-
-          {/* Risk */}
-          <div className={`mt-3 p-3 rounded text-sm ${riskColor}`}>
-            📉 Risque académique :
-            <b className="ml-1">
-              {riskLevel === "low" && "Faible"}
-              {riskLevel === "medium" && "Moyen"}
-              {riskLevel === "high" && "Élevé"}
-            </b>
-          </div>
-        </section>
-      )}
-
-      {/* ===== GRADES CHART ===== */}
-      {grades.length > 0 && (
-        <section className="mb-6 bg-white p-4 rounded shadow">
-          <h2 className="font-semibold mb-4">📈 Évolution des notes</h2>
-          <Line data={gradeChartData} />
-        </section>
-      )}
-
-      {/* ===== ACTIONS ===== */}
-      <section className="bg-white p-4 rounded shadow mb-6">
-        <div className="flex gap-3">
-          <Link to="/dashboard/my-courses" className="btn-primary">📚 Mes cours</Link>
-          <Link to="/dashboard/assignments" className="btn-secondary">📝 Mes devoirs</Link>
         </div>
-      </section>
+      </div>
 
-      {/* ===== CLASSEMENT ===== */}
-      <section className="mb-6 bg-white p-4 rounded shadow">
-        <h2 className="font-semibold mb-3">🏆 Classement de la classe</h2>
-        {ranking.length === 0 ? (
-          <div>Aucun classement disponible.</div>
-        ) : (
-          <ol className="list-decimal ml-5 text-sm">
-            {ranking.map((r, idx) => (
-              <li key={r.id} className="mb-1">
-                #{idx + 1} {r.full_name} — Moyenne: {Number(r.average_score).toFixed(2)}
-              </li>
-            ))}
-          </ol>
-        )}
-      </section>
-    </div>
-  );
-}
+      <div className="rounded-2xl bg-white shadow p-5 border space-y-4">
+        <h2 className="text-xl font-semibold">
+          {t("dashboardStudent.assignments.title", {
+            defaultValue: "📊 Devoirs",
+          })}
+        </h2>
 
-/* ===== SMALL COMPONENT ===== */
-function StatCard({ title, value, color }) {
-  return (
-    <div className={`p-4 rounded text-white ${color}`}>
-      <div className="text-sm">{title}</div>
-      <div className="text-2xl font-bold">{value}</div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="rounded-xl bg-slate-50 p-4">
+            <div className="text-sm text-gray-500">
+              {t("dashboardStudent.assignments.total", { defaultValue: "Total" })}
+            </div>
+            <div className="text-2xl font-bold mt-1">{assignmentStats.total}</div>
+          </div>
+
+          <div className="rounded-xl bg-slate-50 p-4">
+            <div className="text-sm text-gray-500">
+              {t("dashboardStudent.assignments.submitted", {
+                defaultValue: "Soumis",
+              })}
+            </div>
+            <div className="text-2xl font-bold mt-1">
+              {assignmentStats.submitted}
+            </div>
+          </div>
+
+          <div className="rounded-xl bg-slate-50 p-4">
+            <div className="text-sm text-gray-500">
+              {t("dashboardStudent.assignments.pending", {
+                defaultValue: "En attente",
+              })}
+            </div>
+            <div className="text-2xl font-bold mt-1">
+              {assignmentStats.pending}
+            </div>
+          </div>
+
+          <div className="rounded-xl bg-slate-50 p-4">
+            <div className="text-sm text-gray-500">
+              {t("dashboardStudent.assignments.late", {
+                defaultValue: "En retard",
+              })}
+            </div>
+            <div className="text-2xl font-bold mt-1">{assignmentStats.late}</div>
+          </div>
+
+          <div className="rounded-xl bg-slate-50 p-4">
+            <div className="text-sm text-gray-500">
+              {t("dashboardStudent.assignments.completionRate", {
+                defaultValue: "Taux de complétion",
+              })}
+            </div>
+            <div className="text-2xl font-bold mt-1">
+              {assignmentStats.completionRate}%
+            </div>
+          </div>
+        </div>
+
+        <div className="text-sm text-gray-600">
+          {assignmentStats.total > 0 && assignmentStats.submitted === assignmentStats.total
+            ? t("dashboardStudent.assignments.excellent", {
+                defaultValue: "🏆 Excellent – Tous les devoirs soumis",
+              })
+            : `${t("dashboardStudent.assignments.academicRisk", {
+                defaultValue: "📉 Risque académique",
+              })}: ${
+                assignmentStats.late > 0
+                  ? t("dashboardStudent.assignments.riskHigh", {
+                      defaultValue: "Élevé",
+                    })
+                  : assignmentStats.pending > 0
+                  ? t("dashboardStudent.assignments.riskMedium", {
+                      defaultValue: "Moyen",
+                    })
+                  : t("dashboardStudent.assignments.riskLow", {
+                      defaultValue: "Faible",
+                    })
+              }`}
+        </div>
+      </div>
+
+      <div className="rounded-2xl bg-white shadow p-5 border">
+        <h2 className="text-xl font-semibold">
+          {t("dashboardStudent.grades.title", {
+            defaultValue: "📈 Évolution des notes",
+          })}
+        </h2>
+
+        <div className="mt-4 text-sm text-gray-500">
+          {t("dashboardStudent.grades.score", { defaultValue: "Score" })}
+        </div>
+        <div className="text-3xl font-bold mt-1">
+          {averageScore !== null ? averageScore : "—"}
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,14 +1,12 @@
 // src/pages/superadmin/MediaManager.jsx
-import React, { useEffect, useState, useRef } from "react";
-import api from "@/utils/api";
+import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
+import api from "@/utils/api";
 
-/**
- * MediaManager uploader with folder + tags metadata and upload progress.
- * - Uses api.post('/api/superadmin/media', formData, { onUploadProgress })
- * - Shows list fetched from GET /api/superadmin/media
- */
 export default function MediaManager() {
+  const { t } = useTranslation();
+
   const [file, setFile] = useState(null);
   const [folder, setFolder] = useState("");
   const [tagsInput, setTagsInput] = useState("");
@@ -30,43 +28,56 @@ export default function MediaManager() {
       const params = {};
       if (filterFolder) params.folder = filterFolder;
       if (filterTag) params.tag = filterTag;
-      const res = await api.get("/api/superadmin/media", { params });
-      const rows = res.data?.rows ?? [];
-      setMedia(rows);
+
+      const res = await api.get("/media", { params });
+      setMedia(res.data?.rows || []);
     } catch (err) {
-      console.error("fetchList error", err);
-      toast.error("Impossible de charger la liste des médias.");
+      console.error("fetch media error:", err);
+      toast.error(t("mediaManagerPage.errors.load", { defaultValue: "Impossible de charger les médias." }));
     } finally {
       setLoadingList(false);
     }
   }
 
   function onFileChange(e) {
-    setFile(e.target.files?.[0] ?? null);
+    setFile(e.target.files?.[0] || null);
   }
 
   function parseTags() {
-    // user inputs comma separated tags
     return tagsInput
       .split(",")
-      .map((t) => t.trim())
+      .map((tag) => tag.trim())
       .filter(Boolean);
   }
 
+  function resetForm() {
+    setFile(null);
+    setFolder("");
+    setTagsInput("");
+    if (inputRef.current) inputRef.current.value = "";
+  }
+
   async function upload() {
-    if (!file) return toast.error("Choisir un fichier.");
+    if (!file) {
+      return toast.error(
+        t("mediaManagerPage.errors.chooseFile", { defaultValue: "Choisis un fichier." })
+      );
+    }
+
     setUploading(true);
     setProgress(0);
 
     const form = new FormData();
     form.append("file", file);
     if (folder) form.append("folder", folder);
+
     const tagsArr = parseTags();
-    if (tagsArr.length) form.append("tags", JSON.stringify(tagsArr)); // backend accepts JSON array or CSV
+    if (tagsArr.length) {
+      form.append("tags", JSON.stringify(tagsArr));
+    }
 
     try {
-      const res = await api.post("/api/superadmin/media", form, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const res = await api.post("/media", form, {
         onUploadProgress: (ev) => {
           if (ev.total) {
             const p = Math.round((ev.loaded * 100) / ev.total);
@@ -76,22 +87,23 @@ export default function MediaManager() {
       });
 
       const fileRec = res.data?.file;
+
       if (fileRec) {
-        toast.success("Fichier uploadé.");
-        // put new file on top of list
-        setMedia((m) => [fileRec, ...m]);
-        // reset form
-        setFile(null);
-        setFolder("");
-        setTagsInput("");
-        if (inputRef.current) inputRef.current.value = "";
+        toast.success(t("mediaManagerPage.success.uploaded", { defaultValue: "Fichier uploadé." }));
+        setMedia((prev) => [fileRec, ...prev]);
       } else {
-        toast.success("Upload terminé.");
-        fetchList();
+        toast.success(t("mediaManagerPage.success.uploadFinished", { defaultValue: "Upload terminé." }));
+        await fetchList();
       }
+
+      resetForm();
     } catch (err) {
-      console.error("upload error", err);
-      const msg = err?.response?.data?.error || err?.message || "Erreur upload";
+      console.error("upload media error:", err);
+      const msg =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        err?.message ||
+        t("mediaManagerPage.errors.upload", { defaultValue: "Erreur d’upload." });
       toast.error(String(msg));
     } finally {
       setUploading(false);
@@ -100,89 +112,205 @@ export default function MediaManager() {
   }
 
   async function remove(id) {
-    if (!confirm("Supprimer ce fichier ?")) return;
+    if (!window.confirm(t("mediaManagerPage.confirmDelete", { defaultValue: "Supprimer ce média ?" }))) {
+      return;
+    }
+
     try {
-      await api.delete(`/api/superadmin/media/${id}`);
-      toast.success("Supprimé.");
-      setMedia((m) => m.filter((it) => Number(it.id) !== Number(id)));
+      await api.delete(`/media/${id}`);
+      toast.success(t("mediaManagerPage.success.deleted", { defaultValue: "Média supprimé." }));
+      setMedia((prev) => prev.filter((it) => Number(it.id) !== Number(id)));
     } catch (err) {
-      console.error("delete media error", err);
-      toast.error("Impossible de supprimer.");
+      console.error("delete media error:", err);
+      toast.error(t("mediaManagerPage.errors.delete", { defaultValue: "Impossible de supprimer le média." }));
+    }
+  }
+
+  async function copyUrl(url) {
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success(t("mediaManagerPage.success.urlCopied", { defaultValue: "URL copiée." }));
+    } catch {
+      toast.error(t("mediaManagerPage.errors.copyUrl", { defaultValue: "Impossible de copier l’URL." }));
     }
   }
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold mb-4">Gestion des médias</h2>
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold">
+          {t("mediaManagerPage.title", { defaultValue: "Gestion des médias" })}
+        </h2>
+        <p className="text-gray-500">
+          Uploader, filtrer et supprimer les médias de la plateforme.
+        </p>
+      </div>
 
-      <div className="bg-white p-4 rounded shadow mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="bg-gray-50 rounded-2xl p-6 space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm mb-1">Fichier</label>
+            <label className="block text-sm mb-1">
+              {t("mediaManagerPage.file", { defaultValue: "Fichier" })}
+            </label>
             <input ref={inputRef} type="file" onChange={onFileChange} />
-            {file && <div className="text-sm mt-1">Sélectionné: {file.name} • {Math.round(file.size / 1024)} KB</div>}
+            {file ? (
+              <div className="text-sm mt-2 text-gray-600">
+                {t("mediaManagerPage.selected", { defaultValue: "Sélectionné" })}: {file.name} •{" "}
+                {Math.round(file.size / 1024)} KB
+              </div>
+            ) : null}
           </div>
 
           <div>
-            <label className="block text-sm mb-1">Dossier (folder)</label>
-            <input value={folder} onChange={(e) => setFolder(e.target.value)} placeholder="ex: images/banners" className="w-full border rounded p-2" />
+            <label className="block text-sm mb-1">
+              {t("mediaManagerPage.folder", { defaultValue: "Dossier" })}
+            </label>
+            <input
+              value={folder}
+              onChange={(e) => setFolder(e.target.value)}
+              placeholder="ex: images/banners"
+              className="w-full border rounded-xl p-3"
+            />
           </div>
 
           <div>
-            <label className="block text-sm mb-1">Tags (virgule séparés)</label>
-            <input value={tagsInput} onChange={(e) => setTagsInput(e.target.value)} placeholder="ex: home, banner" className="w-full border rounded p-2" />
+            <label className="block text-sm mb-1">
+              {t("mediaManagerPage.tags", { defaultValue: "Tags" })}
+            </label>
+            <input
+              value={tagsInput}
+              onChange={(e) => setTagsInput(e.target.value)}
+              placeholder="ex: home, banner"
+              className="w-full border rounded-xl p-3"
+            />
           </div>
         </div>
 
-        <div className="mt-4 flex items-center gap-2">
-          <button onClick={upload} disabled={uploading} className="px-3 py-2 bg-blue-600 text-white rounded">
-            {uploading ? `Upload… ${progress}%` : "Uploader"}
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={upload}
+            disabled={uploading}
+            className="px-5 py-3 rounded-xl bg-blue-600 text-white disabled:opacity-50"
+          >
+            {uploading
+              ? `${t("mediaManagerPage.uploading", { defaultValue: "Upload..." })} ${progress}%`
+              : t("mediaManagerPage.upload", { defaultValue: "Uploader" })}
           </button>
-          <button onClick={() => { setFile(null); setFolder(""); setTagsInput(""); if (inputRef.current) inputRef.current.value = ""; }} className="px-3 py-2 border rounded">
-            Réinitialiser
+
+          <button
+            type="button"
+            onClick={resetForm}
+            className="px-5 py-3 rounded-xl border"
+          >
+            {t("mediaManagerPage.reset", { defaultValue: "Réinitialiser" })}
           </button>
-          <button onClick={fetchList} className="px-3 py-2 border rounded">Rafraîchir la liste</button>
+
+          <button
+            type="button"
+            onClick={fetchList}
+            className="px-5 py-3 rounded-xl border"
+          >
+            {t("mediaManagerPage.refresh", { defaultValue: "Rafraîchir" })}
+          </button>
         </div>
 
-        {uploading && (
-          <div className="mt-3">
-            <div className="w-full bg-gray-100 rounded h-3 overflow-hidden">
-              <div style={{ width: `${progress}%` }} className="h-3 bg-blue-600" />
+        {uploading ? (
+          <div>
+            <div className="w-full bg-gray-200 rounded h-3 overflow-hidden">
+              <div
+                className="h-3 bg-blue-600"
+                style={{ width: `${progress}%` }}
+              />
             </div>
             <div className="text-xs text-gray-600 mt-1">{progress}%</div>
           </div>
-        )}
+        ) : null}
       </div>
 
-      <div className="mb-4 flex gap-2 items-center">
-        <input placeholder="Filtrer par dossier" value={filterFolder} onChange={(e) => setFilterFolder(e.target.value)} className="border rounded p-2" />
-        <input placeholder="Filtrer par tag" value={filterTag} onChange={(e) => setFilterTag(e.target.value)} className="border rounded p-2" />
-        <button onClick={fetchList} className="px-3 py-2 border rounded">Appliquer filtres</button>
+      <div className="flex flex-wrap gap-3">
+        <input
+          placeholder={t("mediaManagerPage.filterFolder", { defaultValue: "Filtrer par dossier" })}
+          value={filterFolder}
+          onChange={(e) => setFilterFolder(e.target.value)}
+          className="border rounded-xl p-3"
+        />
+        <input
+          placeholder={t("mediaManagerPage.filterTag", { defaultValue: "Filtrer par tag" })}
+          value={filterTag}
+          onChange={(e) => setFilterTag(e.target.value)}
+          className="border rounded-xl p-3"
+        />
+        <button
+          type="button"
+          onClick={fetchList}
+          className="px-5 py-3 rounded-xl border"
+        >
+          {t("mediaManagerPage.applyFilters", { defaultValue: "Appliquer" })}
+        </button>
       </div>
 
-      <div className="bg-white p-4 rounded shadow">
+      <div className="bg-gray-50 rounded-2xl p-6">
         {loadingList ? (
-          <div>Chargement…</div>
+          <div>{t("common.loading", { defaultValue: "Chargement..." })}</div>
         ) : media.length === 0 ? (
-          <div className="text-sm text-gray-500">Aucun média.</div>
+          <div className="text-sm text-gray-500">
+            {t("mediaManagerPage.noMedia", { defaultValue: "Aucun média." })}
+          </div>
         ) : (
           <div className="space-y-3">
             {media.map((m) => (
-              <div key={m.id || m.filename} className="flex items-center justify-between border-b py-2">
+              <div
+                key={m.id || m.filename}
+                className="bg-white border rounded-xl p-4 flex items-center justify-between gap-4"
+              >
                 <div>
                   <div className="font-medium">{m.originalname || m.filename}</div>
-                  <div className="text-xs text-gray-500">
-                    {m.folder ? <><strong>Dossier:</strong> {m.folder} • </> : null}
-                    {Array.isArray(m.tags) && m.tags.length ? <><strong>Tags:</strong> {m.tags.join(", ")} • </> : null}
-                    <span>{(m.size/1024).toFixed(1)} KB</span>
+                  <div className="text-xs text-gray-500 mt-1">
+                    {m.folder ? (
+                      <>
+                        <strong>{t("mediaManagerPage.folderLabel", { defaultValue: "Dossier" })}</strong> {m.folder} •{" "}
+                      </>
+                    ) : null}
+                    {Array.isArray(m.tags) && m.tags.length ? (
+                      <>
+                        <strong>{t("mediaManagerPage.tagsLabel", { defaultValue: "Tags" })}</strong> {m.tags.join(", ")} •{" "}
+                      </>
+                    ) : null}
+                    <span>{((m.size || 0) / 1024).toFixed(1)} KB</span>
                   </div>
-                  <div className="mt-1">
-                    <a className="text-sm text-blue-600 underline" href={m.url} target="_blank" rel="noreferrer">Ouvrir</a>
-                  </div>
+
+                  {m.url ? (
+                    <div className="mt-2">
+                      <a
+                        href={m.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-sm text-blue-600 underline"
+                      >
+                        {t("mediaManagerPage.open", { defaultValue: "Ouvrir" })}
+                      </a>
+                    </div>
+                  ) : null}
                 </div>
-                <div className="flex gap-2">
-                  <button onClick={() => navigator.clipboard?.writeText(m.url).then(()=>toast.success("URL copiée"))} className="px-2 py-1 border rounded text-sm">Copier URL</button>
-                  <button onClick={() => remove(m.id)} className="px-2 py-1 border rounded text-sm">Supprimer</button>
+
+                <div className="flex gap-2 shrink-0">
+                  {m.url ? (
+                    <button
+                      type="button"
+                      onClick={() => copyUrl(m.url)}
+                      className="px-3 py-2 border rounded-lg text-sm"
+                    >
+                      {t("mediaManagerPage.copyUrl", { defaultValue: "Copier l’URL" })}
+                    </button>
+                  ) : null}
+                  <button
+                    type="button"
+                    onClick={() => remove(m.id)}
+                    className="px-3 py-2 bg-red-600 text-white rounded-lg text-sm"
+                  >
+                    {t("mediaManagerPage.delete", { defaultValue: "Supprimer" })}
+                  </button>
                 </div>
               </div>
             ))}

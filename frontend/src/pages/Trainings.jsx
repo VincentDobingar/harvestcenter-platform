@@ -1,4 +1,3 @@
-// 6. ✅ src/pages/Trainings.jsx
 import { useTranslation } from "react-i18next";
 
 export default function Trainings() {
