@@ -1,46 +1,1495 @@
 {
+  "common": {
+    "toggleMenu": "Open menu",
+    "loading": "Loading...",
+    "back": "Back",
+    "refresh": "Refresh",
+    "details": "Details",
+    "cancel": "Cancel"
+  },
   "nav": {
     "home": "Home",
     "about": "About",
+    "scholarships": "Opportunities",
     "courses": "Courses",
-    "why": "Why Us",
-    "testimonials": "Testimonials",
     "contact": "Contact",
-    "formations": "Courses",
-    "inscription": "Apply",
-    "team": "Team",
-    "contactPage": "Contact (Page)"
+    "opportunities": "Opportunities"
   },
-  "pages": {
-    "formations": {
-      "title": "Our Courses",
-      "subtitle": "Hands-on programs to master languages.",
-      "cards": {
-        "english": "General English",
-        "business": "Business English",
-        "chinese": "Chinese (Mandarin)",
-        "spanish": "Spanish",
-        "french": "French (FLE)",
-        "prep": "TOEFL/IELTS Prep"
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "dashboard": "My dashboard",
+    "apply": "Apply"
+  },
+  "site": {
+    "address": "Abena District, N'Djamena, Chad",
+    "phone": "+235 66 68 02 00 / 99 40 20 89",
+    "email": "contact@harvestcentertd.org"
+  },
+  "home": {
+    "hero": {
+      "badge": "Languages • Culture • Education",
+      "title": "Master the languages that open doors",
+      "subtitle": "English, Chinese, Spanish, French — progressive and certified programs tailored to your pace and delivered by experienced trainers.",
+      "bullets": [
+        "Small groups and personalized support",
+        "Flexible schedules: intensive, evening, weekend",
+        "TOEFL / IELTS / HSK / TCF preparation"
+      ],
+      "ctaApply": "Apply now",
+      "ctaCourses": "View courses",
+      "ctaDiscover": "Discover the center",
+      "slideAlt": "Hero visual {{index}}",
+      "cardText": "Regular cohorts, targeted workshops and support all the way to certification.",
+      "floating": {
+        "value": "1,500+ learners",
+        "label": "since 2018"
       },
-      "cta": "Apply"
+      "stats": {
+        "learners": {
+          "value": "98%",
+          "label": "Satisfaction rate"
+        },
+        "certifications": {
+          "value": "850+",
+          "label": "Certifications obtained"
+        },
+        "partners": {
+          "value": "15+",
+          "label": "Partners & NGOs"
+        }
+      }
     },
-    "equipe": {
-      "title": "Our Team",
-      "subtitle": "Experienced and passionate trainers.",
-      "roleTrainer": "Trainer",
-      "roleCoordinator": "Coordinator",
-      "roleDirector": "Director"
+    "about": {
+      "title": "About Harvest Center",
+      "intro": "A language training center: English, Chinese, Spanish, French…",
+      "description": "We offer adapted learning paths: intensive, evening and weekend programs focused on practice and certification.",
+      "imageAlt": "Harvest Center classroom",
+      "features": [
+        "Experienced trainers",
+        "Flexible programs",
+        "Test preparation",
+        "Personalized support"
+      ]
     },
     "contact": {
       "title": "Contact us",
-      "subtitle": "Got a question? Write to us.",
+      "subtitle": "We are here to answer any questions about our courses, registrations, and partnerships.",
+      "mapTitle": "Harvest Center location",
+      "bannerTitle": "Ready to join Harvest Center?",
+      "bannerText": "Submit your registration request and discover our language programs tailored to your goals.",
+      "bannerAlt": "Harvest Center registration banner",
+      "cta": "Submit an application"
+    },
+  "training": {
+    "title": "Our courses",
+    "subtitle": "Progressive learning paths tailored to your pace: intensive, evening or weekend.",
+    "viewProgram": "View program →",
+    "items": {
+      "english": {
+        "title": "English",
+        "desc": "General / Business / TOEFL-IELTS Prep"
+      },
+      "chinese": {
+        "title": "Chinese (Mandarin)",
+        "desc": "Basics, conversation, professional use"
+      },
+      "spanish": {
+        "title": "Spanish",
+        "desc": "Beginner to advanced"
+      },
+      "french": {
+        "title": "French",
+        "desc": "Refresher courses, FLE"
+      },
+      "german": {
+        "title": "German",
+        "desc": "Discover or improve your German with a structured, practical, and accessible training program."
+      }
+    }
+  },
+    "why": {
+      "title": "Why choose us?",
+      "subtitle": "A practical teaching approach, small groups and real support all the way to success.",
+      "items": {
+        "activeMethod": {
+          "title": "Active method",
+          "desc": "Speaking, role plays and real-life practice."
+        },
+        "smallGroups": {
+          "title": "Small groups",
+          "desc": "Faster learning and quality follow-up."
+        },
+        "certifications": {
+          "title": "Certifications",
+          "desc": "Preparation for TOEFL/IELTS/HSK/DELE/TCF."
+        },
+        "flexibleHours": {
+          "title": "Flexible schedules",
+          "desc": "Intensive, evening or weekend classes."
+        },
+        "proTrainers": {
+          "title": "Professional trainers",
+          "desc": "Teaching experience and sector expertise."
+        },
+        "support": {
+          "title": "Support",
+          "desc": "Advice, resources and individual follow-up."
+        }
+      }
+    },
+    "news": {
+      "title": "Latest news",
+      "subtitle": "Announcements, workshops and updates from Harvest Center.",
+      "readMore": "Read more →",
+      "viewAll": "View all news",
+      "items": {
+        "intensiveEnglish": {
+          "title": "Opening of intensive English sessions",
+          "excerpt": "New cohorts begin in October. Flexible schedules: morning, evening and weekend."
+        },
+        "hskWorkshop": {
+          "title": "HSK workshop – Mandarin preparation",
+          "excerpt": "A workshop focused on HSK level 1–3 exam techniques, led by our trainers."
+        },
+        "internalScholarships": {
+          "title": "Harvest Center internal scholarships",
+          "excerpt": "A partial scholarship program for motivated learners. Applications are open."
+        },
+        "conversationClub": {
+          "title": "Conversation classes – Saturday club",
+          "excerpt": "Join the conversation club to practice in real-life conditions."
+        },
+        "partnership": {
+          "title": "Partnership agreement signed",
+          "excerpt": "We are pleased about the partnership agreement signed between Harvest Center and Job Booster Chad."
+        }
+      }
+    },
+    "testimonials": {
+      "title": "They recommend us",
+      "subtitle": "The best proof of quality is the results achieved by our learners.",
+      "photoAlt": "Photo of {{name}}",
+      "ratingAria": "Rating {{n}} out of 5",
+      "items": {
+        "amina": {
+          "role": "IELTS 7.0",
+          "text": "I achieved IELTS 7.0 thanks to the evening classes. The method is very practical and strongly focused on speaking."
+        },
+        "mahamat": {
+          "role": "Business English",
+          "text": "Career-oriented classes helped me at work from the very first week. Small groups mean fast progress."
+        },
+        "sonia": {
+          "role": "HSK (Mandarin)",
+          "text": "Very good support for HSK. The trainers are available and we really practice the language."
+        },
+        "ousmane": {
+          "role": "Spanish A2→B1",
+          "text": "Flexible weekend schedule, perfect for me. The materials are clear and varied."
+        }
+      }
+    },
+      "gallery": {
+      "title": "In pictures",
+      "subtitle": "Life at Harvest Center: classes, workshops and events.",
+      "imageAlt": "Gallery {{index}}",
+      "viewAll": "View full gallery"
+    },
+    "partners": {
+      "title": "Our partners",
+      "subtitle": "They trust us for language training.",
+      "logoAlt": "Logo of {{name}}",
+      "items": {
+        "msf": "Humanitarian medical NGO active in the field.",
+        "adac": "Community development and action association.",
+        "pam": "World Food Programme — food security.",
+        "bodel": "Consulting, training and studies for organizations.",
+        "expertiseFrance": "International technical cooperation and development.",
+        "cdo": "Consulting, digital transformation and organizational support.",
+        "carter": "The Carter Center — public health and governance.",
+        "reussirBeGou": "Guidance, counseling and scholarship and job opportunities.",
+        "jobBooster": "Consulting, training, entrepreneurship and placement.",
+        "ligue": "Consulting, digital transformation and organizational support.",
+        "donaCorp": "Management, placement and business opportunity creation."
+      }
+    },
+"homeCta": {
+  "title": "Ready to get started?",
+  "subtitle": "Join our programs and progress quickly.",
+  "apply": "Apply",
+  "viewCourses": "View courses"
+}
+  },
+  "contactPage": {
+    "title": "Contact us",
+    "openWhatsapp": "Chat on WhatsApp",
+    "successBanner": "✅ Thank you for your message. We will get back to you soon.",
+    "mapTitle": "Harvest Center location",
+    "fields": {
       "name": "Full name",
+      "email": "Email address",
+      "subject": "Subject",
+      "message": "Message",
+      "send": "Send"      
+    },
+    "badge": "Harvest Center",
+    "subtitle": "Have a question, need information, or want to collaborate with us? Send us a message.",
+    "formTitle": "Send a message",
+    "formDescription": "Fill in this form and our team will get back to you as soon as possible.",
+    "openInMaps": "Open in Maps",
+    "dev": {
+      "recaptchaMissing": "VITE_RECAPTCHA_SITE_KEY is missing. The form will be sent without a token.",
+      "recaptchaLoadFailed": "Failed to load reCAPTCHA"
+    },
+    "validation": {
+      "fillAll": "Please fill in all fields."
+    },
+    "toast": {
+      "success": "Message sent successfully ✉️",
+      "error": "Unable to send the message. Please check your connection or try again later."
+    },
+    "info": {
+      "addressLabel": "📍 Address:",
+      "phoneLabel": "📞 Phone:",
+      "emailLabel": "✉️ Email:"
+    }
+  },
+  "formationsPage": {
+    "finalCtaBadge": "Harvest Center International Training",
+    "finalCtaImageAlt": "Harvest Center training banner",
+    "badge": "Harvest Center",
+    "title": "Our training programs",
+    "subtitle": "Harvest Center offers language, professional, and educational programs designed to build useful, lasting, and recognized skills in both local and international environments.",
+    "ctaApply": "Submit an application",
+    "ctaContact": "Contact us",
+    "ctaContactHero": "Talk to our team",
+    "programsTitle": "Structured programs for every profile",
+    "programsSubtitle": "Our offers cover language learning, professional capacity building, academic support, leadership, culture, and future readiness.",
+    "labels": {
+      "audiences": "Target audiences",
+      "highlights": "Key highlights",
+      "outcomes": "Expected outcomes"
+    },
+    "strengths": {
+      "international": {
+        "title": "International positioning",
+        "text": "An offer designed to prepare learners for communication, mobility, and excellence in a global environment."
+      },
+      "results": {
+        "title": "Results-oriented approach",
+        "text": "Each program is designed around clear objectives, observable skills, and concrete progress."
+      },
+      "learner": {
+        "title": "Learner-centered pedagogy",
+        "text": "We prioritize interaction, practice, personalized follow-up, and confidence building."
+      }
+    },
+    "programs": {
+      "languages": {
+        "title": "Languages & International Communication",
+        "description": "Language training pathways designed to strengthen speaking, comprehension, professional ease, and international openness.",
+        "audiences": {
+          "1": "Students and pupils",
+          "2": "Professionals and company staff",
+          "3": "Applicants for scholarships, jobs, and mobility opportunities"
+        },
+        "highlights": {
+          "1": "English, French, Chinese, and other languages according to needs",
+          "2": "Beginner, intermediate, and advanced levels",
+          "3": "Real communication and measurable-results approach"
+        },
+        "outcomes": {
+          "1": "Communicate better in academic and professional contexts",
+          "2": "Build confidence in speaking and writing",
+          "3": "Prepare for mobility, employment, and international exchange"
+        }
+      },
+      "capacity": {
+        "title": "Professional Capacity Building",
+        "description": "Practical training programs to develop essential skills for professional, institutional, and entrepreneurial environments.",
+        "audiences": {
+          "1": "Recent graduates",
+          "2": "Managers and organizational staff",
+          "3": "Entrepreneurs and project holders"
+        },
+        "highlights": {
+          "1": "Professional communication and writing",
+          "2": "Presentation techniques, public speaking, and professional posture",
+          "3": "Transferable skills for employability"
+        },
+        "outcomes": {
+          "1": "Improve workplace effectiveness",
+          "2": "Strengthen leadership and communication",
+          "3": "Increase impact in projects and teams"
+        }
+      },
+      "coaching": {
+        "title": "Academic Coaching and Personalized Support",
+        "description": "Targeted support to help each learner progress according to their level, pace, and personal or professional goals.",
+        "audiences": {
+          "1": "Learners facing challenges or moving up a level",
+          "2": "Candidates preparing for exams or competitions",
+          "3": "Professionals seeking an individual pathway"
+        },
+        "highlights": {
+          "1": "Individual or small-group support",
+          "2": "Clear and progressive learning objectives",
+          "3": "Performance- and confidence-oriented coaching"
+        },
+        "outcomes": {
+          "1": "Faster and better-structured progress",
+          "2": "Better learning organization",
+          "3": "Support tailored to each learner’s profile"
+        }
+      },
+      "education": {
+        "title": "Educational Programs, Clubs, and Leadership",
+        "description": "Dynamic learning spaces designed to develop intellectual curiosity, critical thinking, leadership, and citizenship.",
+        "audiences": {
+          "1": "Youth, students, and educational communities",
+          "2": "School and university clubs",
+          "3": "Organizations wishing to train engaged leaders"
+        },
+        "highlights": {
+          "1": "Language clubs, conversation cafés, and debates",
+          "2": "Leadership, public speaking, and citizenship workshops",
+          "3": "High-impact conferences and educational activities"
+        },
+        "outcomes": {
+          "1": "Strengthen expression, listening, and argumentation",
+          "2": "Develop initiative and leadership",
+          "3": "Train learners who are more open, responsible, and confident"
+        }
+      },
+      "culture": {
+        "title": "Culture, Exchange, and Immersion",
+        "description": "Cultural and language activities that make learning lively, practical, and connected to the world.",
+        "audiences": {
+          "1": "Language learners",
+          "2": "Educational communities",
+          "3": "Cultural and institutional partners"
+        },
+        "highlights": {
+          "1": "Meetings, workshops, exhibitions, and cultural events",
+          "2": "Immersion- and practice-based learning",
+          "3": "Discovery of intercultural contexts"
+        },
+        "outcomes": {
+          "1": "Better understand language within its cultural environment",
+          "2": "Strengthen relational ease",
+          "3": "Develop an international and intercultural posture"
+        }
+      },
+      "certification": {
+        "title": "Preparation, Assessment, and Certification",
+        "description": "Structured pathways that help measure progress, prepare for assessments, and promote acquired competencies.",
+        "audiences": {
+          "1": "Candidates for assessments and certifications",
+          "2": "Learners in diploma or qualifying programs",
+          "3": "Professionals seeking to validate their skills"
+        },
+        "highlights": {
+          "1": "Methodical preparation for assessments",
+          "2": "Results-oriented academic follow-up",
+          "3": "Certification and recognition of acquired competencies"
+        },
+        "outcomes": {
+          "1": "Perform better in assessments and exams",
+          "2": "Structure academic progression",
+          "3": "Obtain evidence of skills for personal and professional projects"
+        }
+      }
+    },
+    "deliveryTitle": "Training formats adapted to your realities",
+    "deliverySubtitle": "We develop flexible, structured, and accessible formats so that every learner, organization, or partner can benefit from an effective training environment.",
+    "delivery": {
+      "onsite": {
+        "title": "In-person training",
+        "text": "Classroom-based courses with direct guidance, strong interaction, and a structured pedagogical dynamic."
+      },
+      "hybrid": {
+        "title": "Hybrid support",
+        "text": "Flexible formats combining in-person sessions, guided exercises, and continuous pedagogical follow-up."
+      },
+      "flexible": {
+        "title": "Flexible schedules",
+        "text": "Time slots adapted to students, professionals, companies, and partner organizations."
+      },
+      "institutions": {
+        "title": "Training for institutions",
+        "text": "Programs designed for companies, NGOs, schools, centers, and public or private institutions."
+      }
+    },
+    "finalCtaTitle": "Choose a training path that truly prepares your future",
+    "finalCtaText": "Whether you are a student, a professional, an institution, or a partner, Harvest Center supports you with high-quality programs focused on impact, progress, and international openness."
+  },
+  "teamPage": {
+    "title": "Our Team",
+    "photoAlt": "Photo of {{name}}",
+    "members": {
+      "founder": "Founder & Director",
+      "englishTrainer": "English Trainer",
+      "academicLead": "Academic Coordinator"
+    }
+  },
+"footer": {
+  "tagline": "Empowering talent through languages and communication.",
+  "headOffice": "Head Office: N'Djamena - Chad",
+  "representation": "Representation: Sarh - Chad",
+  "location": "N'Djamena - Chad",
+  "emailLabel": "Email:",
+  "phoneLabel": "Phone:",
+  "rights": "All rights reserved.",
+  "links": {
+    "about": "About",
+    "courses": "Courses",
+    "why": "Why choose us?",
+    "scholarships": "Opportunities",
+    "contact": "Contact"
+  },
+  "logoAlt": "Harvest Center",
+  "navigationTitle": "Navigation",
+  "contactTitle": "Contact",
+  "socialTitle": "Social media",
+  "socialText": "Follow Harvest Center to discover new courses, opportunities, and news.",
+  "brandName": "Harvest Center",
+  "credit": "Created by Digital Business Services",
+  "social": {
+    "facebook": "Facebook",
+    "linkedin": "LinkedIn",
+    "instagram": "Instagram",
+    "whatsapp": "WhatsApp"
+  }
+},
+"languages": {
+  "french": "French",
+  "english": "English",
+  "chinese": "Chinese",
+  "spanish": "Spanish",
+  "german": "German"
+},
+"teamDirectoryPage": {
+  "title": "Our team",
+  "subtitle": "A passionate and committed team made up of professionals from diverse backgrounds, united by the same vision.",
+  "photoAlt": "Photo of {{name}}",
+  "languagesLabel": "Languages",
+  "roles": {
+    "coordinatorFounder": "COORDINATOR - FOUNDER",
+    "administrativeAssistant": "Administrative Assistant",
+    "marketingCommunication": "Marketing and Communication Officer",
+    "representativeSarh": "Representative Officer - Sarh",
+    "trainingAdministrativeOfficer": "Training & Administrative Officer",
+    "englishTeacher": "English Teacher",
+    "chineseTeacher": "Chinese Teacher",
+    "spanishTeacher": "Spanish Teacher",
+    "germanTeacher": "German Teacher",
+    "onlineEnglishTeacher": "Online English Teacher"
+  }
+},
+"scholarshipsPage": {
+  "title": "Scholarship opportunities",
+  "subtitle": "Discover funding opportunities available through our partners and sponsors.",
+  "searchPlaceholder": "Search for a scholarship (title, sponsor, country)",
+  "onlyOpen": "Show only open scholarships",
+  "newsTitle": "Scholarship updates",
+  "new": "New",
+  "view": "View",
+  "details": "Details",
+  "by": "By",
+  "open": "Open",
+  "closed": "Closed",
+  "deadlineLabel": "Deadline:",
+  "deadlineShort": "Deadline:",
+  "noResults": "No scholarship matches your search.",
+  "apply": "Apply",
+  "modal": {
+    "sponsor": "Sponsor",
+    "benefit": "Benefit",
+    "deadline": "Deadline",
+    "presentation": "Overview",
+    "eligibility": "Eligibility criteria",
+    "documents": "Required documents",
+    "selection": "Selection process",
+    "seeDetails": "See details"
+  }
+},
+"aboutPage": {
+  "presentation": {
+    "title": "About Harvest Center",
+    "subtitle": "Adapted learning paths and measurable results.",
+    "p1": "Based in N'Djamena, Harvest Center provides language training for students, professionals and organizations, with a competency-based approach.",
+    "p2": "Small groups, flexible schedules and targeted workshops help combine rapid progress with quality support.",
+    "imageAlt": "Harvest Center premises and learners in N'Djamena"
+  },
+  "coordinator": {
+    "title": "A word from the Coordinator",
+    "role": "COORDINATOR - FOUNDER",
+    "message": "Welcome to Harvest Center. Our mission is to guide every learner toward language excellence through flexible paths, active methods and concrete results.",
+    "cta": "Discover the team →",
+    "imageAlt": "Harvest Center Coordinator"
+  },
+  "vision": {
+    "title": "Our vision",
+    "subtitle": "To train autonomous communicators capable of evolving in demanding academic and professional environments.",
+    "items": {
+      "excellence": {
+        "title": "Measurable excellence",
+        "desc": "Clear goals, regular assessments and verifiable results."
+      },
+      "activePedagogy": {
+        "title": "Active pedagogy",
+        "desc": "Workshops, real-life situations and projects to anchor learning through practice."
+      },
+      "progress": {
+        "title": "Sustainable progress",
+        "desc": "Modular and flexible paths for solid, usable skills."
+      },
+      "impact": {
+        "title": "Openness & impact",
+        "desc": "Languages to open up to the world, grow professionally and serve one's community."
+      }
+    }
+  },
+  "services": {
+    "title": "Our services",
+    "subtitle": "Training programs tailored to academic and professional needs.",
+    "ctaApply": "Submit an application",
+    "ctaLearnMore": "View courses",
+    "items": {
+      "languages": {
+        "title": "Languages",
+        "desc": "Language programs tailored to academic, professional, and personal needs.",
+        "bullet1": "Courses for beginner, intermediate, and advanced learners",
+        "bullet2": "Programs in English, French, Chinese, and other languages",
+        "bullet3": "Practical communication-focused learning"
+      },
+      "schedule": {
+        "title": "Flexible schedule",
+        "desc": "Time slots designed to fit students, workers, and professionals.",
+        "bullet1": "Day, evening, and weekend classes",
+        "bullet2": "Schedules adapted to each learner’s pace",
+        "bullet3": "Learning rhythm built for steady progress"
+      },
+      "exams": {
+        "title": "Exam preparation",
+        "desc": "Focused support to succeed in academic assessments and language certifications.",
+        "bullet1": "Preparation for language tests and exams",
+        "bullet2": "Practice methods and mock sessions",
+        "bullet3": "Results-oriented academic support"
+      },
+      "smallGroups": {
+        "title": "Small groups",
+        "desc": "A more human, interactive, and effective learning environment.",
+        "bullet1": "Closer guidance from instructors",
+        "bullet2": "Active participation from every learner",
+        "bullet3": "Better trainer-learner interaction"
+      },
+      "immersion": {
+        "title": "Cultural immersion",
+        "desc": "An opening to languages through culture, practice, and interaction.",
+        "bullet1": "Discovery of cultural contexts",
+        "bullet2": "Practical and engaging learning",
+        "bullet3": "Improved speaking confidence"
+      },
+      "certificates": {
+        "title": "Certificates",
+        "desc": "Certificates recognizing the skills developed throughout the programs.",
+        "bullet1": "Recognition of completed training",
+        "bullet2": "Academic and professional value",
+        "bullet3": "Structured and trackable learning paths"
+      }
+    }
+  }
+},
+"galleryPage": {
+  "title": "Gallery",
+  "subtitle": "A few moments from our classes, workshops and activities.",
+  "searchPlaceholder": "Search (e.g. English, workshop, HSK...)",
+  "countLabel": "image(s)",
+  "imageAlt": "Image {{index}}"
+},
+"mediaManagerPage": {
+  "title": "Media manager",
+  "file": "File",
+  "selected": "Selected",
+  "folder": "Folder",
+  "tags": "Tags (comma separated)",
+  "upload": "Upload",
+  "uploading": "Uploading…",
+  "reset": "Reset",
+  "refresh": "Refresh list",
+  "filterFolder": "Filter by folder",
+  "filterTag": "Filter by tag",
+  "applyFilters": "Apply filters",
+  "folderLabel": "Folder:",
+  "tagsLabel": "Tags:",
+  "open": "Open",
+  "copyUrl": "Copy URL",
+  "delete": "Delete",
+  "noMedia": "No media.",
+  "confirmDelete": "Delete this file?",
+  "success": {
+    "uploaded": "File uploaded.",
+    "uploadFinished": "Upload finished.",
+    "deleted": "Deleted.",
+    "urlCopied": "URL copied"
+  },
+  "errors": {
+    "load": "Unable to load media list.",
+    "chooseFile": "Choose a file.",
+    "upload": "Upload error",
+    "delete": "Unable to delete.",
+    "copyUrl": "Unable to copy URL."
+  }
+},
+"newsEditorPage": {
+  "title": "News manager",
+  "create": "Create",
+  "refresh": "Refresh",
+  "delete": "Delete",
+  "published": "Published",
+  "draft": "Draft",
+  "noNews": "No news.",
+  "confirmDelete": "Delete this news item?",
+  "fields": {
+    "title": "Title",
+    "content": "Content"
+  },
+  "success": {
+    "created": "News created.",
+    "deleted": "Deleted."
+  },
+  "errors": {
+    "load": "Unable to load news.",
+    "required": "Title and content are required.",
+    "create": "Error while creating.",
+    "delete": "Error while deleting."
+  }
+},
+"superAdminPage": {
+  "title": "SuperAdmin Dashboard",
+  "accessDenied": "🚫 Access denied - SuperAdmin only",
+  "newNews": "New News",
+  "mediaRecent": "Recent media",
+  "noMedia": "No media found.",
+  "news": "News",
+  "users": "Users",
+  "searchNews": "Search news...",
+  "searchUsers": "Search user...",
+  "active": "Active",
+  "inactive": "Inactive",
+  "noNews": "No news. Create one!",
+  "noUsers": "No users found",
+  "confirmDeleteNews": "Delete this news item?",
+  "confirmDeleteUser": "Delete this user?",
+  "stats": {
+    "totalUsers": "Total users",
+    "students": "Students",
+    "revenue": "Revenue"
+  },
+  "table": {
+    "title": "Title",
+    "status": "Status",
+    "date": "Date",
+    "actions": "Actions"
+  },
+  "userTable": {
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "actions": "Actions"
+  },
+  "newsForm": {
+    "title": "News title",
+    "content": "Content (HTML allowed)",
+    "excerpt": "Excerpt (optional)",
+    "publishNow": "Publish immediately",
+    "create": "Create News"
+  },
+  "errors": {
+    "deleteNews": "Delete error",
+    "deleteUser": "Delete error",
+    "createNews": "News creation error"
+  }
+},
+"forbiddenPage": {
+  "message": "You do not have the required permissions."
+},
+"inscriptionPage": {
+  "title": "Registration request",
+  "confirm": "Do you confirm your registration?",
+  "success": "Request sent. Awaiting admin validation.",
+  "fields": {
+    "languageLevel": "Language level (e.g. Beginner, Intermediate, Advanced)",
+    "preferredSchedule": "Preferred schedule",
+    "chooseFormation": "Choose a course",
+    "loadingLevels": "Loading levels...",
+    "chooseLevel": "Choose a level",
+    "loadingSlots": "Loading time slots...",
+    "chooseSlot": "Choose a time slot",
+    "chooseGender": "Select gender",
+    "male": "Male",
+    "female": "Female",
+    "lastName": "Last name",
+    "firstName": "First name",
+    "email": "Email",
+    "phone": "Phone",
+    "whatsapp": "WhatsApp",
+    "birthPlace": "Place of birth",
+    "neighborhood": "Neighborhood",
+    "district": "District",
+    "acceptFees": "I accept the non-refundable registration fees.",
+    "submit": "Submit request",
+    "submitting": "Sending..."
+  },
+  "errors": {
+    "loadFormations": "Unable to load courses.",
+    "loadLevels": "Unable to load levels.",
+    "loadSlots": "Unable to load time slots.",
+    "required": "All required fields must be completed.",
+    "invalidBirthDate": "Invalid birth date.",
+    "minAge": "Minimum required age: 10 years.",
+    "invalidPhone": "Invalid phone number.",
+    "invalidWhatsapp": "Invalid WhatsApp number.",
+    "acceptFees": "You must accept the registration fees.",
+    "loginRequired": "Please sign in.",
+    "studentsOnly": "This page is reserved for students.",
+    "submit": "Error while sending the request."
+  }
+},
+"myCoursesPage": {
+  "title": "My courses",
+  "course": "Course",
+  "empty": "You are not enrolled in any course yet.",
+  "errors": {
+    "load": "Unable to load your courses"
+  }
+},
+"myPaymentsPage": {
+  "title": "My payments",
+  "payment": "Payment",
+  "status": "Status",
+  "empty": "No payment found.",
+  "errors": {
+    "load": "Unable to load payments"
+  }
+},
+"profilePage": {
+  "title": "My profile",
+  "avatarAlt": "Avatar",
+  "noAvatar": "No",
+  "changePhoto": "Change photo",
+  "photoHint": "Recommended format 400×400, max 2MB",
+  "loggedInAs": "Logged in as",
+  "fields": {
+    "phone": "Phone",
+    "city": "City",
+    "languages": "Languages (comma separated)",
+    "goals": "Goals",
+    "bio": "Bio",
+    "save": "Save",
+    "saving": "Saving…"
+  },
+  "success": {
+    "created": "Profile created successfully",
+    "saved": "Profile saved"
+  },
+  "errors": {
+    "sessionExpired": "Session expired — please sign in again.",
+    "routeMissing": "Route not found (404) — check that the API exposes PUT /api/profiles/me",
+    "save": "Error while saving"
+  }
+},
+"trainings": {
+  "title": "Trainings"
+},
+"timetablePage": {
+  "title": "Timetable",
+  "description": "Timetable display — add your timetable API here."
+},
+"notesPage": {
+  "title": "Grades",
+  "description": "Grades page — implement according to your model (for example: grades by course)."
+},
+"notFoundPage": {
+  "message": "404 - Page not found"
+},
+"unauthorizedPage": {
+  "title": "Access denied 🚫",
+  "withRole": "Your current role (“{{role}}”) does not allow access to this page.",
+  "withoutRole": "You do not have permission to access this page.",
+  "home": "Back to home",
+  "logout": "Logout",
+  "login": "Sign in"
+},
+"sidebar": {
+  "dashboard": "Dashboard",
+  "profile": "Profile",
+  "timetable": "Timetable",
+  "notes": "Grades",
+  "myCourses": "My courses",
+  "payments": "Payments",
+  "assignments": "Assignments",
+  "user": "User"
+},
+"mediaGallery": {
+  "title": "Latest media",
+  "empty": "No media available.",
+  "imageAlt": "Media"
+},
+"dashboardLayout": {
+  "title": "Dashboard",
+  "avatarAlt": "Avatar",
+  "user": "User",
+  "links": {
+    "dashboard": "Dashboard",
+    "profile": "My profile",
+    "myCourses": "My courses",
+    "payments": "Payments",
+    "myClasses": "My classes",
+    "lessons": "Lessons",
+    "students": "Students",
+    "assignments": "Assignments",
+    "timetables": "Timetables",
+    "registrations": "Registrations"
+  }
+},
+"courseCard": {
+  "coverAlt": "Course cover",
+  "open": "Open",
+  "progress": "{{value}}%"
+},
+"langSelector": {
+  "ariaLabel": "Language selector"
+},
+"scholarshipPromo": {
+  "sectionTitle": "Promotion",
+  "sectionSubtitle": "Open calls for applications and scholarships.",
+  "title": "Réussir Bé Gou Scholarship",
+  "sponsor": "Harvest Center",
+  "description": "Call for applications for a language training scholarship. Flexible programs, mentoring and follow-up.",
+  "location": "N'Djamena",
+  "quota": "Limited seats",
+  "deadline": "Deadline",
+  "applyNow": "Apply now",
+  "fillHere": "Fill here",
+  "lastDay": "Last day",
+  "daysLeft": "Only {{count}} day(s) left",
+  "footerText": "Online applications. Selection based on file review and motivation.",
+  "formTitle": "Application form"
+},
+"confirmModal": {
+  "title": "Confirm",
+  "message": "Are you sure?",
+  "confirm": "Confirm",
+  "cancel": "Cancel",
+  "wait": "Please wait…"
+},
+"dashboardSidebar": {
+  "dashboard": "Dashboard",
+  "studentSpace": "Student Area",
+  "teacherSpace": "Teacher Area",
+  "home": "Home",
+  "profile": "Profile",
+  "myCourses": "My Courses",
+  "payments": "Payments",
+  "assignments": "Assignments",
+  "registrationRequest": "Registration Request",
+  "notes": "Grades",
+  "timetable": "Timetable"
+},
+"accountPage": {
+  "titleLogin": "Login",
+  "titleRegister": "Create an account",
+  "fields": {
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "password": "Password",
+    "show": "Show",
+    "hide": "Hide"
+  },
+  "roles": {
+    "student": "Student",
+    "teacher": "Teacher",
+    "admin": "Administrator"
+  },
+  "actions": {
+    "login": "Sign in",
+    "createAccount": "Create my account",
+    "loggingIn": "Signing in…",
+    "creating": "Creating…"
+  },
+  "switch": {
+    "noAccount": "No account?",
+    "create": "Create an account",
+    "alreadyRegistered": "Already registered?",
+    "login": "Sign in"
+  },
+  "success": {
+    "login": "Login successful!",
+    "register": "Registration successful. Waiting for approval."
+  },
+  "errors": {
+    "required": "Please fill in all fields.",
+    "invalidSession": "Invalid session.",
+    "network": "Network issue or browser extension problem.",
+    "auth": "Authentication error"
+  }
+},
+"adminClassDetail": {
+  "class": "Class",
+  "course": "Course",
+  "to": "to",
+  "createdAt": "Created on",
+  "assignTeacher": "Assign teacher",
+  "notFound": "Class not found.",
+  "sections": {
+    "info": "Info",
+    "courses": "Attached courses",
+    "timetables": "Timetables"
+  },
+  "empty": {
+    "courses": "No attached course.",
+    "timetables": "No timetable recorded."
+  },
+  "success": {
+    "assigned": "Teacher assigned."
+  },
+  "errors": {
+    "load": "Unable to load class.",
+    "assign": "Error while assigning."
+  }
+},
+"adminClassesPage": {
+  "title": "Class management",
+  "class": "Class",
+  "course": "Course",
+  "courses": "Courses",
+  "created": "Created",
+  "assignTeacher": "Assign teacher",
+  "empty": "No class found.",
+  "success": {
+    "assigned": "Course assigned."
+  },
+  "errors": {
+    "load": "Unable to load classes.",
+    "assign": "Error while assigning."
+  }
+},
+"adminCourseAssign": {
+  "title": "Assign a teacher",
+  "course": "Course",
+  "loading": "Loading teachers…",
+  "chooseTeacher": "Choose a teacher",
+  "select": "-- Select --",
+  "helper": "If the list is empty, check that some users have the teacher role.",
+  "assign": "Assign",
+  "assigning": "Assigning…",
+  "errors": {
+    "load": "Unable to load teachers list.",
+    "choose": "Choose a teacher.",
+    "assign": "Error while assigning."
+  }
+},
+"adminCourseDetail": {
+  "course": "Course",
+  "duration": "Duration",
+  "level": "Level",
+  "status": "Status",
+  "teacher": "Teacher",
+  "active": "Active",
+  "inactive": "Inactive",
+  "noTeacher": "No teacher assigned",
+  "assignTeacher": "Assign teacher",
+  "activate": "Activate",
+  "deactivate": "Deactivate",
+  "updating": "Updating…",
+  "paid": "Paid",
+  "unpaid": "Unpaid",
+  "notFound": "Course not found.",
+  "sections": {
+    "info": "Information",
+    "students": "Enrolled students"
+  },
+  "empty": {
+    "students": "No student enrolled."
+  },
+  "success": {
+    "assigned": "Teacher assigned."
+  },
+  "errors": {
+    "load": "Unable to load course.",
+    "assign": "Error while assigning.",
+    "status": "Error while updating status."
+  }
+},
+  "admin": {
+    "dashboard": {
+      "title": "Admin dashboard",
+      "studentsSection": "Students table",
+      "serverSection": "Server students table",
+      "sampleTitle": "Admin — Students table"
+    },
+    "forgotPassword": {
+      "title": "Forgot password",
+      "emailLabel": "Email",
+      "emailPlaceholder": "admin@harvestcenter.td",
+      "submit": "Send link",
+      "success": "If the account exists, an email has been sent.",
+      "backToLogin": "Back to login",
+      "emailRequired": "Enter your email.",
+      "sendError": "Unable to send the request."
+    },
+    "login": {
+      "title": "Admin area",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "remember": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "submit": "Login",
+      "success": "Login successful!",
+      "required": "Email and password are required.",
+      "error": "Login failed."
+    },
+    "media": {
+      "title": "Media management",
+      "dropzone": "Drag and drop an image/video or",
+      "selectFile": "Select a file",
+      "saveMedia": "Save media",
+      "saving": "Uploading…",
+      "recent": "Recent",
+      "empty": "No media.",
+      "delete": "Delete",
+      "deleteConfirm": "Delete this media? This action cannot be undone.",
+      "deleted": "Media deleted",
+      "chooseFile": "Choose a file.",
+      "saved": "Media saved ✅",
+      "saveError": "Upload/save failed.",
+      "deleteError": "Delete failed.",
+      "fields": {
+        "title": "Title (optional)",
+        "alt": "Alternative text (alt)",
+        "category": "Category (e.g. event/gallery)",
+        "takenAt": "Date"
+      }
+    },
+    "messages": {
+      "title": "Received messages",
+      "searchPlaceholder": "🔍 Search...",
+      "all": "All",
+      "gmail": "Gmail",
+      "yahoo": "Yahoo",
+      "other": "Other",
+      "exportPdf": "PDF",
+      "exportCsv": "CSV",
+      "deleteSelected": "Delete selected ({{count}})",
+      "empty": "No messages found.",
+      "loading": "Loading...",
+      "columns": {
+        "name": "Name",
+        "email": "Email",
+        "subject": "Subject",
+        "message": "Message",
+        "tag": "Tag",
+        "date": "Date",
+        "actions": "Actions"
+      },
+      "detailTitle": "Message details",
+      "reply": "Reply",
+      "markRead": "Mark as read/unread",
+      "confirmDelete": "Confirm deletion of this message?",
+      "confirmBulkDelete": "Confirm deletion of selected messages?",
+      "deleted": "Message deleted successfully",
+      "bulkDeleted": "Messages deleted successfully",
+      "markedRead": "Message marked as read",
+      "markedUnread": "Message marked as unread"
+    },
+    "resetPassword": {
+      "title": "Reset password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password",
+      "submit": "Reset",
+      "backToLogin": "Back to login",
+      "tooShort": "Password too short (min. 8).",
+      "mismatch": "Passwords do not match.",
+      "success": "Password reset. Please log in.",
+      "error": "Invalid or expired link."
+    },
+    "studentDetail": {
+      "notFound": "Student not found.",
+      "back": "Back",
+      "profile": "Profile",
+      "payment": "Payment",
+      "paid": "Paid",
+      "unpaid": "Unpaid",
+      "amountPaid": "Amount paid",
+      "save": "Save",
+      "saving": "Saving…",
+      "courses": "Enrolled courses",
+      "noCourses": "No courses found.",
+      "grades": "Grades & progress",
+      "noGrades": "No grades found.",
+      "loadedError": "Unable to load student.",
+      "paymentUpdated": "Payment updated.",
+      "paymentError": "Unable to update payment.",
+      "fields": {
+        "id": "ID",
+        "username": "Username",
+        "registeredAt": "Registered at",
+        "role": "Role",
+        "course": "Course",
+        "grade": "Grade"
+      }
+    },
+    "students": {
+      "title": "Registered students list",
+      "empty": "No students registered yet.",
+      "loading": "Loading...",
+      "status": "Status",
+      "paid": "Paid",
+      "unpaid": "Unpaid",
+      "markPaid": "Validate payment",
+      "markUnpaid": "Mark unpaid"
+    },
+    "teachers": {
+      "title": "Teachers",
+      "searchPlaceholder": "Search by name / email…",
+      "search": "Search",
+      "reset": "Reset",
+      "empty": "No teachers found.",
+      "loading": "Loading…",
+      "viewProfile": "View profile",
+      "contact": "Contact",
+      "role": "Role",
+      "emailCopied": "Email copied",
+      "loadError": "Error while loading teachers."
+    },
+    "security": {
+      "title": "Security dashboard",
+      "failedLogins24h": "Failed logins (24h)",
+      "activeSessions": "Active sessions",
+      "suspiciousIps": "Suspicious IPs",
+      "auditLogs": "Audit logs",
+      "loading": "Loading..."
+    },
+    "addUser": {
+      "title": "Add user",
+      "back": "Back",
+      "fullName": "Full name",
       "email": "Email",
-      "message": "Your message",
-      "send": "Send",
-      "success": "Message sent successfully!",
-      "error": "Error while sending. Please try again."
+      "username": "Username",
+      "usernameHelp": "3–20 characters a–z, 0–9, dot, hyphen, underscore.",
+      "usernamePlaceholder": "(leave empty for auto)",
+      "role": "Role",
+      "password": "Password",
+      "passwordPlaceholder": "Min. 8 characters",
+      "show": "Show",
+      "hide": "Hide",
+      "submit": "Create user",
+      "submitting": "Creating...",
+      "errors": {
+        "fullNameRequired": "Full name is required.",
+        "invalidEmail": "Invalid email.",
+        "passwordShort": "Password: minimum 8 characters.",
+        "createFailed": "Creation failed."
+      },
+      "roles": {
+        "user": "User",
+        "admin": "Administrator",
+        "superadmin": "Super Administrator"
+      }
+    },
+    "timetable": {
+      "title": "Timetable management",
+      "newSlot": "New slot",
+      "refresh": "Refresh",
+      "loading": "Loading…",
+      "empty": "No slot",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "save": "Save",
+      "add": "Add",
+      "editTitle": "Edit slot",
+      "newTitle": "New slot",
+      "deleteConfirm": "Delete this slot?",
+      "deleted": "Deleted",
+      "deleteError": "Unable to delete",
+      "saveError": "Error while saving",
+      "updated": "Slot updated",
+      "created": "Slot added",
+      "requiredError": "Fill in required fields (class, course, start and end).",
+      "fields": {
+        "class": "Class",
+        "course": "Course",
+        "teacher": "Teacher",
+        "day": "Day",
+        "start": "Start",
+        "end": "End",
+        "room": "Room",
+        "notes": "Notes",
+        "select": "— select —"
+      },
+      "days": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+      }
+    },
+    "classes": {
+      "title": "Class management",
+      "refresh": "Refresh",
+      "empty": "No classes found.",
+      "loading": "Loading…",
+      "details": "Details",
+      "assignTeacher": "Assign teacher",
+      "createdAt": "Created",
+      "courses": "Courses",
+      "loadError": "Unable to load classes.",
+      "assignSuccess": "Course assigned.",
+      "assignError": "Assignment error."
+    },
+    "classDetail": {
+      "notFound": "Class not found.",
+      "back": "Back",
+      "refresh": "Refresh",
+      "info": "Info",
+      "courses": "Attached courses",
+      "timetables": "Timetables",
+      "noCourses": "No attached courses.",
+      "noTimetables": "No timetable recorded.",
+      "assignTeacher": "Assign teacher",
+      "teacherAssigned": "Teacher assigned.",
+      "assignError": "Assignment error.",
+      "loadError": "Unable to load class."
+    },
+    "courseAssign": {
+      "title": "Assign a teacher",
+      "selectTeacher": "Choose a teacher",
+      "selectPlaceholder": "-- Select --",
+      "cancel": "Cancel",
+      "assign": "Assign",
+      "assigning": "Assigning…",
+      "loading": "Loading teachers…",
+      "emptyHint": "If the list is empty, check that some users have the teacher role.",
+      "chooseTeacher": "Choose a teacher.",
+      "loadError": "Unable to load teachers list.",
+      "assignError": "Assignment error."
+    },
+    "courseDetail": {
+      "notFound": "Course not found.",
+      "back": "Back",
+      "refresh": "Refresh",
+      "information": "Information",
+      "students": "Enrolled students",
+      "noStudents": "No enrolled students.",
+      "assignTeacher": "Assign teacher",
+      "activate": "Activate",
+      "deactivate": "Deactivate",
+      "updating": "Updating…",
+      "noTeacher": "No teacher assigned",
+      "active": "Active",
+      "inactive": "Inactive",
+      "teacherAssigned": "Teacher assigned.",
+      "assignError": "Assignment error.",
+      "statusError": "Error while updating status.",
+      "loadError": "Unable to load course.",
+      "fields": {
+        "duration": "Duration",
+        "level": "Level",
+        "status": "Status",
+        "teacher": "Teacher"
+      }
+    }
+  },
+"dashboardStudent": {
+  "title": "Student Area",
+  "subtitle": "Academic dashboard",
+  "exportPdf": "📄 Download PDF",
+  "myCourses": "📚 My Courses",
+  "myAssignments": "📝 My Assignments",
+  "classRanking": "🏆 Class Ranking",
+  "noRanking": "No ranking available.",
+  "loadError": "Unable to load the student dashboard.",
+  "assignments": {
+    "title": "📊 Assignments",
+    "total": "Total",
+    "submitted": "Submitted",
+    "pending": "Pending",
+    "late": "Late",
+    "completionRate": "Completion rate",
+    "excellent": "🏆 Excellent – All assignments submitted",
+    "academicRisk": "📉 Academic risk",
+    "riskLow": "Low",
+    "riskMedium": "Medium",
+    "riskHigh": "High"
+  },
+  "grades": {
+    "title": "📈 Grade Progress",
+    "score": "Score"
+  }
+},
+  "opportunitiesPage": {
+    "backToList": "Retour aux opportunités",
+    "notFound": "Opportunité introuvable.",
+    "loadError": "Impossible de charger cette opportunité.",
+    "title": "Opportunities",
+    "details": "View details",
+    "badge": "Harvest Center Opportunities",
+    "ctaRegister": "Submit an application",
+    "ctaContact": "Contact us",
+    "stats": {
+      "total": "Visible opportunities",
+      "categories": "Available categories",
+      "deadlines": "With deadlines"
+    },
+    "sideTitle": "Don’t miss",
+    "finalBadge": "Harvest Center Career & Learning",
+    "finalTitle": "Don’t miss the opportunity that could transform your journey",
+    "finalText": "Explore, compare, and apply to the opportunities that best match your academic, professional, and international ambitions.",
+    "subtitle": "Find all our opportunities here: scholarships, fellowships, various offers and other calls.",
+    "search": "Search an opportunity...",
+    "allTypes": "All types",
+    "deadline": "Deadline",
+    "apply": "Apply",
+    "empty": "No opportunity available at the moment.",
+    "types": {
+      "scholarship": "Scholarship",
+      "fellowship": "Fellowship",
+      "job": "Job",
+      "internship": "Internship",
+      "training": "Training",
+      "grant": "Grant",
+      "other": "Other"
+    }
+  },
+  "actualitesPage": {
+    "badge": "Harvest Center News & Opportunities",
+    "title": "News & Opportunities",
+    "subtitle": "Stay updated with the latest center news, important announcements, and academic and professional opportunities you should not miss.",
+    "ctaRegister": "Submit an application",
+    "ctaRegisterShort": "Apply",
+    "ctaContact": "Contact us",
+    "stats": {
+      "total": "Visible content",
+      "news": "News",
+      "opportunities": "Opportunities"
+    },
+    "search": "Search for news or an opportunity...",
+    "filters": {
+      "all": "All",
+      "news": "News",
+      "opportunities": "Opportunities"
+    },
+    "badges": {
+      "news": "News",
+      "opportunity": "Opportunity"
+    },
+    "deadline": "Deadline",
+    "readMore": "Read details",
+    "spotlightTitle": "Top stories",
+    "finalBadge": "Harvest Center Updates",
+    "finalTitle": "Stay connected to the content that can move your future forward",
+    "finalText": "Follow the latest news, discover the best opportunities, and engage in a learning journey focused on excellence.",
+    "empty": "No content is available at the moment."
+  },
+  "actualiteDetailPage": {
+    "back": "Back to news",
+    "notFound": "Content not found.",
+    "badges": {
+      "news": "News",
+      "opportunity": "Opportunity"
+    },
+    "fields": {
+      "sponsor": "Sponsor",
+      "country": "Country",
+      "deadline": "Deadline"
+    },
+    "notSpecified": "Not specified",
+    "applyNow": "Apply now",
+    "register": "Submit an application",
+    "viewAll": "View all news",
+    "contact": "Contact us",
+    "finalBadge": "Harvest Center",
+    "finalTitleOpportunity": "Take action and seize this opportunity",
+    "finalTextOpportunity": "Prepare your application, strengthen your profile, and move forward on a path shaped by excellence.",
+    "finalTitleNews": "Stay connected to the news shaping your future",
+    "finalTextNews": "Follow our updates, discover our initiatives, and join a learning dynamic open to the world."
+  },
+  "assignmentsPage": {
+    "title": "My assignments",
+    "noAssignments": "No assignments available at the moment.",
+    "course": "Course",
+    "deadline": "Deadline",
+    "open": "Open",
+    "errors": {
+      "load": "Unable to load assignments."
+    }
+  },
+  "assignmentDetailPage": {
+    "title": "Assignment details",
+    "back": "Back to assignments",
+    "deadline": "Deadline",
+    "maxScore": "Maximum score",
+    "instructions": "Instructions",
+    "errors": {
+      "load": "Unable to load the assignment."
+    }
+  },
+  "teacherDashboard": {
+    "avatarAlt": "Avatar",
+    "title": "Teacher Dashboard",
+    "welcome": "Welcome, {{name}}",
+    "actions": {
+      "logout": "Logout",
+      "profile": "My profile",
+      "view": "View",
+      "edit": "Edit"
+    },
+    "states": {
+      "loading": "Loading..."
+    },
+    "stats": {
+      "courses": "Courses",
+      "students": "Students",
+      "average": "Overall average",
+      "revenue": "Revenue"
+    },
+    "courses": {
+      "title": "My courses",
+      "empty": "No courses found.",
+      "meta": "{{count}} students — Average {{average}}"
+    },
+    "quickLesson": {
+      "title": "Publish a quick lesson"
+    },
+    "chart": {
+      "title": "Average by course 📈",
+      "averagePerCourse": "Average by course"
+    },
+    "notifications": {
+      "title": "Latest submitted assignments 🔔",
+      "empty": "No notifications."
+    },
+    "fallback": {
+      "untitled": "Untitled",
+      "unknownStudent": "Unknown student",
+      "unknownAssignment": "Unknown assignment",
+      "justNow": "just now"
+    },
+    "success": {
+      "lessonCreated": "Lesson created successfully"
+    },
+    "errors": {
+      "loadData": "Unable to load data",
+      "createLesson": "Error while creating the lesson"
     }
   }
 }
+
