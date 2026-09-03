@@ -1,100 +1,68 @@
-// src/routes/AdminRoutes.jsx
-import React, { lazy, Suspense } from "react";
-import RequireRole from "@/components/RequireRole";
-import NotFound from "@/pages/NotFound";
-import PageLoader from "@/components/ui/PageLoader";
+// api/routes/admin.routes.js
+import express from "express";
+import { requireAuth } from "../middlewares/requireAuth.js";
+import { requireRole } from "../middlewares/requireRole.js";
+import * as adminController from "../controllers/admin.controller.js";
 
-// Layouts
-import AdminLayout from "@/layouts/AdminLayout";
-import SuperAdminLayout from "@/layouts/SuperAdminLayout";
+const router = express.Router();
 
-// Lazy-loaded pages
-const AdminLogin = lazy(() => import("@/pages/admin/AdminLogin"));
-const AdminForgotPassword = lazy(() => import("@/pages/admin/AdminForgotPassword"));
-const AdminResetPassword = lazy(() => import("@/pages/admin/AdminResetPassword"));
-const AdminDashboard = lazy(() => import("@/pages/admin/AdminDashboard"));
+// 🔐 Protection globale
+router.use(requireAuth);
+router.use(requireRole("admin"));
 
-const AdminMedia = lazy(() => import("@/pages/admin/AdminMedia"));
-const AjouterUtilisateur = lazy(() => import("@/pages/admin/AjouterUtilisateur"));
-const AdminStudentsPage = lazy(() => import("@/pages/admin/AdminStudentsPage"));
-const AdminStudentDetail = lazy(() => import("@/pages/admin/AdminStudentDetail"));
-const AdminClassesPage = lazy(() => import("@/pages/admin/AdminClassesPage"));
-const AdminClassDetail = lazy(() => import("@/pages/admin/AdminClassDetail"));
-const AdminTeachersPage = lazy(() => import("@/pages/admin/AdminTeachersPage"));
-const AdminInscriptionRequestsPage = lazy(() => import("@/pages/admin/AdminInscriptionRequestsPage"));
-const AdminCoursesPage = lazy(() => import("@/pages/admin/AdminCoursesPage"));
-const AdminTimetablesPage = lazy(() => import("@/pages/admin/AdminTimetablesPage"));
+/* ===================== SCHOLARSHIPS ===================== */
+router.get("/scholarship", adminController.getScholarships);
+router.post("/scholarship", adminController.createScholarship);
+router.post("/students/fees", adminController.assignScholarshipAndFees);
 
-const SuperAdminDashboard = lazy(() => import("@/pages/superadmin/SuperAdminDashboard"));
-const NewsEditor = lazy(() => import("@/pages/superadmin/NewsEditor"));
-const MediaManager = lazy(() => import("@/pages/superadmin/MediaManager"));
-const OpportunityManager = lazy(() => import("@/pages/superadmin/OpportunityManager"));
-const UserManager = lazy(() => import("@/pages/superadmin/UserManager"));
+/* ===================== TEACHERS ===================== */
+router.post("/teachers", adminController.createTeacher);
+router.get("/teachers", adminController.getTeachers);
+router.post("/teachers/:id/assign-class", adminController.assignTeacherToClass);
+router.delete("/teachers/:id/classes/:classId", adminController.removeTeacherClassAssignment);
+router.post("/teachers/:id/assign-subject", adminController.assignTeacherToSubject);
+router.delete("/teachers/:id/subjects/:subjectId", adminController.removeTeacherSubjectAssignment);
+router.post("/teachers/:id/assign-course", adminController.assignTeacherToCourse);
+router.delete("/teachers/:id/courses/:courseId", adminController.removeTeacherCourseAssignment);
 
-const withSuspense = (Component) => (
-  <Suspense fallback={<PageLoader />}>
-    <Component />
-  </Suspense>
-);
+/* ===================== CLASSES ===================== */
+router.post("/classes", adminController.createClass);
+router.get("/classes", adminController.getClasses);
 
-const adminPublicRoutes = [
-  { path: "/admin/login", element: withSuspense(AdminLogin) },
-  { path: "/admin/forgot", element: withSuspense(AdminForgotPassword) },
-  { path: "/admin/reset-password/:token", element: withSuspense(AdminResetPassword) },
-];
+/* ===================== COURSES ===================== */
+router.get("/courses", adminController.getCoursesList);
 
-const adminProtectedRoutes = {
-  path: "/admin",
-  element: (
-    <RequireRole
-      allowed={["admin", "administrateur", "administrator", "secretaire", "superadmin"]}
-    >
-      <AdminLayout />
-    </RequireRole>
-  ),
-  children: [
-    { index: true, element: withSuspense(AdminDashboard) },
+/* ===================== SUBJECTS ===================== */
+router.get("/subjects", adminController.getSubjectsList);
+router.post("/subjects", adminController.createSubject);
 
-    { path: "inscriptions/demandes", element: withSuspense(AdminInscriptionRequestsPage) },
+/* ===================== TIMETABLES ===================== */
+router.post("/timetables", adminController.createTimetable);
+router.get("/timetables", adminController.getTimetables);
+router.delete("/timetables/:id", adminController.deleteTimetable);
 
-    { path: "students", element: withSuspense(AdminStudentsPage) },
-    { path: "students/:id", element: withSuspense(AdminStudentDetail) },
+/* ===================== ANNOUNCEMENTS ===================== */
+router.post("/announcements", adminController.createAnnouncement);
+router.get("/announcements", adminController.getAnnouncements);
 
-    { path: "teachers", element: withSuspense(AdminTeachersPage) },
+/* ===================== INSCRIPTION REQUESTS ===================== */
+router.get("/inscription-requests", adminController.getInscriptionRequests);
+router.patch("/inscription-requests/:id/status", adminController.updateInscriptionRequestStatus);
+router.patch("/inscription-requests/:id/payment", adminController.updateInscriptionRequestPayment);
 
-    { path: "classes", element: withSuspense(AdminClassesPage) },
-    { path: "classes/:id", element: withSuspense(AdminClassDetail) },
+/* ===================== STUDENTS ===================== */
+router.get("/students", adminController.getStudents);
+router.get("/students/:id", adminController.getStudentById);
+router.patch("/students/:id/payment", adminController.updateStudentPayment);
 
-    { path: "courses", element: withSuspense(AdminCoursesPage) },
+/* ===================== USERS ===================== */
+router.post("/users", adminController.createUser);
+router.get("/users", adminController.getUsers);
+router.delete("/users/:id", adminController.deleteUser);
+router.patch("/users/:id/role", adminController.updateUserRole);
 
-    { path: "timetables", element: withSuspense(AdminTimetablesPage) },
+/* ===================== STATS & SECURITY ===================== */
+router.get("/stats", adminController.getAdminStats);
+router.get("/security-dashboard", adminController.getSecurityDashboard);
 
-    { path: "media", element: withSuspense(AdminMedia) },
-    { path: "utilisateurs/ajouter", element: withSuspense(AjouterUtilisateur) },
-
-    { path: "*", element: <NotFound /> },
-  ],
-};
-
-const superAdminRoutes = {
-  path: "/superadmin",
-  element: (
-    <RequireRole allowed={["superadmin"]}>
-      <SuperAdminLayout />
-    </RequireRole>
-  ),
-  children: [
-    { index: true, element: withSuspense(SuperAdminDashboard) },
-    { path: "news", element: withSuspense(NewsEditor) },
-    { path: "opportunities", element: withSuspense(OpportunityManager) },
-    { path: "users", element: withSuspense(UserManager) },
-    { path: "media", element: withSuspense(MediaManager) },
-    { path: "*", element: <NotFound /> },
-  ],
-};
-
-export const adminRoutes = [
-  ...adminPublicRoutes,
-  adminProtectedRoutes,
-  superAdminRoutes,
-];
+export default router;

@@ -272,25 +272,3 @@ export async function createInscriptionRequest(req, res) {
     conn.release();
   }
 }
-
-export const getFormationOptions = async (_req, res) => {
-  try {
-    const [rows] = await db.query(`
-      SELECT
-        id,
-        title AS label
-      FROM courses
-      ORDER BY title ASC
-    `);
-
-    return res.json({
-      formations: rows,
-    });
-  } catch (error) {
-    console.error("getFormationOptions error:", error);
-    return res.status(500).json({
-      message: "Erreur lors du chargement des cours.",
-      formations: [],
-    });
-  }
-};
