@@ -1,3 +1,4 @@
+// api/app.js
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -42,25 +43,8 @@ const corsOptions = {
   optionsSuccessStatus: 204
 };
 
-// Très important : headers CORS manuels de secours
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (origin && allowedOrigins.includes(origin)) {
-    res.header("Access-Control-Allow-Origin", origin);
-    res.header("Vary", "Origin");
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
-  }
-
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(204);
-  }
-
-  next();
-});
-
 app.use(cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
@@ -85,6 +69,9 @@ import superadminRoutes from "./routes/superadmin.routes.js";
 import syncRoutes from "./routes/sync.routes.js";
 import teacherRoutes from "./routes/teacher.routes.js";
 import mediaRoutes from "./routes/media.routes.js";
+import opportunitiesRoutes from "./routes/opportunities.routes.js";
+import newsRoutes from "./routes/news.routes.js";
+import contactRoutes from "./routes/contact.routes.js";
 
 // ==========================
 // Appliquer les routes
@@ -103,6 +90,9 @@ app.use("/api/student", studentRoutes);
 app.use("/api/superadmin", superadminRoutes);
 app.use("/api/sync", syncRoutes);
 app.use("/api/teacher", teacherRoutes);
+app.use("/api/opportunities", opportunitiesRoutes);
+app.use("/api/news", newsRoutes);
+app.use("/api/contact", contactRoutes); 
 
 // ==========================
 // Root endpoint
