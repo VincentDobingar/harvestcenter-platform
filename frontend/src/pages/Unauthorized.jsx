@@ -1,8 +1,9 @@
-// 📁 src/pages/Unauthorized.jsx
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Unauthorized() {
+  const { t } = useTranslation();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -14,11 +15,14 @@ export default function Unauthorized() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
       <div className="bg-white p-8 rounded-2xl shadow-md max-w-md text-center">
-        <h1 className="text-3xl font-bold text-red-600 mb-3">Accès refusé 🚫</h1>
+        <h1 className="text-3xl font-bold text-red-600 mb-3">
+          {t("unauthorizedPage.title")}
+        </h1>
+
         <p className="text-gray-700 mb-6">
           {user?.role
-            ? `Votre rôle actuel (« ${user.role} ») ne vous permet pas d’accéder à cette page.`
-            : "Vous n’avez pas la permission d’accéder à cette page."}
+            ? t("unauthorizedPage.withRole", { role: user.role })
+            : t("unauthorizedPage.withoutRole")}
         </p>
 
         <div className="flex flex-col gap-3">
@@ -26,7 +30,7 @@ export default function Unauthorized() {
             to="/"
             className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
           >
-            Retour à l’accueil
+            {t("unauthorizedPage.home")}
           </Link>
 
           {user ? (
@@ -34,14 +38,14 @@ export default function Unauthorized() {
               onClick={handleLogout}
               className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-md transition"
             >
-              Déconnexion
+              {t("unauthorizedPage.logout")}
             </button>
           ) : (
             <Link
               to="/login"
               className="inline-block text-blue-600 hover:underline text-sm"
             >
-              Se connecter
+              {t("unauthorizedPage.login")}
             </Link>
           )}
         </div>

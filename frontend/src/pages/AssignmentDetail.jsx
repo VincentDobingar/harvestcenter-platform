@@ -1,53 +1,98 @@
-// 📁 src/pages/Assignments.jsx
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import api from "@/utils/api";
-import { asArray } from "@/utils/asArray";
+// src/pages/AssignmentDetail.jsx
 
-export default function Assignments() {
-  const [assignments, setAssignments] = useState(null); // null = loading
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Link, useParams } from "react-router-dom";
+import api from "@/utils/api";
+
+export default function AssignmentDetail() {
+  const { t, i18n } = useTranslation();
+  const { id } = useParams();
+  const locale = i18n.resolvedLanguage?.startsWith("en") ? "en-GB" : "fr-FR";
+
+  const [assignment, setAssignment] = useState(null);
   const [err, setErr] = useState("");
 
   useEffect(() => {
+    let mounted = true;
+
     (async () => {
       try {
-        const { data } = await api.get("/assignments");
-        setAssignments(asArray(data));
+        const { data } = await api.get(`/assignments/${id}`);
+        if (!mounted) return;
+        setAssignment(data?.data || data || null);
       } catch (e) {
-        setErr(e?.response?.data?.error || "Impossible de charger les devoirs");
-        setAssignments([]); // évite .map sur non-array
+        if (!mounted) return;
+        setErr(
+          e?.response?.data?.error ||
+            t("assignmentDetailPage.errors.load", {
+              defaultValue: "Impossible de charger le devoir.",
+            })
+        );
+        setAssignment(null);
       }
     })();
-  }, []);
 
-  if (assignments === null) return <div className="p-4">Chargement…</div>;
+    return () => {
+      mounted = false;
+    };
+  }, [id, t]);
+
+  if (!assignment && !err) {
+    return (
+      <div className="p-4">
+        {t("common.loading", { defaultValue: "Chargement..." })}
+      </div>
+    );
+  }
+
+  if (err) {
+    return (
+      <div className="max-w-4xl mx-auto p-4 space-y-4">
+        <div className="text-red-600 text-sm">{err}</div>
+        <Link to="/dashboard/assignments" className="text-blue-600 underline">
+          {t("assignmentDetailPage.back", { defaultValue: "Retour aux devoirs" })}
+        </Link>
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-6xl mx-auto p-4 space-y-4">
-      <h1 className="text-2xl font-bold">Mes devoirs</h1>
-      {err && <div className="text-red-600 text-sm">{err}</div>}
+    <div className="max-w-4xl mx-auto p-4 space-y-4">
+      <Link to="/dashboard/assignments" className="text-blue-600 underline">
+        {t("assignmentDetailPage.back", { defaultValue: "Retour aux devoirs" })}
+      </Link>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {asArray(assignments).map((a) => (
-          <div key={a.id} className="rounded-2xl bg-white shadow p-4 space-y-2">
-            <h3 className="card-title">{a.title}</h3>
-            <p className="text-sm text-gray-600">
-              {a.instructions ? String(a.instructions).slice(0, 140) : "—"}
-            </p>
-            <div className="text-sm">
-              Échéance : {a.due_at ? new Date(a.due_at).toLocaleString() : "—"}
-            </div>
-            <div className="text-sm text-gray-600">Barème : {a.max_score ?? 20}</div>
-            <Link to={`/assignments/${a.id}`} className="btn-brand w-full text-center">
-              Ouvrir
-            </Link>
-          </div>
-        ))}
+      <h1 className="text-2xl font-bold">
+        {assignment?.title || t("assignmentDetailPage.title", { defaultValue: "Détail du devoir" })}
+      </h1>
+
+      <div className="rounded-2xl bg-white shadow p-4 space-y-3">
+        <div>
+          <span className="font-medium">
+            {t("assignmentDetailPage.deadline", { defaultValue: "Date limite" })}:
+          </span>{" "}
+          {assignment?.due_at
+            ? new Date(assignment.due_at).toLocaleString(locale)
+            : "—"}
+        </div>
+
+        <div>
+          <span className="font-medium">
+            {t("assignmentDetailPage.maxScore", { defaultValue: "Note maximale" })}:
+          </span>{" "}
+          {assignment?.max_score ?? 20}
+        </div>
+
+        <div>
+          <span className="font-medium">
+            {t("assignmentDetailPage.instructions", { defaultValue: "Consignes" })}:
+          </span>
+          <p className="mt-2 text-gray-700 whitespace-pre-line">
+            {assignment?.instructions || "—"}
+          </p>
+        </div>
       </div>
-
-      {asArray(assignments).length === 0 && (
-        <p className="text-sm text-gray-600">Aucun devoir pour l’instant.</p>
-      )}
     </div>
   );
 }

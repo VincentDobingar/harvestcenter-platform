@@ -1,15 +1,19 @@
 // src/pages/auth/Account.jsx
-import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Account() {
+  const { t } = useTranslation();
   const { login, register, gotoByRole } = useAuth();
   const nav = useNavigate();
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [isLogin, setIsLogin] = useState(true);
+  const initialTab = searchParams.get("tab");
+  const [isLogin, setIsLogin] = useState(initialTab !== "register");
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
@@ -22,6 +26,16 @@ export default function Account() {
 
   const [showPwd, setShowPwd] = useState(false);
 
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    setIsLogin(tab !== "register");
+  }, [searchParams]);
+
+  function switchTab(loginMode) {
+    setIsLogin(loginMode);
+    setSearchParams(loginMode ? { tab: "login" } : { tab: "register" });
+  }
+
   function handleChange(e) {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -33,7 +47,7 @@ export default function Account() {
     try {
       if (isLogin) {
         if (!form.email.trim() || !form.password.trim()) {
-          toast.error("Veuillez remplir tous les champs.");
+          toast.error(t("accountPage.errors.required"));
           return;
         }
 
@@ -42,9 +56,9 @@ export default function Account() {
         const user = await login(form.email.trim(), form.password);
 
         if (user?.role) {
-          toast.success("Connexion réussie !");
+          toast.success(t("accountPage.success.login"));
 
-          const next = location.state?.next;
+          const next = location.state?.next || location.state?.from?.pathname;
 
           if (next) {
             nav(next, { replace: true });
@@ -52,7 +66,7 @@ export default function Account() {
             gotoByRole(user, nav);
           }
         } else {
-          toast.error("Session invalide.");
+          toast.error(t("accountPage.errors.invalidSession"));
         }
       } else {
         if (
@@ -61,7 +75,7 @@ export default function Account() {
           !form.first_name.trim() ||
           !form.last_name.trim()
         ) {
-          toast.error("Veuillez remplir tous les champs.");
+          toast.error(t("accountPage.errors.required"));
           return;
         }
 
@@ -77,8 +91,8 @@ export default function Account() {
 
         await register(payload);
 
-        toast.success("Inscription réussie. En attente de validation.");
-        setIsLogin(true);
+        toast.success(t("accountPage.success.register"));
+        switchTab(true);
       }
     } catch (err) {
       console.error("Account auth error:", err);
@@ -86,9 +100,9 @@ export default function Account() {
       const message =
         err?.response?.data?.message ||
         (err?.code === "ERR_NETWORK"
-          ? "Problème réseau ou extension navigateur."
+          ? t("accountPage.errors.network")
           : err?.message) ||
-        "Erreur d'authentification";
+        t("accountPage.errors.auth");
 
       toast.error(message);
     } finally {
@@ -103,7 +117,9 @@ export default function Account() {
         className="w-full max-w-md bg-white rounded-2xl shadow p-6 space-y-4"
       >
         <h1 className="text-2xl font-bold text-center">
-          {isLogin ? "Connexion" : "Créer un compte"}
+          {isLogin
+            ? t("accountPage.titleLogin")
+            : t("accountPage.titleRegister")}
         </h1>
 
         {!isLogin && (
@@ -113,7 +129,7 @@ export default function Account() {
               value={form.first_name}
               onChange={handleChange}
               className="w-full border rounded-xl p-3"
-              placeholder="Prénom"
+              placeholder={t("accountPage.fields.firstName")}
               required
             />
             <input
@@ -121,7 +137,7 @@ export default function Account() {
               value={form.last_name}
               onChange={handleChange}
               className="w-full border rounded-xl p-3"
-              placeholder="Nom"
+              placeholder={t("accountPage.fields.lastName")}
               required
             />
             <select
@@ -130,9 +146,9 @@ export default function Account() {
               onChange={handleChange}
               className="w-full border rounded-xl p-3"
             >
-              <option value="student">Étudiant</option>
-              <option value="teacher">Enseignant</option>
-              <option value="admin">Administrateur</option>
+              <option value="student">{t("accountPage.roles.student")}</option>
+              <option value="teacher">{t("accountPage.roles.teacher")}</option>
+              <option value="admin">{t("accountPage.roles.admin")}</option>
             </select>
           </>
         )}
@@ -143,7 +159,7 @@ export default function Account() {
           value={form.email}
           onChange={handleChange}
           className="w-full border rounded-xl p-3"
-          placeholder="Email"
+          placeholder={t("accountPage.fields.email")}
           required
         />
 
@@ -154,7 +170,7 @@ export default function Account() {
             value={form.password}
             onChange={handleChange}
             className="w-full border rounded-xl p-3 pr-12"
-            placeholder="Mot de passe"
+            placeholder={t("accountPage.fields.password")}
             required
           />
           <button
@@ -162,45 +178,43 @@ export default function Account() {
             onClick={() => setShowPwd((s) => !s)}
             className="absolute right-2 top-1/2 -translate-y-1/2 text-sm"
           >
-            {showPwd ? "Masquer" : "Voir"}
+            {showPwd
+              ? t("accountPage.fields.hide")
+              : t("accountPage.fields.show")}
           </button>
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full btn-brand"
-        >
+        <button type="submit" disabled={loading} className="w-full btn-brand">
           {loading
             ? isLogin
-              ? "Connexion…"
-              : "Création…"
+              ? t("accountPage.actions.loggingIn")
+              : t("accountPage.actions.creating")
             : isLogin
-              ? "Se connecter"
-              : "Créer mon compte"}
+            ? t("accountPage.actions.login")
+            : t("accountPage.actions.createAccount")}
         </button>
 
         <p className="text-center text-sm">
           {isLogin ? (
             <>
-              Pas de compte ?{" "}
+              {t("accountPage.switch.noAccount")}{" "}
               <button
                 type="button"
-                onClick={() => setIsLogin(false)}
+                onClick={() => switchTab(false)}
                 className="text-blue-600 underline"
               >
-                Créer un compte
+                {t("accountPage.switch.create")}
               </button>
             </>
           ) : (
             <>
-              Déjà inscrit ?{" "}
+              {t("accountPage.switch.alreadyRegistered")}{" "}
               <button
                 type="button"
-                onClick={() => setIsLogin(true)}
+                onClick={() => switchTab(true)}
                 className="text-blue-600 underline"
               >
-                Se connecter
+                {t("accountPage.switch.login")}
               </button>
             </>
           )}

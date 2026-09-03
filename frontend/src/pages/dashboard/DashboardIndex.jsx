@@ -1,52 +1,27 @@
 // src/pages/dashboard/DashboardIndex.jsx
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
+import PageLoader from "@/components/ui/PageLoader";
 
-/**
- * DashboardIndex
- * 
- * Page d'index du dashboard qui redirige automatiquement selon le rôle
- * - Student -> /dashboard/student
- * - Teacher -> /dashboard/teacher
- * - Admin/SuperAdmin -> /admin ou /superadmin
- * - Sinon -> /login
- */
 export default function DashboardIndex() {
-  const { user } = useAuth();
-  const navigate = useNavigate();
+  const { user, booting } = useAuth();
 
-  useEffect(() => {
-    if (!user) {
-      // Pas connecté -> redirection vers login
-      navigate("/login", { replace: true });
-      return;
-    }
+  if (booting) return <PageLoader />;
 
-    switch (user.role) {
-      case "student":
-      case "etudiant":
-        navigate("/dashboard/student", { replace: true });
-        break;
-      case "teacher":
-      case "formateur":
-        navigate("/dashboard/teacher", { replace: true });
-        break;
-      case "admin":
-      case "administrateur":
-      case "secretaire":
-        navigate("/admin", { replace: true });
-        break;
-      case "superadmin":
-        navigate("/superadmin", { replace: true });
-        break;
-      default:
-        // rôle inconnu -> login
-        navigate("/login", { replace: true });
-        break;
-    }
-  }, [user, navigate]);
+  if (!user) {
+    return <Navigate to="/account?tab=login" replace />;
+  }
 
-  // On peut afficher un loader pendant la redirection
-  return <div>Redirection en cours...</div>;
+  const role = String(user.role || "").trim().toLowerCase();
+
+  if (role === "superadmin") return <Navigate to="/superadmin" replace />;
+  if (role === "admin") return <Navigate to="/admin" replace />;
+  if (["teacher", "formateur"].includes(role)) {
+    return <Navigate to="/dashboard/teacher" replace />;
+  }
+  if (["student", "etudiant"].includes(role)) {
+    return <Navigate to="/dashboard/student" replace />;
+  }
+
+  return <Navigate to="/unauthorized" replace />;
 }
