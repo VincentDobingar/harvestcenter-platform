@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="880" viewBox="0 0 880 880">
+<defs>
+  <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#8f6b12"/>
+    <stop offset="18%" stop-color="#e7c55b"/>
+    <stop offset="38%" stop-color="#fff2a5"/>
+    <stop offset="58%" stop-color="#d8a61c"/>
+    <stop offset="78%" stop-color="#f3d66e"/>
+    <stop offset="100%" stop-color="#8c6610"/>
+  </linearGradient>
+  <linearGradient id="silverGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#948a80"/>
+    <stop offset="18%" stop-color="#d8d1c9"/>
+    <stop offset="50%" stop-color="#726a63"/>
+    <stop offset="100%" stop-color="#111"/>
+  </linearGradient>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity="0.45"/>
+  </filter>
+</defs>
+<rect width="100%" height="100%" fill="#000"/>
+<path d="M 362,123 L 344,132 L 334,131 L 314,143 L 309,153 L 297,159 L 289,176 L 292,191 L 283,204 L 283,219 L 295,226 L 298,238 L 312,252 L 341,253 L 364,248 L 386,260 L 387,273 L 383,287 L 395,296 L 395,304 L 406,326 L 396,348 L 397,356 L 409,371 L 409,388 L 416,399 L 417,409 L 429,417 L 450,409 L 461,389 L 475,380 L 472,367 L 474,359 L 487,352 L 499,336 L 499,330 L 492,319 L 492,297 L 530,258 L 538,240 L 541,223 L 520,230 L 514,229 L 507,223 L 504,215 L 492,208 L 491,198 L 480,184 L 479,172 L 470,165 L 470,149 L 442,147 L 433,141 L 427,141 L 420,147 L 412,147 L 405,140 L 393,137 L 391,123 Z " fill="url(#goldGrad)" fill-rule="evenodd"/>
+<path d="M 84,369 L 85,452 L 88,469 L 100,469 L 94,421 L 94,388 L 104,326 L 119,283 L 130,261 L 154,223 L 172,201 L 226,153 L 264,130 L 298,115 L 350,100 L 375,96 L 452,96 L 515,110 L 566,132 L 612,162 L 656,204 L 694,258 L 721,322 L 732,384 L 732,423 L 726,469 L 738,468 L 741,448 L 742,378 L 735,333 L 710,266 L 679,217 L 642,176 L 589,136 L 531,108 L 466,91 L 388,88 L 334,96 L 268,119 L 210,154 L 166,194 L 129,243 L 99,305 Z " fill="url(#goldGrad)" fill-rule="evenodd"/>
+<path d="M 662,234 L 642,264 L 612,291 L 574,315 L 514,344 L 509,350 L 515,359 L 514,362 L 486,367 L 531,378 L 580,378 L 610,371 L 631,360 L 642,349 L 650,335 L 654,312 L 625,333 L 600,344 L 562,354 L 540,357 L 530,354 L 599,334 L 622,323 L 644,307 L 660,287 L 667,258 Z " fill="url(#goldGrad)" fill-rule="evenodd"/>
+<path d="M 164,235 L 160,263 L 165,283 L 174,297 L 202,320 L 235,336 L 276,348 L 318,355 L 374,359 L 316,344 L 245,310 L 214,290 L 194,273 L 174,251 Z " fill="url(#goldGrad)" fill-rule="evenodd"/>
+<path d="M 177,336 L 186,351 L 199,362 L 220,372 L 253,378 L 297,379 L 379,366 L 322,363 L 256,352 L 222,341 L 192,326 L 173,312 Z " fill="url(#goldGrad)" fill-rule="evenodd"/>
+<path d="M 382,372 L 342,381 L 294,387 L 255,387 L 204,376 L 210,393 L 221,405 L 239,414 L 262,416 L 292,412 L 339,396 Z " fill="url(#goldGrad)" fill-rule="evenodd"/>
+<path d="M 481,389 L 527,410 L 556,416 L 575,416 L 593,412 L 605,405 L 618,389 L 621,376 L 599,384 L 578,387 L 545,387 L 490,376 Z " fill="url(#goldGrad)" fill-rule="evenodd"/>
+<path d="M 386,378 L 358,396 L 319,413 L 278,424 L 250,425 L 258,436 L 273,445 L 297,446 L 313,442 L 337,430 L 355,416 L 374,396 Z " fill="url(#goldGrad)" fill-rule="evenodd"/>
+<path d="M 463,412 L 494,436 L 523,447 L 550,446 L 563,439 L 574,427 L 520,417 L 496,408 L 474,395 Z " fill="url(#goldGrad)" fill-rule="evenodd"/>
+<path d="M 387,391 L 358,426 L 338,440 L 312,452 L 337,455 L 358,446 L 377,423 Z " fill="url(#goldGrad)" fill-rule="evenodd"/>
+<path d="M 440,419 L 447,434 L 467,451 L 481,455 L 509,451 L 483,442 L 450,418 Z " fill="url(#goldGrad)" fill-rule="evenodd"/>
+<g filter="url(#shadow)">
+  <text x="440" y="558" text-anchor="middle" fill="url(#goldGrad)"
+        font-family="Georgia, Times New Roman, serif" font-size="118" font-weight="700">MANI</text>
+  <text x="440" y="607" text-anchor="middle" fill="url(#goldGrad)"
+        font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700" letter-spacing="1">FINANCIAL GROUP SA</text>
+  <text x="440" y="656" text-anchor="middle" fill="#f0f0f0"
+        font-family="Arial, Helvetica, sans-serif" font-size="32">Twese Mw’Iterambere</text>
+</g>
+<g>
+  <rect x="95" y="710" width="635" height="50" rx="7" fill="url(#silverGrad)" stroke="#f4f4f4" stroke-width="2"/>
+  <text x="412.5" y="747" text-anchor="middle" fill="#f3f3f3"
+        font-family="Arial, Helvetica, sans-serif" font-size="33" font-weight="600" letter-spacing="8">MICROFINANCE</text>
+</g>
+</svg>
