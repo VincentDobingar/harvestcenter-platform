@@ -1,6 +1,6 @@
 // routes/superadmin.routes.js
 import express from "express";
-import { requireAuth } from "../middlewares/requireAuth.js";
+import { requireAuth } from "../middlewares/auth.middleware.js";
 import { requireRole } from "../middlewares/requireRole.js";
 import * as superAdminController from "../controllers/superadmin.controller.js";
 import * as opportunitiesController from "../controllers/opportunities.controller.js";
@@ -10,7 +10,7 @@ import { uploadNewsMedia } from "../middlewares/upload.js";
 const router = express.Router();
 
 // Sécurité globale superadmin
-router.use(requireAuth);
+router.use(requireAuth());
 router.use(requireRole("superadmin"));
 
 // Dashboard

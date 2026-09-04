@@ -1,6 +1,6 @@
 import express from 'express';
 import { requireAuth  } from '../middlewares/auth.middleware.js';
-import role from '../middlewares/role.js';
+import { requireRole } from '../middlewares/requireRole.js';
 
 import {
   getFormations,
@@ -14,6 +14,6 @@ const router = express.Router();
 router.get('/', getFormations);
 router.get('/:id', getFormationById);
 router.post('/:id/enroll', requireAuth(), enrollUser);
-router.get('/:id/stats', requireAuth(), role('admin', 'teacher'), getFormationStats);
+router.get('/:id/stats', requireAuth(), requireRole('admin', 'teacher'), getFormationStats);
 
 export default router;

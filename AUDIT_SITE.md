@@ -81,24 +81,22 @@ Contrairement à `JWT_SECRET` (64 octets aléatoires générés proprement, cf. 
 
 ## 🟡 MOYEN / DETTE TECHNIQUE
 
-### 9. Quatre implémentations différentes et incohérentes de l'authentification
-`middlewares/auth.middleware.js`, `middlewares/requireAuth.js`, `middlewares/authJwt.js`, `middlewares/auth.js` (mort) coexistent, avec des signatures différentes (factory vs middleware direct, cookie vs header Bearer, `role` vs `roles`). C'est la cause directe des bugs #2, #3, #5. Idem pour `role.js` (comparaison sensible à la casse, `export default`) vs `requireRole.js` (normalisée, `export nommé`).
-**Recommandation** : ne garder qu'une seule implémentation (`requireAuth` + `requireRole`, cookie-based) et supprimer les autres.
+### 9. ✅ Corrigé — Quatre implémentations différentes et incohérentes de l'authentification
+`middlewares/auth.middleware.js`, `middlewares/requireAuth.js`, `middlewares/authJwt.js`, `middlewares/auth.js` (mort) coexistaient, avec des signatures différentes (factory vs middleware direct, cookie vs header Bearer, `role` vs `roles`). C'était la cause directe des bugs #2, #3, #5. Idem pour `role.js` (comparaison sensible à la casse) vs `requireRole.js` (normalisée).
+**Fix appliqué** : toutes les routes utilisent désormais une seule implémentation (`auth.middleware.js` → `requireAuth(...roles)` + `requireRole.js` → `requireRole(...roles)`, toutes deux cookie-based et normalisées). Les fichiers concurrents ont été supprimés (voir #10).
 
-### 10. Code mort jamais importé
-- `middlewares/auth.js`
-- `middlewares/requirePermission.js` (utilise `db.query` sans même importer `db` → plante si jamais utilisé)
-- `middlewares/student.middleware.js`
+### 10. ✅ Corrigé — Code mort jamais importé
+Supprimés : `middlewares/auth.js`, `middlewares/requirePermission.js` (utilisait `db.query` sans même importer `db`), `middlewares/student.middleware.js`, `middlewares/requireAuth.js`, `middlewares/role.js`, `middlewares/authJwt.js`, `middlewares/auditLog.js` (redondant avec l'écriture directe dans `audit_logs` faite par `admin.controller.js`), `middlewares/sync.middleware.js` (redondant avec `offlineSync.middleware.js`, qui lui est utilisé), ainsi que `config/jwt.js` (seul consommateur : `authJwt.js`).
 
-### 11. Dépendance `csurf` inutilisée
-Listée dans `api/package.json` mais jamais appliquée dans `app.js`. Aucune protection CSRF active dans l'app malgré l'usage de cookies + `credentials: true` en CORS. À évaluer si nécessaire vu que l'auth repose sur cookies httpOnly cross-site (le risque CSRF existe potentiellement sur les routes qui modifient l'état).
+### 11. ✅ Corrigé — Dépendance `csurf` inutilisée
+Retirée de `api/package.json` (`npm uninstall csurf`). Aucune protection CSRF active dans l'app malgré l'usage de cookies + `credentials: true` en CORS — à réévaluer séparément si une vraie protection CSRF est nécessaire (ce n'était de toute façon pas ce que `csurf` non-branché fournissait).
 
-### 12. `health.routes.js` ouvre une connexion MySQL brute à chaque appel
+### 12. ✅ Corrigé — `health.routes.js` ouvre une connexion MySQL brute à chaque appel
 **Fichier** : `api/routes/health.routes.js`
-Crée une nouvelle connexion `mysql2` à chaque requête au lieu de réutiliser le pool de `config/db.js`. Sous charge ou sondage fréquent (monitoring), risque d'épuisement de connexions côté MySQL.
+Utilise maintenant le pool partagé de `config/db.js` (`db.getConnection()` + `.ping()` + `.release()`) au lieu de créer et fermer une connexion `mysql2` à chaque requête. Message d'erreur également généralisé (cohérent avec le fix #7).
 
 ### 13. Système de permissions granulaire construit mais jamais branché
-Les tables `role_permissions` et `permissions` existent dans le schéma (`schema.sql`), et `requirePermission.js` a été écrit pour les utiliser, mais rien dans les routes ne l'importe. Fonctionnalité à moitié faite — soit à terminer, soit à retirer du schéma si abandonnée.
+Les tables `role_permissions` et `permissions` existent dans le schéma (`schema.sql`), mais le seul code qui les utilisait (`requirePermission.js`) a été supprimé au point #10 car mort et cassé (bug d'import). Les tables restent en base, inutilisées. **Décision à prendre** : soit implémenter proprement ce système de permissions granulaires si le besoin est réel, soit retirer ces tables du schéma si l'idée est abandonnée. Aucune action de code n'a été prise ici faute de décision produit.
 
 ---
 

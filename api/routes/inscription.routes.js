@@ -7,8 +7,7 @@ import {
   createInscriptionRequest,
 } from "../controllers/inscription.controller.js";
 
-// Adapte l'import selon ton projet
-import { requireAuth } from "../middlewares/requireAuth.js";
+import { requireAuth } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
@@ -20,6 +19,6 @@ router.get("/options/niveaux/:module_id", getDeprecatedLevels);
 router.get("/options/timeslots/:niveau_id", getDeprecatedTimeSlots);
 
 // Soumission
-router.post("/request", requireAuth, createInscriptionRequest);
+router.post("/request", requireAuth(), createInscriptionRequest);
 
 export default router;
