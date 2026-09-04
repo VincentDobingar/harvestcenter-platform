@@ -102,14 +102,15 @@ Les tables `role_permissions` et `permissions` existent dans le schéma (`schema
 
 ## 🟢 FAIBLE / NOTES
 
-### 14. Pas de migrations versionnées
-`api/config/script.sql` ne contient qu'une table (`opportunities`) sur les 36 réelles. Le schéma complet n'existe que dans la base de production ; il a fallu le dumper manuellement pendant cette session (`api/config/schema.sql`, converti en `schema_mysql8.sql` pour compatibilité MySQL 8 — MariaDB en prod supporte nativement le type `uuid`, pas MySQL 8). Ces deux fichiers sont désormais dans `.gitignore`.
+### 14. ✅ Corrigé — Pas de migrations versionnées
+`api/config/script.sql` ne contenait qu'une table (`opportunities`) sur les 36 réelles ; le schéma complet n'existait que dans la base de production.
+**Fix appliqué** : le schéma complet (dumpé depuis la prod, colonnes `uuid` MariaDB converties en `char(36)` pour compatibilité MySQL 8) est maintenant versionné dans `api/migrations/0001_initial_schema.sql`, avec un petit runner (`api/scripts/migrate.js`, exécutable via `npm run db:migrate`) qui suit les migrations déjà appliquées dans une table `schema_migrations` — sûr à relancer, ne réapplique jamais un fichier déjà exécuté. Voir `api/migrations/README.md` pour la convention à suivre pour les futures migrations. `api/config/script.sql`, `schema.sql` et `schema_mysql8.sql` ont été retirés (remplacés par ce dossier).
 
-### 15. Le frontend local pointe toujours vers l'API de production
-`frontend/.env` → `VITE_API_BASE_URL=https://api.harvestcentertd.org`. Pas de fichier séparé pour pointer vers l'API locale (`http://localhost:5000`) pendant le développement.
+### 15. ✅ Corrigé — Le frontend local pointait toujours vers l'API de production
+`frontend/.env.local` (gitignoré, prioritaire sur `.env` sous Vite) pointe maintenant vers `http://localhost:5000` pour le développement local ; `frontend/.env` (commité) reste inchangé comme valeur par défaut pour tout environnement sans override.
 
-### 16. Fichiers d'archive à la racine
-`api.zip`, `api1.zip`, `Test_Img/` (non trackés par git, donc pas de risque de fuite, mais à nettoyer si obsolètes).
+### 16. ✅ Corrigé — Fichiers d'archive à la racine
+`api.zip`, `api1.zip` (anciennes sauvegardes de mars) et `Test_Img/` supprimés après confirmation.
 
 ---
 
