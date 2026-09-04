@@ -12,6 +12,8 @@ Ce document remplace l'analyse précédente qui a été perdue. Chaque point est
 
 Les points #2, #3, #4 et #5 ci-dessous ont été corrigés et vérifiés (redémarrage de l'API + tests HTTP confirmant que les routes répondent correctement au lieu de rester bloquées ou de refuser à tort l'accès).
 
+Les points #6, #7 et #8 ont également été corrigés et vérifiés (`loginLimiter` testé : 429 après 5 tentatives ; secrets rotés côté production par l'utilisateur).
+
 **Bonus trouvé pendant la correction** : `api/routes/grades.routes.js` contenait une route `GET /grades` (donc `GET /api/grades/grades`) commentée "public/test", sans aucune authentification, qui exposait `SELECT * FROM grades LIMIT 10` à n'importe qui. Elle a été supprimée (code de test resté en prod).
 
 Le point #1 (secrets de prod exposés dans `ScriptSSH.txt`) reste **à traiter côté production** — voir section correspondante, action non automatisable depuis ce dépôt local.
@@ -64,14 +66,14 @@ Chacun de ces trois points suffit à bloquer l'accès ; les trois cumulés confi
 
 ## 🟠 ÉLEVÉ
 
-### 6. Pas de protection anti-bruteforce sur le login
+### 6. ✅ Corrigé — Pas de protection anti-bruteforce sur le login
 **Fichier** : `api/middlewares/rateLimit.js` définit `loginLimiter` (via `express-rate-limit`) mais il n'est **importé nulle part**. `POST /api/auth/login` et `/register` (`api/routes/auth.routes.js`) n'ont aucune limite de tentatives.
 
-### 7. Le handler d'erreur global fuite les messages d'erreur en production
+### 7. ✅ Corrigé — Le handler d'erreur global fuite les messages d'erreur en production
 **Fichier** : `api/app.js:113-121`
 `res.status(500).json({ message: err.message, stack: ... })` — `stack` est bien masqué en prod, mais `message` est toujours renvoyé au client, y compris pour des erreurs SQL brutes (peut révéler noms de colonnes/tables, structure interne).
 
-### 8. `JWT_REFRESH_SECRET` est un secret faible/placeholder
+### 8. ✅ Corrigé (côté production) — `JWT_REFRESH_SECRET` est un secret faible/placeholder
 **Fichier** : `api/.env` → `JWT_REFRESH_SECRET=anothersecret456`
 Contrairement à `JWT_SECRET` (64 octets aléatoires générés proprement, cf. `ScriptSSH.txt`), le refresh secret est une chaîne devinable. À régénérer avec la même méthode (`crypto.randomBytes(64).toString('hex')`).
 

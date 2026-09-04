@@ -113,10 +113,12 @@ app.get("/", (req, res) => {
 app.use((err, req, res, next) => {
   console.error("🔥 FULL ERROR:", err);
 
+  const isProduction = process.env.NODE_ENV === "production";
+
   res.status(500).json({
     success: false,
-    message: err.message,
-    stack: process.env.NODE_ENV === "production" ? undefined : err.stack
+    message: isProduction ? "Erreur serveur" : err.message,
+    stack: isProduction ? undefined : err.stack
   });
 });
 
