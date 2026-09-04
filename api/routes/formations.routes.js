@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.get('/', getFormations);
 router.get('/:id', getFormationById);
-router.post('/:id/enroll', requireAuth, enrollUser);
-router.get('/:id/stats', requireAuth, role('admin', 'teacher'), getFormationStats);
+router.post('/:id/enroll', requireAuth(), enrollUser);
+router.get('/:id/stats', requireAuth(), role('admin', 'teacher'), getFormationStats);
 
 export default router;
