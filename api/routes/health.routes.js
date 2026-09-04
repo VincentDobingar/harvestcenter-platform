@@ -1,28 +1,19 @@
 import express from "express";
+import db from "../config/db.js";
 
 const router = express.Router();
 
-import mysql from "mysql2/promise";
-
 router.get("/", async (req, res) => {
   try {
-    const connection = await mysql.createConnection({
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME
-    });
-
+    const connection = await db.getConnection();
     await connection.ping();
-    await connection.end();
+    connection.release();
 
     res.json({ status: "OK", database: "connected" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ status: "ERROR", message: error.message });
+    res.status(500).json({ status: "ERROR", message: "Database unreachable" });
   }
 });
-
-
 
 export default router;
