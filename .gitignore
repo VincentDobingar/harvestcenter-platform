@@ -9,5 +9,5 @@ build
 *.zip
 passwords
 ScriptSSH.txt
-api/config/schema.sql
-api/config/schema_mysql8.sql
+.env.local
+.env.*.local
