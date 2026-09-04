@@ -7,6 +7,12 @@ export const requireRole = (...roles) => {
     }
 
     const currentRole = String(req.user.role || "").trim().toLowerCase();
+
+    // Le superadmin a tous les droits
+    if (currentRole === "superadmin") {
+      return next();
+    }
+
     const allowedRoles = roles.map((r) => String(r || "").trim().toLowerCase());
 
     if (!allowedRoles.includes(currentRole)) {

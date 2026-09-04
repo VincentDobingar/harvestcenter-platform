@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post(
   "/",
-  requireAuth,
+  requireAuth(),
   offlineSyncGuard,
   syncOfflineActions
 );
