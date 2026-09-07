@@ -10,6 +10,23 @@ Options -MultiViews
 DirectorySlash Off
 RewriteEngine On
 
+# PassengerAppRoot / PassengerBaseURI above make this directory both the
+# app root AND the Apache document root: any file that physically exists
+# here is served directly by Apache, bypassing the Node app entirely.
+# Confirmed on 2026-09-07: /package.json was fetchable at
+# https://api.harvestcentertd.org/package.json (HTTP 200). Block direct
+# access to source, config and secret-shaped files so only the app's own
+# routes (and Express's explicit /uploads static mount) remain reachable.
+<FilesMatch "\.(env|sql|sh|log|md|json|yml|yaml|lock)$">
+  Require all denied
+</FilesMatch>
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
+<FilesMatch "^(deploy_key.*|id_rsa.*|id_ed25519.*)$">
+  Require all denied
+</FilesMatch>
+
 <IfModule mod_headers.c>
   SetEnvIfNoCase Origin "^https://(www\.)?harvestcentertd\.org$" ACAO=$0
   SetEnvIfNoCase Origin "^http://localhost:(3000|5173|4173)$" ACAO=$0
