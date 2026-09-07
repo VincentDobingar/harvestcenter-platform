@@ -36,8 +36,24 @@ jobs:
       - name: Build frontend
         working-directory: frontend
         run: |
+          # Overrides the committed .env (which points at the production
+          # API) so each target builds against its own backend. VITE_*
+          # vars are baked in at build time — there is no runtime config
+          # switch (window.__RUNTIME_CONFIG__ is set in main.jsx but never
+          # actually read anywhere in the app).
+          echo "VITE_API_BASE_URL=${{ secrets.FRONTEND_API_BASE_URL }}" > .env.production.local
+          echo "VITE_API_PREFIX=/api" >> .env.production.local
           npm ci
           npm run build
+
+      - name: Generate environment-specific .htaccess for the frontend
+        run: |
+          # frontend/.htaccess isn't part of the Vite build output (it
+          # lives outside src/public) and its /api proxy rule is hardcoded
+          # to the production API host — retarget it per environment
+          # before it gets rsynced alongside dist/.
+          sed "s#https://api.harvestcentertd.org#${{ secrets.FRONTEND_API_BASE_URL }}#g" \
+            frontend/.htaccess > frontend/dist/.htaccess
 
       - name: Load deploy SSH key
         uses: webfactory/ssh-agent@v0.9.0
@@ -58,9 +74,17 @@ jobs:
 
       - name: Sync API source
         run: |
+          # .htaccess is excluded on purpose: cPanel's "Setup Node.js App"
+          # generates its own PassengerAppRoot/PassengerNodejs directives
+          # per app (different absolute paths for staging vs production).
+          # The version checked into this repo carries production's paths
+          # and CORS-header origins — rsyncing it here would silently
+          # break Passenger on any other target. Apply .htaccess changes
+          # for this app root by hand (see DEPLOY.md).
           rsync -az --delete \
             --exclude 'node_modules' \
             --exclude '.env' \
+            --exclude '.htaccess' \
             --exclude 'uploads' \
             --exclude 'tmp' \
             --exclude '.git' \

@@ -25,6 +25,8 @@ const allowedOrigins = [
   "https://www.harvestcentertd.org",
   "https://harvestcentertd.org",
   "https://api.harvestcentertd.org",
+  "https://staging.harvestcentertd.org",
+  "https://staging.api.harvestcentertd.org",
   "http://localhost:3000",
   "http://localhost:5173",
   "http://localhost:4173"
