@@ -15,7 +15,6 @@ const PATHS_BY_ROLE = {
   teacher: { spacePath: "/formateur/dashboard", profilePath: "/formateur/profile" },
   trainer: { spacePath: "/formateur/dashboard", profilePath: "/formateur/profile" },
   formateur: { spacePath: "/formateur/dashboard", profilePath: "/formateur/profile" },
-  teacher: { spacePath: "/formateur/dashboard", profilePath: "/formateur/profile" },
 
   admin: { spacePath: "/admin/dashboard", profilePath: "/admin/profile" },
   administrateur: { spacePath: "/admin/dashboard", profilePath: "/admin/profile" },
