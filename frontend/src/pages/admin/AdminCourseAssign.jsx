@@ -1,5 +1,5 @@
 // src/pages/admin/AdminCourseAssign.jsx
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import api from "@/utils/api";
 import { Button } from "@/components/ui/button";
@@ -18,11 +18,7 @@ export default function AdminCourseAssign({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchTeachers();
-  }, []);
-
-  async function fetchTeachers() {
+  const fetchTeachers = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -36,7 +32,11 @@ export default function AdminCourseAssign({
     } finally {
       setLoading(false);
     }
-  }
+  }, [t]);
+
+  useEffect(() => {
+    fetchTeachers();
+  }, [fetchTeachers]);
 
   async function handleAssign() {
     if (!selected) return setError(t("adminCourseAssign.errors.choose"));

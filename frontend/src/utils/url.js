@@ -24,7 +24,7 @@ export function toAbsoluteUrl(u) {
 
     // fallback: use current origin
     return window.location.origin + (u.startsWith("/") ? u : "/" + u);
-  } catch (e) {
+  } catch {
     // last resort fallback
     return "http://localhost:5000" + (u.startsWith("/") ? u : "/" + u);
   }

@@ -64,7 +64,9 @@ export default function HomeGalerie({ limit = 8 }) {
           );
           return;
         }
-      } catch (_) {}
+      } catch {
+        // ignore: fall back to the static gallery below
+      }
 
       if (mounted) setItems(FALLBACK.slice(0, limit));
     })();

@@ -1,31 +1,16 @@
 // 📁 src/components/ToastProvider.jsx
-import React from "react";
-import { Toaster, toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
 /**
  * 🌍 ToastProvider
  *
  * Fournit un contexte global pour les notifications (`react-hot-toast`).
- * 
- * 💡 À placer tout en haut de ton application (comme tu l’as déjà fait dans App.jsx) :
- * ```jsx
- * <BrowserRouter>
- *   <ToastProvider>
- *     <AuthProvider>
- *       <AppRoutes />
- *     </AuthProvider>
- *   </ToastProvider>
- * </BrowserRouter>
- * ```
+ * À placer tout en haut de l'application (voir App.jsx).
  *
- * ➕ Tu peux ensuite utiliser les toasts dans n’importe quel composant :
- * ```js
- * import { toast } from "react-hot-toast";
- * toast.success("Opération réussie !");
- * toast.error("Une erreur est survenue");
- * ```
+ * Pour déclencher une notification, utiliser les helpers de
+ * `@/utils/notify` (`notifySuccess`, `notifyError`) plutôt que
+ * d'importer `react-hot-toast` directement.
  */
-
 export function ToastProvider({ children }) {
   return (
     <>
@@ -42,13 +27,13 @@ export function ToastProvider({ children }) {
           },
           success: {
             iconTheme: {
-              primary: "#16a34a", // vert Tailwind
+              primary: "#16a34a",
               secondary: "#fff",
             },
           },
           error: {
             iconTheme: {
-              primary: "#dc2626", // rouge Tailwind
+              primary: "#dc2626",
               secondary: "#fff",
             },
           },
@@ -56,24 +41,4 @@ export function ToastProvider({ children }) {
       />
     </>
   );
-}
-
-/* -------------------------------------------------------
-   💡 Helpers optionnels (facultatifs)
-   Tu peux les importer depuis ce fichier :
-   import { notifySuccess, notifyError } from "@/components/ToastProvider";
-------------------------------------------------------- */
-export function notifySuccess(msg) {
-  toast.success(msg || "Opération réussie !");
-}
-
-export function notifyError(err) {
-  let message =
-    typeof err === "string"
-      ? err
-      : err?.response?.data?.message ||
-        err?.response?.data?.error ||
-        err?.message ||
-        "Une erreur est survenue";
-  toast.error(message);
 }

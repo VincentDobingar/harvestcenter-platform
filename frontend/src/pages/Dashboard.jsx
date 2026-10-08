@@ -23,7 +23,9 @@ function safeJoin(val, sep = ",") {
     if (typeof val[Symbol.iterator] === "function") {
       return Array.from(val).join(sep);
     }
-  } catch {}
+  } catch {
+    // not iterable, fall through
+  }
   return String(val);
 }
 
@@ -112,9 +114,6 @@ export default function Dashboard() {
         count = data.length;
       } else if (data.rows || data.students || data.items) {
         rows = data.rows ?? data.students ?? data.items;
-        count = Number(data.total ?? rows.length);
-      } else if (data.ok && (data.rows || data.students)) {
-        rows = data.rows ?? data.students ?? [];
         count = Number(data.total ?? rows.length);
       } else {
         rows = data ? (Array.isArray(data) ? data : [data]) : [];

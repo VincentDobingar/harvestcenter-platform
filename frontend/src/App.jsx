@@ -6,7 +6,7 @@ import { publicRoutes } from "@/routes/PublicRoutes";
 import { adminRoutes } from "@/routes/AdminRoutes";
 import { dashboardRoutes } from "@/routes/DashboardRoutes";
 import { AuthProvider } from "@/context/AuthContext";
-import { ToastProvider } from "@/components/Toast";
+import { ToastProvider } from "@/components/ToastProvider";
 
 function normalizeRoutes(items) {
   return items.filter(Boolean).flatMap((r) => (Array.isArray(r) ? r : [r]));

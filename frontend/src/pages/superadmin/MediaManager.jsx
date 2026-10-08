@@ -20,6 +20,7 @@ export default function MediaManager() {
 
   useEffect(() => {
     fetchList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally mount-only; filter changes refetch via the explicit buttons below, not live on every keystroke
   }, []);
 
   async function fetchList() {

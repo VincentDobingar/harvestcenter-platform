@@ -12,7 +12,7 @@ async function loadRuntimeConfig() {
     const json = await resp.json();
     window.__RUNTIME_CONFIG__ = json;
     return json;
-  } catch (e) {
+  } catch {
     if (import.meta.env.DEV) {
       console.warn("No runtime config found, falling back to build-time envs");
     }

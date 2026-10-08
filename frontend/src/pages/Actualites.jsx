@@ -11,7 +11,37 @@ import {
   Sparkles,
 } from "lucide-react";
 
-// ...
+function getImageUrl(imageUrl) {
+  if (!imageUrl) return "/images/news/placeholder.jpg";
+
+  if (imageUrl.startsWith("http")) return imageUrl;
+  if (imageUrl.startsWith("/images/")) return imageUrl;
+
+  if (imageUrl.startsWith("/uploads/")) {
+    const apiRoot = BASE_URL.replace(/\/api$/, "");
+    return `${apiRoot}${imageUrl}`;
+  }
+
+  return imageUrl;
+}
+
+function formatDate(value, locale = "fr-FR") {
+  if (!value) return "";
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleDateString(locale, {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+function buildExcerpt(content) {
+  if (!content) return "";
+  return content.length > 170
+    ? `${content.slice(0, 170).trim()}...`
+    : content;
+}
 
 export default function Actualites() {
   const { t, i18n } = useTranslation();

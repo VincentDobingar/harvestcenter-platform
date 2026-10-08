@@ -28,11 +28,8 @@ export function rowsFromResponse(resData) {
 
   // Nothing usable found
   // Useful log for debugging in dev
-  if (typeof window !== "undefined") {
-    // avoid noisy logs in production by checking NODE_ENV
-    if (process.env.NODE_ENV !== "production") {
-      console.warn("rowsFromResponse: response not an array, returning []. Response:", resData);
-    }
+  if (import.meta.env.DEV) {
+    console.warn("rowsFromResponse: response not an array, returning []. Response:", resData);
   }
 
   return [];

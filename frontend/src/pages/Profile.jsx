@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import api from "@/utils/api";
 import { useAuth } from "@/context/AuthContext";
-import { notifySuccess, notifyError } from "@/components/ToastProvider";
+import { notifySuccess, notifyError } from "@/utils/notify";
 
 function getDisplayName(user) {
   if (!user) return "";
@@ -92,7 +92,9 @@ export default function Profile() {
         if (e?.response?.status === 401) {
           try {
             await logout();
-          } catch {}
+          } catch {
+            // ignore: redirecting to login regardless
+          }
           navigate("/account?tab=login", { replace: true });
           return;
         }
@@ -119,7 +121,9 @@ export default function Profile() {
       notifyError(t("profilePage.errors.sessionExpired"));
       try {
         await logout();
-      } catch {}
+      } catch {
+        // ignore: redirecting to login regardless
+      }
       navigate("/account?tab=login", { replace: true });
       return;
     }
@@ -152,7 +156,9 @@ export default function Profile() {
 
       try {
         await fetchMe();
-      } catch {}
+      } catch {
+        // ignore: local form state already reflects the save
+      }
 
       setMsg(t("profilePage.success.saved"));
     } catch (err) {
@@ -162,7 +168,9 @@ export default function Profile() {
         notifyError(t("profilePage.errors.sessionExpired"));
         try {
           await logout();
-        } catch {}
+        } catch {
+          // ignore: redirecting to login regardless
+        }
         navigate("/account?tab=login", { replace: true });
         return;
       }

@@ -1,5 +1,5 @@
 // src/pages/superadmin/NewsEditor.jsx
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import api from "@/utils/api";
@@ -22,11 +22,7 @@ export default function NewsEditor() {
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    fetchNews();
-  }, []);
-
-  async function fetchNews() {
+  const fetchNews = useCallback(async () => {
     setLoading(true);
     try {
       const res = await api.get("/superadmin/news");
@@ -37,7 +33,11 @@ export default function NewsEditor() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [t]);
+
+  useEffect(() => {
+    fetchNews();
+  }, [fetchNews]);
 
   function resetForm() {
     setForm(initialForm);

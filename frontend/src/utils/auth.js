@@ -8,7 +8,7 @@ const Auth = {
     try {
       if (token) localStorage.setItem(TOKEN_KEY, token);
       else localStorage.removeItem(TOKEN_KEY);
-    } catch (e) {
+    } catch {
       /* ignore storage errors */
     }
   },
@@ -16,7 +16,7 @@ const Auth = {
   getToken() {
     try {
       return localStorage.getItem(TOKEN_KEY);
-    } catch (e) {
+    } catch {
       return null;
     }
   },
@@ -24,7 +24,9 @@ const Auth = {
   logoutLocal() {
     try {
       localStorage.removeItem(TOKEN_KEY);
-    } catch (e) {}
+    } catch {
+      // ignore storage errors
+    }
   },
 
   /**

@@ -218,6 +218,7 @@ export function AuthProvider({ children }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components -- context + hook live together by convention; 23 call sites import useAuth from here
 export function useAuth() {
   return useContext(AuthContext);
 }

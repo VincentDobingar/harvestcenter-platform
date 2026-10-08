@@ -56,7 +56,9 @@ export default function Galerie() {
           );
           return;
         }
-      } catch (_) {}
+      } catch {
+        // ignore: fall back to the static gallery below
+      }
 
       if (mounted) setImages(FALLBACK_ALL);
     })();

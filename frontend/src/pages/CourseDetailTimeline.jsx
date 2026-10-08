@@ -42,13 +42,17 @@ export default function CourseDetailTimeline() {
           const eRes = await api.get("/enrollments/me");
           const isEnrolled = asArray(eRes.data).some((e) => e.course_id === data.id);
           setEnrolled(isEnrolled);
-        } catch {}
+        } catch {
+          // ignore: enrollment status defaults to false
+        }
 
         try {
           const pRes = await api.get(`/progress/course/${data.id}`);
           const ids = asArray(pRes.data?.doneLessonIds);
           setDoneSet(new Set(ids));
-        } catch {}
+        } catch {
+          // ignore: progress defaults to empty
+        }
 
         const firstModule = asArray(data?.modules)[0];
         if (firstModule?.id) setOpenModuleIds(new Set([firstModule.id]));

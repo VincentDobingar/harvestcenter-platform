@@ -5,6 +5,7 @@ import { studentRoutes } from "@/routes/StudentRoutes";
 import { useAuth } from "@/context/AuthContext";
 import PageLoader from "@/components/ui/PageLoader";
 
+// eslint-disable-next-line react-refresh/only-export-components -- route-local redirect component, only consumed by the dashboardRoutes config below
 function DashboardIndexRedirect() {
   const { user, booting, getDashboardPath } = useAuth();
 

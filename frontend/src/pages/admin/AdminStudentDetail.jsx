@@ -1,5 +1,5 @@
 // src/pages/admin/AdminStudentDetail.jsx
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "@/utils/api";
 import toast from "react-hot-toast";
@@ -14,12 +14,7 @@ export default function AdminStudentDetail() {
   const [savingPayment, setSavingPayment] = useState(false);
   const [paid, setPaid] = useState(false);
 
-  useEffect(() => {
-    if (!id) return;
-    fetchStudent();
-  }, [id]);
-
-  async function fetchStudent() {
+  const fetchStudent = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -34,7 +29,12 @@ export default function AdminStudentDetail() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
+    fetchStudent();
+  }, [id, fetchStudent]);
 
   async function savePayment() {
     if (!student) return;

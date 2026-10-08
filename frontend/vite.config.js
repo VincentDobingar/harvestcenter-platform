@@ -2,6 +2,9 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [react()],
@@ -33,5 +36,11 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/auth/, "/api/auth"),
       },
     },
+  },
+
+  test: {
+    environment: "jsdom",
+    setupFiles: "./src/setupTests.js",
+    globals: true,
   },
 });

@@ -31,7 +31,9 @@ export default function CourseDetail() {
           const eRes = await api.get("/enrollments/me");
           const isEnrolled = (eRes.data || []).some((e) => e.course_id === data.id);
           setEnrolled(isEnrolled);
-        } catch {}
+        } catch {
+          // ignore: enrollment status defaults to false
+        }
 
         try {
           const pRes = await api.get(`/progress/course/${data.id}`);
@@ -39,7 +41,9 @@ export default function CourseDetail() {
             ? pRes.data.doneLessonIds
             : [];
           setDoneSet(new Set(ids));
-        } catch {}
+        } catch {
+          // ignore: progress defaults to empty
+        }
       } catch (e) {
         if (!mounted) return;
         setErr(e?.response?.data?.error || t("coursePage.errors.load"));

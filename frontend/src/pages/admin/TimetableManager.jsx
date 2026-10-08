@@ -1,5 +1,5 @@
 // src/pages/admin/TimetableManager.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import api from "@/utils/api";
 import toast from "react-hot-toast";
 
@@ -60,15 +60,7 @@ export default function TimetableManager() {
 
   const [form, setForm] = useState(EMPTY_FORM);
 
-  useEffect(() => {
-    loadAll();
-  }, []);
-
-  async function loadAll() {
-    await Promise.all([fetchLists(), fetchTimetables()]);
-  }
-
-  async function fetchLists() {
+  const fetchLists = useCallback(async () => {
     try {
       const [classesRes, coursesRes, teachersRes] = await Promise.all([
         api.get("/api/admin/classes").catch(() => ({ data: { rows: [] } })),
@@ -83,9 +75,9 @@ export default function TimetableManager() {
       console.error("fetchLists error", err);
       toast.error("Impossible de charger les listes.");
     }
-  }
+  }, []);
 
-  async function fetchTimetables() {
+  const fetchTimetables = useCallback(async () => {
     try {
       setLoading(true);
       const res = await api.get("/api/admin/timetables");
@@ -96,7 +88,15 @@ export default function TimetableManager() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
+
+  const loadAll = useCallback(async () => {
+    await Promise.all([fetchLists(), fetchTimetables()]);
+  }, [fetchLists, fetchTimetables]);
+
+  useEffect(() => {
+    loadAll();
+  }, [loadAll]);
 
   function resetForm() {
     setForm(EMPTY_FORM);
