@@ -8,7 +8,7 @@ on:
 
 jobs:
   frontend:
-    name: Frontend (lint + build)
+    name: Frontend (lint + test + build)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -24,13 +24,9 @@ jobs:
 
       - run: npm ci
 
-      # 57 pre-existing lint errors on main as of 2026-09-07 (undefined
-      # `process`/`__dirname` in service/config files, a couple of
-      # unused vars). Not introduced by this workflow. Kept non-blocking
-      # until that's cleaned up — flip to a hard failure once
-      # `npm run lint` is green.
       - run: npm run lint
-        continue-on-error: true
+
+      - run: npm test
 
       - run: npm run build
 
@@ -43,7 +39,7 @@ jobs:
           retention-days: 7
 
   api:
-    name: API (install check)
+    name: API (test)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -59,8 +55,6 @@ jobs:
 
       - run: npm ci
 
-      # No automated test suite exists yet (see the refonte plan, phase 1).
-      # This step is a placeholder: once `npm test` is wired to a real
-      # suite (Vitest/Supertest), swap the line below for `npm test` and
-      # make it a required check before the deploy workflow can run.
       - run: node --check server.js && node --check app.js
+
+      - run: npm test
