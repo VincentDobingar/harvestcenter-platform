@@ -20,6 +20,26 @@ Le point #1 (secrets de prod exposés dans `ScriptSSH.txt`) reste **à traiter c
 
 ---
 
+## 🔴 Mise à jour du 2026-10-09 — analyse du site en direct : tout ce qui précède n'a jamais été déployé
+
+Contrairement aux sections ci-dessus (qui vérifient le **code** du dépôt), une analyse de `https://www.harvestcentertd.org/` et `https://api.harvestcentertd.org/` en direct montre que **la production tourne encore sur une version antérieure à ce document** :
+
+- `GET /package.json` sur l'API renvoie encore la dépendance `csurf`, supprimée par le commit `ff1bff0` du 2026-09-04 (point #11).
+- Les en-têtes `Last-Modified` de `server.js`, `app.js`, `config/db.js`, `package.json` datent de mars-avril 2026, alors que ces fichiers ont été modifiés par les commits de correction de septembre et octobre.
+- Conclusion : les points #2 à #12 ci-dessus sont corrigés **dans le dépôt** mais très probablement **pas sur le site réel** — `deploy.yml` (créé le 2026-09-07) n'a vraisemblablement jamais été exécuté vers `production`.
+
+Trois nouveaux problèmes trouvés en testant le site en direct, et corrigés dans ce dépôt le 2026-10-09 (restent à déployer) :
+
+1. **Code source backend téléchargeable en clair** : `GET /server.js`, `/app.js`, `/config/db.js` renvoyaient 200 avec le code source complet. Cause : `api/.htaccess` (qui bloque `.env`/`.sql`/etc., point #107cf8c du 2026-09-07) n'incluait jamais l'extension `.js`, et `deploy.yml` l'excluait de toute façon du rsync. **Fix** : `.js/.mjs/.cjs/.ts/.map` ajoutés au `<FilesMatch>` de blocage ; `deploy.yml` génère maintenant `api/.htaccess` par environnement (`PassengerAppRoot`/`PassengerNodejs` injectés via secrets) et le synchronise comme les autres fichiers au lieu de l'exclure — voir `DEPLOY.md` (nouveau secret `PASSENGER_NODEJS_PATH`).
+2. **Listing de répertoire ouvert sur `/assets/`** et aucune redirection HTTP→HTTPS ni en-tête de sécurité côté frontend statique (alors que l'API a `helmet()`). **Fix** : `Options -Indexes` retiré, redirection HTTPS forcée, et HSTS/CSP/X-Frame-Options/X-Content-Type-Options/Referrer-Policy ajoutés dans `frontend/.htaccess`.
+3. **`GET /health` fuite un identifiant DB et échoue réellement** (`Access denied for user 'harvest_local_user'@'localhost'`) — l'API en prod ne peut actuellement pas se connecter à MySQL. Rien de codé en dur côté `config/db.js` ; le `.env` déployé sur le serveur est en cause. **Action manuelle restante, non automatisable depuis ce dépôt** : vérifier/corriger `DB_USER`/`DB_PASSWORD` dans le `.env` de `REMOTE_API_PATH` — voir `DEPLOY.md`.
+
+SEO mineur corrigé en même temps : `frontend/index.html` n'avait ni `meta description` ni balises Open Graph, et un `<title>` non formaté ("harvest center").
+
+**Action restante la plus importante : exécuter `deploy.yml` vers `production`** (après avoir renseigné le secret `PASSENGER_NODEJS_PATH` et vérifié le `.env` serveur) — sans ce déploiement, aucun des correctifs de ce document, anciens ou nouveaux, n'atteint le site réel.
+
+---
+
 ## 🔴 CRITIQUE
 
 ### 1. Identifiants de production exposés dans git

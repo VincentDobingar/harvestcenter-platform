@@ -1,12 +1,31 @@
 # .htaccess pour Vite / React SPA sur cPanel
-Options -MultiViews
+Options -MultiViews -Indexes
 RewriteEngine On
+
+# Forcer HTTPS : confirmé le 2026-10-08, http://www.harvestcentertd.org
+# répondait 200 en clair (pas de redirection) — un formulaire de login
+# chargé par cette URL soumettrait les identifiants sans TLS.
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # Proxy /api vers le sous-domaine API
 RewriteRule ^api/(.*)$ https://api.harvestcentertd.org/api/$1 [P,L,QSA]
 
 # Ne pas toucher à cgi-bin
 RewriteRule ^cgi-bin(/.*)?$ - [L,NC]
+
+# En-têtes de sécurité — l'API les a déjà via helmet(), le frontend
+# statique n'avait jusqu'ici aucun de ces en-têtes (confirmé le
+# 2026-10-08). connect-src/l'URL de l'API ci-dessous est retargetée par
+# le même sed que la règle de proxy ci-dessus (voir deploy.yml).
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "no-referrer"
+  Header always set X-XSS-Protection "0"
+  Header always set Content-Security-Policy "default-src 'self';base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';img-src 'self' data:;font-src 'self' https: data:;style-src 'self' https: 'unsafe-inline';script-src 'self';connect-src 'self' https://api.harvestcentertd.org;upgrade-insecure-requests"
+</IfModule>
 
 # Servir config.json sans cache
 <Files "config.json">
@@ -19,7 +38,3 @@ RewriteRule ^cgi-bin(/.*)?$ - [L,NC]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.html [L]
-
-# Forcer HTTPS si besoin
-# RewriteCond %{HTTPS} !=on
-# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

@@ -49,11 +49,26 @@ jobs:
       - name: Generate environment-specific .htaccess for the frontend
         run: |
           # frontend/.htaccess isn't part of the Vite build output (it
-          # lives outside src/public) and its /api proxy rule is hardcoded
-          # to the production API host — retarget it per environment
-          # before it gets rsynced alongside dist/.
+          # lives outside src/public) and its /api proxy rule (and CSP
+          # connect-src) are hardcoded to the production API host —
+          # retarget them per environment before it gets rsynced
+          # alongside dist/.
           sed "s#https://api.harvestcentertd.org#${{ secrets.FRONTEND_API_BASE_URL }}#g" \
             frontend/.htaccess > frontend/dist/.htaccess
+
+      - name: Generate environment-specific .htaccess for the API
+        run: |
+          # api/.htaccess carries CloudLinux's PassengerAppRoot/PassengerNodejs
+          # directives, which embed an absolute filesystem path that cPanel
+          # assigns per Node app (different for staging vs production) —
+          # fill them in from this environment's secrets, then let it be
+          # rsynced like any other file below instead of hand-maintained
+          # on the server (that manual-edit approach is how the hardening
+          # rules added on 2026-09-07 never actually reached production).
+          sed -e "s#__PASSENGER_APP_ROOT__#${{ secrets.REMOTE_API_PATH }}#g" \
+              -e "s#__PASSENGER_NODEJS_PATH__#${{ secrets.PASSENGER_NODEJS_PATH }}#g" \
+              api/.htaccess > api/.htaccess.generated
+          mv api/.htaccess.generated api/.htaccess
 
       - name: Load deploy SSH key
         uses: webfactory/ssh-agent@v0.9.0
@@ -74,17 +89,12 @@ jobs:
 
       - name: Sync API source
         run: |
-          # .htaccess is excluded on purpose: cPanel's "Setup Node.js App"
-          # generates its own PassengerAppRoot/PassengerNodejs directives
-          # per app (different absolute paths for staging vs production).
-          # The version checked into this repo carries production's paths
-          # and CORS-header origins — rsyncing it here would silently
-          # break Passenger on any other target. Apply .htaccess changes
-          # for this app root by hand (see DEPLOY.md).
+          # .htaccess is now templated per environment by the step above
+          # and rsynced like any other file — see that step for why it
+          # used to be excluded here.
           rsync -az --delete \
             --exclude 'node_modules' \
             --exclude '.env' \
-            --exclude '.htaccess' \
             --exclude 'uploads' \
             --exclude 'tmp' \
             --exclude '.git' \

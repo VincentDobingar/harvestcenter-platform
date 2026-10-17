@@ -1,12 +1,12 @@
 # DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
-PassengerAppRoot "/home2/sc2djem5820/public_html/api"
+PassengerAppRoot "__PASSENGER_APP_ROOT__"
 PassengerBaseURI "/"
-PassengerNodejs "/home2/sc2djem5820/nodevenv/public_html/api/20/bin/node"
+PassengerNodejs "__PASSENGER_NODEJS_PATH__"
 PassengerAppType node
 PassengerStartupFile server.js
 # DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
 
-Options -MultiViews
+Options -MultiViews -Indexes
 DirectorySlash Off
 RewriteEngine On
 
@@ -14,10 +14,16 @@ RewriteEngine On
 # app root AND the Apache document root: any file that physically exists
 # here is served directly by Apache, bypassing the Node app entirely.
 # Confirmed on 2026-09-07: /package.json was fetchable at
-# https://api.harvestcentertd.org/package.json (HTTP 200). Block direct
-# access to source, config and secret-shaped files so only the app's own
-# routes (and Express's explicit /uploads static mount) remain reachable.
-<FilesMatch "\.(env|sql|sh|log|md|json|yml|yaml|lock)$">
+# https://api.harvestcentertd.org/package.json (HTTP 200), and again on
+# 2026-10-09: /server.js, /app.js and /config/db.js were all fetchable in
+# plain text because the extension list below never included .js — block
+# every source/config extension, not just the ones found so far, so only
+# the app's own routes (and Express's explicit /uploads static mount)
+# remain reachable. The two Passenger values above are filled in by
+# deploy.yml from the REMOTE_API_PATH / PASSENGER_NODEJS_PATH secrets for
+# the target environment (see DEPLOY.md) — this file is now rsynced like
+# any other, it is no longer a manual hand-edit on the server.
+<FilesMatch "\.(env|sql|sh|log|md|json|yml|yaml|lock|js|mjs|cjs|ts|map)$">
   Require all denied
 </FilesMatch>
 <FilesMatch "^\.">
