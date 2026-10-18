@@ -21,10 +21,21 @@ export default function AdminInscriptionRequestsPage() {
   const [q, setQ] = useState("");
   const [status, setStatus] = useState("");
   const [selected, setSelected] = useState(null);
+  const [classes, setClasses] = useState([]);
+  const [classId, setClassId] = useState("");
 
   useEffect(() => {
     fetchRequests();
+    api
+      .get("/admin/classes")
+      .then((res) => setClasses(Array.isArray(res.data) ? res.data : []))
+      .catch((err) => console.error("fetchClasses error:", err));
   }, []);
+
+  // Pré-remplit la classe déjà choisie quand on ouvre une demande.
+  useEffect(() => {
+    setClassId(selected?.class_id ? String(selected.class_id) : "");
+  }, [selected?.id, selected?.class_id]);
 
   async function fetchRequests(filters = {}) {
     try {
@@ -51,9 +62,15 @@ export default function AdminInscriptionRequestsPage() {
   }
 
   async function updateStatus(id, nextStatus) {
+    if (nextStatus === "enrolled" && !classId) {
+      toast.error("Choisissez d'abord la classe de l'étudiant.");
+      return;
+    }
+
     try {
       const res = await api.patch(`/admin/inscription-requests/${id}/status`, {
         status: nextStatus,
+        ...(nextStatus === "enrolled" ? { class_id: Number(classId) } : {}),
       });
 
       const updated = res.data?.request ?? { id, status: nextStatus };
@@ -68,10 +85,12 @@ export default function AdminInscriptionRequestsPage() {
         setSelected((prev) => ({ ...prev, ...updated, status: nextStatus }));
       }
 
-      toast.success("Statut mis à jour.");
+      toast.success(res.data?.message || "Statut mis à jour.");
     } catch (err) {
       console.error("updateStatus error:", err);
-      toast.error("Impossible de mettre à jour le statut.");
+      toast.error(
+        err?.response?.data?.message || "Impossible de mettre à jour le statut."
+      );
     }
   }
 
@@ -314,12 +333,36 @@ export default function AdminInscriptionRequestsPage() {
                     Valider la demande
                   </Button>
 
-                  <Button
-                    variant="outline"
-                    onClick={() => updateStatus(selected.id, "enrolled")}
-                  >
-                    Marquer comme inscrite
-                  </Button>
+                  <div className="rounded-xl border p-3 space-y-2">
+                    <label className="block text-sm font-medium text-slate-700">
+                      Classe de l'étudiant
+                    </label>
+                    <select
+                      value={classId}
+                      onChange={(e) => setClassId(e.target.value)}
+                      className="w-full border rounded-lg p-2 text-sm"
+                    >
+                      <option value="">— Choisir une classe —</option>
+                      {classes.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {[c.name, c.level, c.academic_year].filter(Boolean).join(" · ")}
+                        </option>
+                      ))}
+                    </select>
+                    <Button
+                      className="w-full"
+                      variant="outline"
+                      disabled={!classId}
+                      onClick={() => updateStatus(selected.id, "enrolled")}
+                    >
+                      Inscrire dans cette classe
+                    </Button>
+                    {classes.length === 0 && (
+                      <p className="text-xs text-amber-700">
+                        Aucune classe n'existe encore : créez-en une dans « Classes ».
+                      </p>
+                    )}
+                  </div>
 
                   <Button
                     variant="outline"

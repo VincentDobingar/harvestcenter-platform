@@ -19,7 +19,24 @@ export const dashboard = async (req, res) => {
       FROM students s JOIN users u ON u.id = s.user_id LEFT JOIN scholarships sc ON sc.id = s.scholarship_id
       WHERE u.id = ?`, [userId]);
 
-    if (!studentRows.length) return res.status(404).json({ message: "Student not found" });
+    if (!studentRows.length) {
+      // Compte créé mais pas encore inscrit dans une classe par l'admin :
+      // on renvoie un tableau de bord vide + l'état de sa demande, pas une erreur.
+      const [[lastRequest]] = await db.query(
+        `SELECT id, status, created_at FROM inscription_requests
+         WHERE user_id = ? ORDER BY created_at DESC, id DESC LIMIT 1`,
+        [userId]
+      );
+      return res.json({
+        student: null,
+        needsInscription: true,
+        inscriptionStatus: lastRequest?.status || null,
+        courses: [],
+        announcements: [],
+        stats: { total: 0, submitted: 0, pending: 0, late: 0 },
+        completionRate: 0,
+      });
+    }
     const student = studentRows[0];
 
     const [courses] = await db.query(`

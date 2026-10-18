@@ -32,6 +32,23 @@ const run = async () => {
   );
   const applied = new Set(appliedRows.map((r) => r.filename));
 
+  // Garde-fou : 0001_initial_schema.sql recrée toutes les tables (DROP TABLE).
+  // Sur une base existante (production) qui n'a jamais utilisé ce runner, on la
+  // marque comme déjà appliquée au lieu de l'exécuter, sinon toutes les données
+  // seraient effacées.
+  const BASELINE = "0001_initial_schema.sql";
+  if (!applied.has(BASELINE)) {
+    const [existing] = await connection.query("SHOW TABLES LIKE 'users'");
+    if (existing.length) {
+      await connection.query(
+        "INSERT INTO schema_migrations (filename) VALUES (?)",
+        [BASELINE]
+      );
+      applied.add(BASELINE);
+      console.log(`- ${BASELINE} : base existante détectée, marquée comme appliquée (non exécutée)`);
+    }
+  }
+
   const files = fs
     .readdirSync(migrationsDir)
     .filter((f) => f.endsWith(".sql"))

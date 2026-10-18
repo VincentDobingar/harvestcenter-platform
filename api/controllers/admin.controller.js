@@ -882,25 +882,101 @@ export const getInscriptionRequests = async (req, res) => {
 };
 
 export const updateInscriptionRequestStatus = async (req, res) => {
+  const { id } = req.params;
+  const status = String(req.body?.status || "").trim();
+  const classId = req.body?.class_id ? Number(req.body.class_id) : null;
+
+  const allowed = ["pending", "validated", "rejected", "enrolled"];
+  if (!allowed.includes(status)) {
+    return res.status(400).json({ message: "Statut invalide" });
+  }
+
+  // "Inscrite" = l'étudiant rejoint une classe : l'admin doit la choisir.
+  if (status === "enrolled" && !classId) {
+    return res.status(400).json({ message: "Choisissez une classe pour inscrire l'étudiant" });
+  }
+
+  const conn = await db.getConnection();
   try {
-    const { id } = req.params;
-    const { status } = req.body;
+    await conn.beginTransaction();
 
-    const allowed = ["pending", "validated", "rejected", "enrolled"];
-    if (!allowed.includes(String(status || "").trim())) {
-      return res.status(400).json({ message: "Statut invalide" });
-    }
-
-    const [result] = await db.query(
-      `UPDATE inscription_requests
-       SET status = ?, updated_at = NOW()
-       WHERE id = ?`,
-      [status, id]
+    const [[request]] = await conn.query(
+      `SELECT * FROM inscription_requests WHERE id = ? FOR UPDATE`,
+      [id]
     );
-
-    if (result.affectedRows === 0) {
+    if (!request) {
+      await conn.rollback();
       return res.status(404).json({ message: "Demande introuvable" });
     }
+
+    let studentId = null;
+
+    if (status === "enrolled") {
+      const [[cls]] = await conn.query(`SELECT id FROM classes WHERE id = ?`, [classId]);
+      if (!cls) {
+        await conn.rollback();
+        return res.status(400).json({ message: "Classe introuvable" });
+      }
+
+      const [[formation]] = await conn.query(
+        `SELECT name FROM formations WHERE id = ?`,
+        [request.module_id]
+      );
+      const address = [request.quartier, request.arrondissement].filter(Boolean).join(", ") || null;
+      const language = formation?.name ? String(formation.name).slice(0, 50) : null;
+
+      // Crée la fiche étudiant si elle n'existe pas, sinon met à jour sa classe.
+      const [[existing]] = await conn.query(
+        `SELECT id FROM students WHERE user_id = ? LIMIT 1`,
+        [request.user_id]
+      );
+
+      if (existing) {
+        studentId = existing.id;
+        await conn.query(
+          `UPDATE students
+           SET class_id = ?,
+               phone_call = COALESCE(phone_call, ?),
+               phone_whatsapp = COALESCE(phone_whatsapp, ?),
+               address = COALESCE(address, ?),
+               language = COALESCE(language, ?)
+           WHERE id = ?`,
+          [classId, request.telephone || null, request.whatsapp || null, address, language, studentId]
+        );
+      } else {
+        const [ins] = await conn.query(
+          `INSERT INTO students
+             (user_id, class_id, phone_call, phone_whatsapp, address, city, country, language)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          [
+            request.user_id,
+            classId,
+            request.telephone || null,
+            request.whatsapp || null,
+            address,
+            "N'Djamena",
+            "Tchad",
+            language,
+          ]
+        );
+        studentId = ins.insertId;
+      }
+
+      // Le compte doit avoir le rôle étudiant pour accéder à son espace.
+      await conn.query(
+        `UPDATE users SET role = 'student' WHERE id = ? AND role NOT IN ('admin', 'superadmin')`,
+        [request.user_id]
+      );
+    }
+
+    await conn.query(
+      `UPDATE inscription_requests
+       SET status = ?, class_id = ?, updated_at = NOW()
+       WHERE id = ?`,
+      [status, status === "enrolled" ? classId : request.class_id ?? null, id]
+    );
+
+    await conn.commit();
 
     const [[updated]] = await db.query(
       `SELECT * FROM inscription_requests WHERE id = ?`,
@@ -908,12 +984,16 @@ export const updateInscriptionRequestStatus = async (req, res) => {
     );
 
     res.json({
-      message: "Statut mis à jour",
+      message: status === "enrolled" ? "Étudiant inscrit dans la classe" : "Statut mis à jour",
       request: updated,
+      student_id: studentId,
     });
   } catch (err) {
+    await conn.rollback().catch(() => {});
     console.error("UPDATE INSCRIPTION REQUEST STATUS ERROR:", err);
     res.status(500).json({ message: "Erreur mise à jour statut" });
+  } finally {
+    conn.release();
   }
 };
 

@@ -83,8 +83,10 @@ export const register = async (req, res) => {
     const normalizedEmail = String(email).trim().toLowerCase();
     const normalizedRole = normalizeRole(role) || "student";
 
-    // Register public : jamais admin ni superadmin
-    if (!["student", "teacher"].includes(normalizedRole)) {
+    // Inscription publique : uniquement des comptes étudiants. Les comptes
+    // enseignant / admin sont créés par un administrateur (POST /admin/users),
+    // sinon n'importe qui pourrait se déclarer enseignant.
+    if (normalizedRole !== "student") {
       return res.status(403).json({
         message: "Le rôle demandé n'est pas autorisé via l'inscription publique",
       });

@@ -86,7 +86,7 @@ export default function Account() {
           last_name: form.last_name.trim(),
           email: form.email.trim(),
           password: form.password,
-          role: form.role || "student",
+          role: "student",
         };
 
         await register(payload);
@@ -140,16 +140,6 @@ export default function Account() {
               placeholder={t("accountPage.fields.lastName")}
               required
             />
-            <select
-              name="role"
-              value={form.role}
-              onChange={handleChange}
-              className="w-full border rounded-xl p-3"
-            >
-              <option value="student">{t("accountPage.roles.student")}</option>
-              <option value="teacher">{t("accountPage.roles.teacher")}</option>
-              <option value="admin">{t("accountPage.roles.admin")}</option>
-            </select>
           </>
         )}
 

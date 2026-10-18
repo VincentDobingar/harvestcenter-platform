@@ -47,10 +47,7 @@ export default function StudentDashboard() {
         setDashboard(dashboardData);
         setAssignments(safeArray(assignmentsData));
 
-        if (
-          dashboardRes.status === "rejected" &&
-          assignmentsRes.status === "rejected"
-        ) {
+        if (dashboardRes.status === "rejected") {
           setErr(
             t("dashboardStudent.loadError", {
               defaultValue: "Impossible de charger le tableau de bord étudiant.",
@@ -143,6 +140,39 @@ export default function StudentDashboard() {
       </div>
 
       {err && <div className="text-red-600 text-sm">{err}</div>}
+
+      {dashboard?.needsInscription && (
+        <div className="rounded-2xl border border-blue-200 bg-blue-50 p-5 text-blue-900">
+          {dashboard.inscriptionStatus === "pending" ||
+          dashboard.inscriptionStatus === "validated" ? (
+            <p>
+              {t("dashboardStudent.inscriptionPending", {
+                defaultValue:
+                  "Votre demande d'inscription est en cours de traitement. Votre espace sera complet dès que l'administration vous aura affecté à une classe.",
+              })}
+            </p>
+          ) : dashboard.inscriptionStatus === "rejected" ? (
+            <p>
+              {t("dashboardStudent.inscriptionRejected", {
+                defaultValue:
+                  "Votre demande d'inscription n'a pas été retenue. Contactez-nous pour plus d'informations.",
+              })}
+            </p>
+          ) : (
+            <p>
+              {t("dashboardStudent.inscriptionMissing", {
+                defaultValue:
+                  "Vous n'êtes pas encore inscrit à une formation. Déposez votre demande pour accéder à vos cours, devoirs et notes.",
+              })}{" "}
+              <Link to="/dashboard/student/inscription" className="font-semibold underline">
+                {t("dashboardStudent.inscriptionCta", {
+                  defaultValue: "Faire une demande d'inscription",
+                })}
+              </Link>
+            </p>
+          )}
+        </div>
+      )}
 
       <div className="grid md:grid-cols-3 gap-4">
         <Link
