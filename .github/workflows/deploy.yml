@@ -82,10 +82,21 @@ jobs:
 
       - name: Sync frontend build
         run: |
-          rsync -az --delete \
+          # REMOTE_FRONTEND_PATH is public_html in production, which ALSO
+          # contains the API (public_html/api, with its .env and uploads),
+          # cgi-bin, .well-known (SSL renewal) and possibly other sites.
+          # A plain `rsync --delete dist/ public_html/` would wipe all of
+          # them. So: copy the build without --delete, and only prune old
+          # hashed bundles inside assets/, which belongs to the build alone.
+          rsync -az \
+            --exclude 'assets/' \
             -e "ssh -p ${{ secrets.SSH_PORT }}" \
             frontend/dist/ \
             "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.REMOTE_FRONTEND_PATH }}/"
+          rsync -az --delete \
+            -e "ssh -p ${{ secrets.SSH_PORT }}" \
+            frontend/dist/assets/ \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.REMOTE_FRONTEND_PATH }}/assets/"
 
       - name: Sync API source
         run: |
