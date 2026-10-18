@@ -323,7 +323,25 @@ export const createNews = async (req, res) => {
       content,
       excerpt = "",
       is_active = true,
+      published_at = null,
+      source_url = null,
     } = req.body;
+
+    // Import (ex. Facebook) : date d'origine de la publication et lien source.
+    let publishedAt = null;
+    if (published_at) {
+      const d = new Date(published_at);
+      if (!Number.isNaN(d.getTime())) publishedAt = d;
+    }
+    const sourceUrl = source_url ? String(source_url).trim().slice(0, 500) : null;
+
+    if (sourceUrl) {
+      const [[dup]] = await db.query("SELECT id FROM news WHERE source_url = ? LIMIT 1", [sourceUrl]);
+      if (dup) {
+        if (req.file) await deleteLocalNewsImage(`/uploads/news/${req.file.filename}`);
+        return res.status(409).json({ success: false, message: "Cette publication est déjà importée.", data: { id: dup.id } });
+      }
+    }
 
     if (!title || !String(title).trim()) {
       if (req.file) {
@@ -349,6 +367,7 @@ export const createNews = async (req, res) => {
         excerpt,
         image_url,
         video_url,
+        source_url,
         media_type,
         is_active,
         created_by,
@@ -356,7 +375,7 @@ export const createNews = async (req, res) => {
         created_at,
         updated_at
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, COALESCE(?, NOW()), NOW())
       `,
       [
         safeTitle,
@@ -365,10 +384,12 @@ export const createNews = async (req, res) => {
         excerpt || null,
         image_url,
         null,
+        sourceUrl,
         image_url ? "image" : "none",
         normalizeBool(is_active, true) ? 1 : 0,
         req.user?.id || null,
         req.user?.id || null,
+        publishedAt,
       ]
     );
 
