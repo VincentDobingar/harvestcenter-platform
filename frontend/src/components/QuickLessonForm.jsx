@@ -12,7 +12,7 @@ export default function QuickLessonForm({ onCreate }) {
 
   function submit(e) {
     e.preventDefault();
-    if (!title.trim()) return alert("Titre requis");
+    if (!title.trim()) return;
     onCreate({ title: title.trim(), content: content.trim(), file });
     setTitle("");
     setContent("");
@@ -24,21 +24,26 @@ export default function QuickLessonForm({ onCreate }) {
       <input
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        placeholder="Titre"
-        className="w-full p-2 border rounded"
+        placeholder="Titre de la leçon"
+        aria-label="Titre de la leçon"
+        required
+        className="field"
       />
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="Contenu"
-        className="w-full p-2 border rounded h-24"
+        aria-label="Contenu"
+        className="field h-28 resize-y"
       />
-      <input type="file" onChange={(e) => setFile(e.target.files?.[0] || null)} />
-      <div>
-        <button type="submit" className="px-4 py-2 rounded bg-blue-600 text-white">
-          Publier
-        </button>
-      </div>
+      <label className="block cursor-pointer rounded-xl border border-dashed border-line px-4 py-3 text-sm text-mist hover:border-ink/30">
+        <span className="font-medium text-ink">{file ? file.name : "Joindre un fichier"}</span>
+        {!file && <span> (facultatif)</span>}
+        <input type="file" className="sr-only" onChange={(e) => setFile(e.target.files?.[0] || null)} />
+      </label>
+      <button type="submit" disabled={!title.trim()} className="btn-primary focus-ring w-full">
+        Publier la leçon
+      </button>
     </form>
   );
 }

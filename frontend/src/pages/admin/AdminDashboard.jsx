@@ -1,185 +1,152 @@
 // src/pages/admin/AdminDashboard.jsx
 import React, { useEffect, useMemo, useState } from "react";
-import api from "@/utils/api";
+import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
-import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  LineChart,
-  Line,
-  PieChart,
-  Pie,
-  Cell,
-  Legend,
-} from "recharts";
+import { FileText, GraduationCap, Wallet, Users, School, BookOpen, UserRound, RefreshCw } from "lucide-react";
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
+import api from "@/utils/api";
+import { PageHeader, StatCard, StatGrid, Panel, EmptyState, SkeletonGrid } from "@/components/dash";
+import { CHART } from "@/components/dash/chartTheme";
 
-function StatCard({ title, value, colorClass = "text-slate-900" }) {
-  return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="text-sm text-slate-500">{title}</div>
-      <div className={`mt-2 text-3xl font-bold ${colorClass}`}>{value}</div>
-    </div>
-  );
-}
+const n = (v) => Number(v || 0);
+const fmt = (v) => n(v).toLocaleString("fr-FR");
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState({
-    totalUsers: 0,
-    students: 0,
-    teachers: 0,
-    classes: 0,
-    courses: 0,
-    pendingRequests: 0,
-    validatedRequests: 0,
-    paidStudents: 0,
-    unpaidStudents: 0,
-    revenue: 0,
-    monthlyRegistrations: [],
-  });
+  const [stats, setStats] = useState({});
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    fetchStats();
-  }, []);
-
-  async function fetchStats() {
+  async function fetchStats(initial = false) {
     try {
-      setLoading(true);
+      if (!initial) setRefreshing(true);
       const res = await api.get("/admin/stats");
-      setStats((prev) => ({
-        ...prev,
-        ...(res.data || {}),
-      }));
+      setStats(res.data || {});
     } catch (err) {
       console.error("fetchStats error:", err);
-      toast.error("Impossible de charger les statistiques.");
+      toast.error("Les statistiques n’ont pas pu être chargées.");
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   }
 
-  const usersCompare = useMemo(
-    () => [
-      { name: "Étudiants", value: Number(stats.students || 0) },
-      { name: "Formateurs", value: Number(stats.teachers || 0) },
-    ],
+  useEffect(() => {
+    fetchStats(true);
+  }, []);
+
+  const paid = n(stats.paidStudents);
+  const unpaid = n(stats.unpaidStudents);
+  const paidRate = paid + unpaid ? Math.round((paid / (paid + unpaid)) * 100) : 0;
+  const monthly = useMemo(
+    () => (Array.isArray(stats.monthlyRegistrations) ? stats.monthlyRegistrations : []).map((m) => ({ ...m, count: n(m.count) })),
     [stats]
   );
-
-  const paymentCompare = useMemo(
-    () => [
-      { name: "Payés", value: Number(stats.paidStudents || 0) },
-      { name: "Non payés", value: Number(stats.unpaidStudents || 0) },
-    ],
-    [stats]
-  );
-
-  const monthlyData = Array.isArray(stats.monthlyRegistrations)
-    ? stats.monthlyRegistrations
-    : [];
 
   return (
     <div className="space-y-6">
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-        <div className="flex items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-900">
-              Tableau de bord administrateur
-            </h1>
-            <p className="mt-1 text-sm text-slate-500">
-              Vue globale sur les inscriptions, étudiants, enseignants, classes et paiements.
-            </p>
-          </div>
-
-          <button
-            onClick={fetchStats}
-            className="rounded-xl border border-slate-300 px-4 py-2 text-sm hover:bg-slate-50"
-          >
+      <PageHeader
+        title="Tableau de bord"
+        subtitle="Inscriptions, effectifs et paiements du centre."
+        actions={
+          <button type="button" onClick={() => fetchStats()} disabled={refreshing} className="btn-ghost focus-ring">
+            <RefreshCw className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
             Actualiser
           </button>
-        </div>
-      </div>
+        }
+      />
 
       {loading ? (
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          Chargement…
-        </div>
+        <SkeletonGrid />
       ) : (
         <>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-            <StatCard title="Utilisateurs" value={stats.totalUsers || 0} />
-            <StatCard title="Étudiants" value={stats.students || 0} colorClass="text-blue-600" />
-            <StatCard title="Formateurs" value={stats.teachers || 0} colorClass="text-indigo-600" />
-            <StatCard title="Classes" value={stats.classes || 0} colorClass="text-emerald-600" />
-            <StatCard title="Cours" value={stats.courses || 0} colorClass="text-amber-600" />
-          </div>
+          <StatGrid>
+            <StatCard
+              primary
+              icon={FileText}
+              label="Demandes à traiter"
+              value={fmt(stats.pendingRequests)}
+              hint={`${fmt(stats.validatedRequests)} déjà validées`}
+              to="/admin/inscriptions/demandes"
+            />
+            <StatCard icon={GraduationCap} label="Étudiants" value={fmt(stats.students)} to="/admin/students" />
+            <StatCard
+              icon={Wallet}
+              label="Encaissé"
+              value={fmt(stats.revenue)}
+              unit="FCFA"
+              tone="ok"
+            />
+            <StatCard
+              icon={Users}
+              label="Formateurs"
+              value={fmt(stats.teachers)}
+              to="/admin/teachers"
+            />
+          </StatGrid>
 
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <StatCard title="Demandes en attente" value={stats.pendingRequests || 0} colorClass="text-orange-500" />
-            <StatCard title="Demandes validées" value={stats.validatedRequests || 0} colorClass="text-cyan-600" />
-            <StatCard title="Étudiants payés" value={stats.paidStudents || 0} colorClass="text-green-600" />
-            <StatCard title="Revenus" value={`${Number(stats.revenue || 0).toLocaleString()} FCFA`} colorClass="text-violet-600" />
-          </div>
+          <div className="grid gap-6 lg:grid-cols-3">
+            <Panel
+              className="lg:col-span-2"
+              title="Inscriptions par mois"
+              description="Nouvelles demandes reçues"
+            >
+              {monthly.length ? (
+                <div className="h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={monthly} margin={{ top: 8, right: 12, left: -16, bottom: 0 }}>
+                      <CartesianGrid vertical={false} stroke={CHART.grid} />
+                      <XAxis dataKey="month" tick={CHART.tick} axisLine={false} tickLine={false} />
+                      <YAxis allowDecimals={false} tick={CHART.tick} axisLine={false} tickLine={false} />
+                      <Tooltip contentStyle={CHART.tooltip} />
+                      <Line
+                        type="monotone"
+                        dataKey="count"
+                        name="Inscriptions"
+                        stroke={CHART.primary}
+                        strokeWidth={2.5}
+                        dot={{ r: 3, fill: CHART.primary }}
+                        activeDot={{ r: 5 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              ) : (
+                <EmptyState title="Pas encore de données">
+                  La courbe apparaîtra avec les premières demandes d’inscription.
+                </EmptyState>
+              )}
+            </Panel>
 
-          <div className="grid gap-4 xl:grid-cols-2">
-            <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-              <h2 className="mb-4 text-lg font-semibold text-slate-900">
-                Étudiants vs formateurs
-              </h2>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={usersCompare}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis allowDecimals={false} />
-                    <Tooltip />
-                    <Bar dataKey="value" radius={[8, 8, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
+            <Panel title="Frais d’inscription" description="Étudiants à jour de leurs frais">
+              <p className="font-display text-[2.4rem] font-semibold leading-none text-ink tabular-nums">{paidRate} %</p>
+              <div className="mt-4 flex h-3 overflow-hidden rounded-full bg-paper" role="img" aria-label={`${paid} payés, ${unpaid} non payés`}>
+                <div className="bg-ok" style={{ width: `${paidRate}%` }} />
               </div>
-            </div>
-
-            <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-              <h2 className="mb-4 text-lg font-semibold text-slate-900">
-                Paiements étudiants
-              </h2>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie data={paymentCompare} dataKey="value" nameKey="name" outerRadius={110} label>
-                      <Cell />
-                      <Cell />
-                    </Pie>
-                    <Tooltip />
-                    <Legend />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
+              <dl className="mt-5 space-y-2.5 text-sm">
+                <div className="flex items-center justify-between">
+                  <dt className="flex items-center gap-2 text-mist">
+                    <span className="h-2.5 w-2.5 rounded-full bg-ok" /> Payés
+                  </dt>
+                  <dd className="font-semibold tabular-nums text-ink">{fmt(paid)}</dd>
+                </div>
+                <div className="flex items-center justify-between">
+                  <dt className="flex items-center gap-2 text-mist">
+                    <span className="h-2.5 w-2.5 rounded-full bg-line" /> Non payés
+                  </dt>
+                  <dd className="font-semibold tabular-nums text-ink">{fmt(unpaid)}</dd>
+                </div>
+              </dl>
+              <Link to="/admin/students" className="mt-5 inline-block text-sm font-medium text-brand hover:text-brand-800">
+                Voir les étudiants
+              </Link>
+            </Panel>
           </div>
 
-          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-            <h2 className="mb-4 text-lg font-semibold text-slate-900">
-              Inscriptions par mois
-            </h2>
-
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={monthlyData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis allowDecimals={false} />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="count" strokeWidth={3} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
+          <StatGrid cols={3}>
+            <StatCard icon={School} label="Classes" value={fmt(stats.classes)} to="/admin/classes" />
+            <StatCard icon={BookOpen} label="Cours" value={fmt(stats.courses)} to="/admin/courses" />
+            <StatCard icon={UserRound} label="Comptes utilisateurs" value={fmt(stats.totalUsers)} />
+          </StatGrid>
         </>
       )}
     </div>

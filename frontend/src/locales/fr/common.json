@@ -190,36 +190,36 @@
         }
       }
     },
-  "gallery": {
-    "title": "En images",
-    "subtitle": "La vie au Harvest Center : cours, ateliers et événements.",
-    "imageAlt": "Galerie {{index}}",
-    "viewAll": "Voir toute la galerie"
-  },
-  "partners": {
-    "title": "Nos partenaires",
-    "subtitle": "Ils nous font confiance pour la formation en langues.",
-    "logoAlt": "Logo de {{name}}",
-    "items": {
-      "msf": "ONG médicale humanitaire présente sur le terrain.",
-      "adac": "Association de développement et d’action communautaire.",
-      "pam": "Programme Alimentaire Mondial — sécurité alimentaire.",
-      "bodel": "Conseil, formation et études pour les organisations.",
-      "expertiseFrance": "Coopération technique internationale et développement.",
-      "cdo": "Conseil, digitalisation et appui aux organisations.",
-      "carter": "The Carter Center — santé publique et gouvernance.",
-      "reussirBeGou": "Conseil, orientation et opportunités de bourses et d'emploi.",
-      "jobBooster": "Conseil, formation, entrepreneuriat et placement.",
-      "ligue": "Conseil, digitalisation et appui aux organisations.",
-      "donaCorp": "Gestion, placement et création d’opportunités d’affaires."
+    "gallery": {
+      "title": "En images",
+      "subtitle": "La vie au Harvest Center : cours, ateliers et événements.",
+      "imageAlt": "Galerie {{index}}",
+      "viewAll": "Voir toute la galerie"
+    },
+    "partners": {
+      "title": "Nos partenaires",
+      "subtitle": "Ils nous font confiance pour la formation en langues.",
+      "logoAlt": "Logo de {{name}}",
+      "items": {
+        "msf": "ONG médicale humanitaire présente sur le terrain.",
+        "adac": "Association de développement et d’action communautaire.",
+        "pam": "Programme Alimentaire Mondial — sécurité alimentaire.",
+        "bodel": "Conseil, formation et études pour les organisations.",
+        "expertiseFrance": "Coopération technique internationale et développement.",
+        "cdo": "Conseil, digitalisation et appui aux organisations.",
+        "carter": "The Carter Center — santé publique et gouvernance.",
+        "reussirBeGou": "Conseil, orientation et opportunités de bourses et d'emploi.",
+        "jobBooster": "Conseil, formation, entrepreneuriat et placement.",
+        "ligue": "Conseil, digitalisation et appui aux organisations.",
+        "donaCorp": "Gestion, placement et création d’opportunités d’affaires."
+      }
+    },
+    "homeCta": {
+      "title": "Prêt·e à démarrer ?",
+      "subtitle": "Rejoignez nos programmes et progressez rapidement.",
+      "apply": "S’inscrire",
+      "viewCourses": "Voir les formations"
     }
-  },
-  "homeCta": {
-    "title": "Prêt·e à démarrer ?",
-    "subtitle": "Rejoignez nos programmes et progressez rapidement.",
-    "apply": "S’inscrire",
-    "viewCourses": "Voir les formations"
-  }
   },
   "contactPage": {
     "title": "Contactez-nous",
@@ -233,15 +233,15 @@
       "message": "Message",
       "send": "Envoyer"
     },
-      "badge": "Harvest Center",
-      "subtitle": "Une question, une demande d’information ou un besoin de collaboration ? Écrivez-nous.",
-      "formTitle": "Envoyer un message",
-      "formDescription": "Remplissez ce formulaire et notre équipe vous répondra dans les meilleurs délais.",
-      "openInMaps": "Ouvrir dans Maps",
-      "dev": {
-        "recaptchaMissing": "VITE_RECAPTCHA_SITE_KEY manquant. Le formulaire s’enverra sans token.",
-        "recaptchaLoadFailed": "Échec de chargement de reCAPTCHA"
-      },
+    "badge": "Harvest Center",
+    "subtitle": "Une question, une demande d’information ou un besoin de collaboration ? Écrivez-nous.",
+    "formTitle": "Envoyer un message",
+    "formDescription": "Remplissez ce formulaire et notre équipe vous répondra dans les meilleurs délais.",
+    "openInMaps": "Ouvrir dans Maps",
+    "dev": {
+      "recaptchaMissing": "VITE_RECAPTCHA_SITE_KEY manquant. Le formulaire s’enverra sans token.",
+      "recaptchaLoadFailed": "Échec de chargement de reCAPTCHA"
+    },
     "validation": {
       "fillAll": "Merci de remplir tous les champs."
     },
@@ -433,598 +433,627 @@
       "academicLead": "Responsable pédagogique"
     }
   },
-"footer": {
-  "tagline": "Former et accompagner les talents grâce aux langues et à la communication.",
-  "headOffice": "Siège Social : N'Djaména - Tchad",
-  "representation": "Représentation : Sarh - Tchad",
-  "location": "N'Djaména - Tchad",
-  "emailLabel": "Email :",
-  "phoneLabel": "Téléphone :",
-  "rights": "Tous droits réservés.",
-  "links": {
-    "about": "Présentation",
-    "courses": "Formations",
-    "why": "Pourquoi nous choisir ?",
-    "scholarships": "Opportunités",
-    "contact": "Contact"
+  "footer": {
+    "tagline": "Former et accompagner les talents grâce aux langues et à la communication.",
+    "headOffice": "Siège Social : N'Djaména - Tchad",
+    "representation": "Représentation : Sarh - Tchad",
+    "location": "N'Djaména - Tchad",
+    "emailLabel": "Email :",
+    "phoneLabel": "Téléphone :",
+    "rights": "Tous droits réservés.",
+    "links": {
+      "about": "Présentation",
+      "courses": "Formations",
+      "why": "Pourquoi nous choisir ?",
+      "scholarships": "Opportunités",
+      "contact": "Contact"
+    },
+    "logoAlt": "Harvest Center",
+    "navigationTitle": "Navigation",
+    "contactTitle": "Contact",
+    "socialTitle": "Réseaux sociaux",
+    "socialText": "Suivez Harvest Center pour découvrir les nouvelles formations, opportunités et actualités.",
+    "brandName": "Harvest Center",
+    "credit": "Créé par Digital Business Services",
+    "social": {
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn",
+      "instagram": "Instagram",
+      "whatsapp": "WhatsApp"
+    }
   },
-  "logoAlt": "Harvest Center",
-  "navigationTitle": "Navigation",
-  "contactTitle": "Contact",
-  "socialTitle": "Réseaux sociaux",
-  "socialText": "Suivez Harvest Center pour découvrir les nouvelles formations, opportunités et actualités.",
-  "brandName": "Harvest Center",
-  "credit": "Créé par Digital Business Services",
-  "social": {
-    "facebook": "Facebook",
-    "linkedin": "LinkedIn",
-    "instagram": "Instagram",
-    "whatsapp": "WhatsApp"
-  }
-},
-"languages": {
-  "french": "Français",
-  "english": "Anglais",
-  "chinese": "Chinois",
-  "spanish": "Espagnol",
-  "german": "Allemand"
-},
-"teamDirectoryPage": {
-  "title": "Notre équipe",
-  "subtitle": "Une équipe passionnée et engagée, composée de professionnels aux parcours variés, unis par la même vision.",
-  "photoAlt": "Photo de {{name}}",
-  "languagesLabel": "Langues",
-  "roles": {
-    "coordinatorFounder": "COORDINATOR - FOUNDER",
-    "administrativeAssistant": "Administrative Assistant",
-    "marketingCommunication": "Responsible Marketing et Communication",
-    "representativeSarh": "Representative Officer - Sarh",
-    "trainingAdministrativeOfficer": "Training & Administrative Officer",
-    "englishTeacher": "English Teacher",
-    "chineseTeacher": "Chinese Teacher",
-    "spanishTeacher": "Spanish Teacher",
-    "germanTeacher": "German Teacher",
-    "onlineEnglishTeacher": "Online English Teacher"
-  }
-},
-"scholarshipsPage": {
-  "title": "Offres de bourses",
-  "subtitle": "Découvrez les opportunités de financement disponibles via nos partenaires et mécènes.",
-  "searchPlaceholder": "Rechercher une bourse (titre, sponsor, pays)",
-  "onlyOpen": "Afficher uniquement les bourses ouvertes",
-  "newsTitle": "Actualités des bourses",
-  "new": "Nouveauté",
-  "view": "Voir",
-  "details": "Détails",
-  "by": "Par",
-  "open": "Ouverte",
-  "closed": "Fermée",
-  "deadlineLabel": "Clôture :",
-  "deadlineShort": "Clôture :",
-  "noResults": "Aucune bourse ne correspond à votre recherche.",
-  "apply": "Postuler",
-  "modal": {
-    "sponsor": "Sponsor",
-    "benefit": "Avantage",
-    "deadline": "Clôture",
-    "presentation": "Présentation",
-    "eligibility": "Conditions d'éligibilité",
-    "documents": "Pièces à fournir",
-    "selection": "Processus de sélection",
-    "seeDetails": "Voir détails"
-  }
-},
-"aboutPage": {
-  "presentation": {
-    "title": "Présentation du Harvest Center",
-    "subtitle": "Parcours adaptés et résultats mesurables.",
-    "p1": "Basé à N’Djamena, le Harvest Center forme aux langues pour étudiants, professionnels et organisations. Approche orientée compétences.",
-    "p2": "Petits groupes, créneaux flexibles et ateliers ciblés pour concilier progression rapide et qualité d’accompagnement.",
-    "imageAlt": "Locaux et apprenants du Harvest Center à N’Djamena"
+  "languages": {
+    "french": "Français",
+    "english": "Anglais",
+    "chinese": "Chinois",
+    "spanish": "Espagnol",
+    "german": "Allemand"
   },
-  "coordinator": {
-    "title": "Le mot du Coordinateur",
-    "role": "COORDINATOR - FOUNDER",
-    "message": "Bienvenue à Harvest Center. Notre mission est d’accompagner chaque apprenant vers l’excellence linguistique, grâce à des parcours flexibles, des méthodes actives et des résultats concrets.",
-    "cta": "Découvrir l’équipe →",
-    "imageAlt": "Coordinateur du Harvest Center"
+  "teamDirectoryPage": {
+    "title": "Notre équipe",
+    "subtitle": "Une équipe passionnée et engagée, composée de professionnels aux parcours variés, unis par la même vision.",
+    "photoAlt": "Photo de {{name}}",
+    "languagesLabel": "Langues",
+    "roles": {
+      "coordinatorFounder": "COORDINATOR - FOUNDER",
+      "administrativeAssistant": "Administrative Assistant",
+      "marketingCommunication": "Responsible Marketing et Communication",
+      "representativeSarh": "Representative Officer - Sarh",
+      "trainingAdministrativeOfficer": "Training & Administrative Officer",
+      "englishTeacher": "English Teacher",
+      "chineseTeacher": "Chinese Teacher",
+      "spanishTeacher": "Spanish Teacher",
+      "germanTeacher": "German Teacher",
+      "onlineEnglishTeacher": "Online English Teacher"
+    }
   },
-  "vision": {
-    "title": "Notre vision",
-    "subtitle": "Former des communicants autonomes, capables d’évoluer dans des contextes académiques et professionnels exigeants.",
-    "items": {
-      "excellence": {
-        "title": "Excellence mesurable",
-        "desc": "Des objectifs clairs, des évaluations régulières et des résultats vérifiables."
-      },
-      "activePedagogy": {
-        "title": "Pédagogie active",
-        "desc": "Ateliers, mises en situation et projets pour ancrer les acquis par la pratique."
-      },
-      "progress": {
-        "title": "Progression durable",
-        "desc": "Parcours modulaires et flexibles pour des acquis solides et utilisables."
-      },
-      "impact": {
-        "title": "Ouverture & impact",
-        "desc": "Des langues pour s’ouvrir au monde, évoluer professionnellement et servir sa communauté."
+  "scholarshipsPage": {
+    "title": "Offres de bourses",
+    "subtitle": "Découvrez les opportunités de financement disponibles via nos partenaires et mécènes.",
+    "searchPlaceholder": "Rechercher une bourse (titre, sponsor, pays)",
+    "onlyOpen": "Afficher uniquement les bourses ouvertes",
+    "newsTitle": "Actualités des bourses",
+    "new": "Nouveauté",
+    "view": "Voir",
+    "details": "Détails",
+    "by": "Par",
+    "open": "Ouverte",
+    "closed": "Fermée",
+    "deadlineLabel": "Clôture :",
+    "deadlineShort": "Clôture :",
+    "noResults": "Aucune bourse ne correspond à votre recherche.",
+    "apply": "Postuler",
+    "modal": {
+      "sponsor": "Sponsor",
+      "benefit": "Avantage",
+      "deadline": "Clôture",
+      "presentation": "Présentation",
+      "eligibility": "Conditions d'éligibilité",
+      "documents": "Pièces à fournir",
+      "selection": "Processus de sélection",
+      "seeDetails": "Voir détails"
+    }
+  },
+  "aboutPage": {
+    "presentation": {
+      "title": "Présentation du Harvest Center",
+      "subtitle": "Parcours adaptés et résultats mesurables.",
+      "p1": "Basé à N’Djamena, le Harvest Center forme aux langues pour étudiants, professionnels et organisations. Approche orientée compétences.",
+      "p2": "Petits groupes, créneaux flexibles et ateliers ciblés pour concilier progression rapide et qualité d’accompagnement.",
+      "imageAlt": "Locaux et apprenants du Harvest Center à N’Djamena"
+    },
+    "coordinator": {
+      "title": "Le mot du Coordinateur",
+      "role": "COORDINATOR - FOUNDER",
+      "message": "Bienvenue à Harvest Center. Notre mission est d’accompagner chaque apprenant vers l’excellence linguistique, grâce à des parcours flexibles, des méthodes actives et des résultats concrets.",
+      "cta": "Découvrir l’équipe →",
+      "imageAlt": "Coordinateur du Harvest Center"
+    },
+    "vision": {
+      "title": "Notre vision",
+      "subtitle": "Former des communicants autonomes, capables d’évoluer dans des contextes académiques et professionnels exigeants.",
+      "items": {
+        "excellence": {
+          "title": "Excellence mesurable",
+          "desc": "Des objectifs clairs, des évaluations régulières et des résultats vérifiables."
+        },
+        "activePedagogy": {
+          "title": "Pédagogie active",
+          "desc": "Ateliers, mises en situation et projets pour ancrer les acquis par la pratique."
+        },
+        "progress": {
+          "title": "Progression durable",
+          "desc": "Parcours modulaires et flexibles pour des acquis solides et utilisables."
+        },
+        "impact": {
+          "title": "Ouverture & impact",
+          "desc": "Des langues pour s’ouvrir au monde, évoluer professionnellement et servir sa communauté."
+        }
+      }
+    },
+    "services": {
+      "title": "Nos services",
+      "subtitle": "Des formations adaptées aux besoins académiques et professionnels.",
+      "ctaApply": "Faire une demande d’inscription",
+      "ctaLearnMore": "Voir les formations",
+      "items": {
+        "languages": {
+          "title": "Langues",
+          "desc": "Des formations linguistiques adaptées aux besoins académiques, professionnels et personnels.",
+          "bullet1": "Cours pour débutants, intermédiaires et avancés",
+          "bullet2": "Programmes en anglais, français, chinois et autres langues",
+          "bullet3": "Apprentissage pratique axé sur la communication"
+        },
+        "schedule": {
+          "title": "Horaires flexibles",
+          "desc": "Des créneaux conçus pour s’adapter aux étudiants, travailleurs et professionnels.",
+          "bullet1": "Cours de jour, du soir et du week-end",
+          "bullet2": "Horaires adaptés au rythme de chaque apprenant",
+          "bullet3": "Un rythme d’apprentissage pensé pour une progression durable"
+        },
+        "exams": {
+          "title": "Préparation aux examens",
+          "desc": "Un accompagnement ciblé pour réussir les évaluations académiques et les certifications linguistiques.",
+          "bullet1": "Préparation aux tests et examens de langue",
+          "bullet2": "Méthodes pratiques et sessions d’entraînement",
+          "bullet3": "Accompagnement académique orienté résultats"
+        },
+        "smallGroups": {
+          "title": "Petits groupes",
+          "desc": "Un environnement d’apprentissage plus humain, interactif et efficace.",
+          "bullet1": "Encadrement plus rapproché par les formateurs",
+          "bullet2": "Participation active de chaque apprenant",
+          "bullet3": "Meilleure interaction formateur-apprenant"
+        },
+        "immersion": {
+          "title": "Immersion culturelle",
+          "desc": "Une ouverture aux langues à travers la culture, la pratique et l’interaction.",
+          "bullet1": "Découverte des contextes culturels",
+          "bullet2": "Apprentissage pratique et engageant",
+          "bullet3": "Confiance renforcée à l’oral"
+        },
+        "certificates": {
+          "title": "Certificats",
+          "desc": "Des certificats qui valorisent les compétences développées tout au long des programmes.",
+          "bullet1": "Reconnaissance des formations suivies",
+          "bullet2": "Valeur académique et professionnelle",
+          "bullet3": "Parcours structurés et traçables"
+        }
       }
     }
   },
-  "services": {
-    "title": "Nos services",
-    "subtitle": "Des formations adaptées aux besoins académiques et professionnels.",
-    "ctaApply": "Faire une demande d’inscription",
-    "ctaLearnMore": "Voir les formations",
-    "items": {
-      "languages": {
-        "title": "Langues",
-        "desc": "Des formations linguistiques adaptées aux besoins académiques, professionnels et personnels.",
-        "bullet1": "Cours pour débutants, intermédiaires et avancés",
-        "bullet2": "Programmes en anglais, français, chinois et autres langues",
-        "bullet3": "Apprentissage pratique axé sur la communication"
-      },
-      "schedule": {
-        "title": "Horaires flexibles",
-        "desc": "Des créneaux conçus pour s’adapter aux étudiants, travailleurs et professionnels.",
-        "bullet1": "Cours de jour, du soir et du week-end",
-        "bullet2": "Horaires adaptés au rythme de chaque apprenant",
-        "bullet3": "Un rythme d’apprentissage pensé pour une progression durable"
-      },
-      "exams": {
-        "title": "Préparation aux examens",
-        "desc": "Un accompagnement ciblé pour réussir les évaluations académiques et les certifications linguistiques.",
-        "bullet1": "Préparation aux tests et examens de langue",
-        "bullet2": "Méthodes pratiques et sessions d’entraînement",
-        "bullet3": "Accompagnement académique orienté résultats"
-      },
-      "smallGroups": {
-        "title": "Petits groupes",
-        "desc": "Un environnement d’apprentissage plus humain, interactif et efficace.",
-        "bullet1": "Encadrement plus rapproché par les formateurs",
-        "bullet2": "Participation active de chaque apprenant",
-        "bullet3": "Meilleure interaction formateur-apprenant"
-      },
-      "immersion": {
-        "title": "Immersion culturelle",
-        "desc": "Une ouverture aux langues à travers la culture, la pratique et l’interaction.",
-        "bullet1": "Découverte des contextes culturels",
-        "bullet2": "Apprentissage pratique et engageant",
-        "bullet3": "Confiance renforcée à l’oral"
-      },
-      "certificates": {
-        "title": "Certificats",
-        "desc": "Des certificats qui valorisent les compétences développées tout au long des programmes.",
-        "bullet1": "Reconnaissance des formations suivies",
-        "bullet2": "Valeur académique et professionnelle",
-        "bullet3": "Parcours structurés et traçables"
-      }
+  "galleryPage": {
+    "title": "Galerie",
+    "subtitle": "Quelques moments de nos cours, ateliers et activités.",
+    "searchPlaceholder": "Rechercher (ex : anglais, atelier, hsk…)",
+    "countLabel": "image(s)",
+    "imageAlt": "Image {{index}}"
+  },
+  "mediaManagerPage": {
+    "title": "Gestion des médias",
+    "file": "Fichier",
+    "selected": "Sélectionné",
+    "folder": "Dossier (folder)",
+    "tags": "Tags (séparés par des virgules)",
+    "upload": "Uploader",
+    "uploading": "Upload…",
+    "reset": "Réinitialiser",
+    "refresh": "Rafraîchir la liste",
+    "filterFolder": "Filtrer par dossier",
+    "filterTag": "Filtrer par tag",
+    "applyFilters": "Appliquer filtres",
+    "folderLabel": "Dossier :",
+    "tagsLabel": "Tags :",
+    "open": "Ouvrir",
+    "copyUrl": "Copier URL",
+    "delete": "Supprimer",
+    "noMedia": "Aucun média.",
+    "confirmDelete": "Supprimer ce fichier ?",
+    "success": {
+      "uploaded": "Fichier uploadé.",
+      "uploadFinished": "Upload terminé.",
+      "deleted": "Supprimé.",
+      "urlCopied": "URL copiée"
+    },
+    "errors": {
+      "load": "Impossible de charger la liste des médias.",
+      "chooseFile": "Choisir un fichier.",
+      "upload": "Erreur upload",
+      "delete": "Impossible de supprimer.",
+      "copyUrl": "Impossible de copier l'URL."
     }
-  }
-},
-"galleryPage": {
-  "title": "Galerie",
-  "subtitle": "Quelques moments de nos cours, ateliers et activités.",
-  "searchPlaceholder": "Rechercher (ex : anglais, atelier, hsk…)",
-  "countLabel": "image(s)",
-  "imageAlt": "Image {{index}}"
-},
-"mediaManagerPage": {
-  "title": "Gestion des médias",
-  "file": "Fichier",
-  "selected": "Sélectionné",
-  "folder": "Dossier (folder)",
-  "tags": "Tags (séparés par des virgules)",
-  "upload": "Uploader",
-  "uploading": "Upload…",
-  "reset": "Réinitialiser",
-  "refresh": "Rafraîchir la liste",
-  "filterFolder": "Filtrer par dossier",
-  "filterTag": "Filtrer par tag",
-  "applyFilters": "Appliquer filtres",
-  "folderLabel": "Dossier :",
-  "tagsLabel": "Tags :",
-  "open": "Ouvrir",
-  "copyUrl": "Copier URL",
-  "delete": "Supprimer",
-  "noMedia": "Aucun média.",
-  "confirmDelete": "Supprimer ce fichier ?",
-  "success": {
-    "uploaded": "Fichier uploadé.",
-    "uploadFinished": "Upload terminé.",
-    "deleted": "Supprimé.",
-    "urlCopied": "URL copiée"
   },
-  "errors": {
-    "load": "Impossible de charger la liste des médias.",
-    "chooseFile": "Choisir un fichier.",
-    "upload": "Erreur upload",
-    "delete": "Impossible de supprimer.",
-    "copyUrl": "Impossible de copier l'URL."
-  }
-},
-"newsEditorPage": {
-  "title": "Gestion des actualités",
-  "create": "Créer",
-  "refresh": "Rafraîchir",
-  "delete": "Supprimer",
-  "published": "Publié",
-  "draft": "Brouillon",
-  "noNews": "Aucune actualité.",
-  "confirmDelete": "Supprimer cette actualité ?",
-  "fields": {
-    "title": "Titre",
-    "content": "Contenu"
+  "newsEditorPage": {
+    "title": "Gestion des actualités",
+    "create": "Créer",
+    "refresh": "Rafraîchir",
+    "delete": "Supprimer",
+    "published": "Publié",
+    "draft": "Brouillon",
+    "noNews": "Aucune actualité.",
+    "confirmDelete": "Supprimer cette actualité ?",
+    "fields": {
+      "title": "Titre",
+      "content": "Contenu"
+    },
+    "success": {
+      "created": "Actualité créée.",
+      "deleted": "Supprimé."
+    },
+    "errors": {
+      "load": "Impossible de charger les actualités.",
+      "required": "Titre et contenu requis.",
+      "create": "Erreur lors de la création.",
+      "delete": "Erreur lors de la suppression."
+    }
   },
-  "success": {
-    "created": "Actualité créée.",
-    "deleted": "Supprimé."
+  "superAdminPage": {
+    "title": "SuperAdmin Dashboard",
+    "accessDenied": "🚫 Accès refusé - SuperAdmin uniquement",
+    "newNews": "Nouvelle News",
+    "mediaRecent": "Médias récents",
+    "noMedia": "Aucun média trouvé.",
+    "news": "News",
+    "users": "Utilisateurs",
+    "searchNews": "Rechercher news...",
+    "searchUsers": "Rechercher utilisateur...",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "noNews": "Aucune news. Créez-en une !",
+    "noUsers": "Aucun utilisateur trouvé",
+    "confirmDeleteNews": "Supprimer cette news ?",
+    "confirmDeleteUser": "Supprimer cet utilisateur ?",
+    "stats": {
+      "totalUsers": "Utilisateurs total",
+      "students": "Étudiants",
+      "revenue": "Chiffre d'affaires"
+    },
+    "table": {
+      "title": "Titre",
+      "status": "Statut",
+      "date": "Date",
+      "actions": "Actions"
+    },
+    "userTable": {
+      "name": "Nom",
+      "email": "Email",
+      "role": "Rôle",
+      "actions": "Actions"
+    },
+    "newsForm": {
+      "title": "Titre news",
+      "content": "Contenu (HTML accepté)",
+      "excerpt": "Extrait (optionnel)",
+      "publishNow": "Publier immédiatement",
+      "create": "Créer News"
+    },
+    "errors": {
+      "deleteNews": "Erreur suppression",
+      "deleteUser": "Erreur suppression",
+      "createNews": "Erreur création news"
+    }
   },
-  "errors": {
-    "load": "Impossible de charger les actualités.",
-    "required": "Titre et contenu requis.",
-    "create": "Erreur lors de la création.",
-    "delete": "Erreur lors de la suppression."
-  }
-},
-"superAdminPage": {
-  "title": "SuperAdmin Dashboard",
-  "accessDenied": "🚫 Accès refusé - SuperAdmin uniquement",
-  "newNews": "Nouvelle News",
-  "mediaRecent": "Médias récents",
-  "noMedia": "Aucun média trouvé.",
-  "news": "News",
-  "users": "Utilisateurs",
-  "searchNews": "Rechercher news...",
-  "searchUsers": "Rechercher utilisateur...",
-  "active": "Actif",
-  "inactive": "Inactif",
-  "noNews": "Aucune news. Créez-en une !",
-  "noUsers": "Aucun utilisateur trouvé",
-  "confirmDeleteNews": "Supprimer cette news ?",
-  "confirmDeleteUser": "Supprimer cet utilisateur ?",
-  "stats": {
-    "totalUsers": "Utilisateurs total",
-    "students": "Étudiants",
-    "revenue": "Chiffre d'affaires"
+  "forbiddenPage": {
+    "message": "Vous n'avez pas les droits nécessaires."
   },
-  "table": {
-    "title": "Titre",
+  "inscriptionPage": {
+    "title": "Demande d'inscription",
+    "confirm": "Confirmez-vous votre inscription ?",
+    "success": "Demande envoyée. En attente de validation admin.",
+    "fields": {
+      "languageLevel": "Niveau de langue (ex: Débutant, Intermédiaire, Avancé)",
+      "preferredSchedule": "Horaire préféré",
+      "chooseFormation": "Choisir une formation",
+      "loadingLevels": "Chargement des niveaux...",
+      "chooseLevel": "Choisir un niveau",
+      "loadingSlots": "Chargement des créneaux...",
+      "chooseSlot": "Choisir un créneau horaire",
+      "chooseGender": "Sélectionner le sexe",
+      "male": "Masculin",
+      "female": "Féminin",
+      "lastName": "Nom",
+      "firstName": "Prénom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "whatsapp": "WhatsApp",
+      "birthPlace": "Lieu de naissance",
+      "neighborhood": "Quartier",
+      "district": "Arrondissement",
+      "acceptFees": "J’accepte les frais d’inscription non remboursables.",
+      "submit": "Envoyer la demande",
+      "submitting": "Envoi..."
+    },
+    "errors": {
+      "loadFormations": "Impossible de charger les formations.",
+      "loadLevels": "Impossible de charger les niveaux.",
+      "loadSlots": "Impossible de charger les créneaux horaires.",
+      "required": "Tous les champs obligatoires doivent être remplis.",
+      "invalidBirthDate": "Date de naissance invalide.",
+      "minAge": "Âge minimum requis : 10 ans.",
+      "invalidPhone": "Numéro de téléphone invalide.",
+      "invalidWhatsapp": "Numéro WhatsApp invalide.",
+      "acceptFees": "Vous devez accepter les frais d'inscription.",
+      "loginRequired": "Veuillez vous connecter.",
+      "studentsOnly": "Cette page est réservée aux étudiants.",
+      "submit": "Erreur lors de l'envoi de la demande."
+    }
+  },
+  "myCoursesPage": {
+    "title": "Mes cours",
+    "course": "Cours",
+    "empty": "Vous n’êtes inscrit à aucun cours pour l’instant.",
+    "errors": {
+      "load": "Impossible de charger vos cours"
+    }
+  },
+  "myPaymentsPage": {
+    "title": "Mes paiements",
+    "payment": "Paiement",
     "status": "Statut",
-    "date": "Date",
-    "actions": "Actions"
+    "empty": "Aucun paiement trouvé.",
+    "errors": {
+      "load": "Impossible de charger les paiements"
+    }
   },
-  "userTable": {
-    "name": "Nom",
-    "email": "Email",
-    "role": "Rôle",
-    "actions": "Actions"
+  "profilePage": {
+    "title": "Mon profil",
+    "avatarAlt": "Avatar",
+    "noAvatar": "No",
+    "changePhoto": "Changer la photo",
+    "photoHint": "Format recommandé 400×400, max 2MB",
+    "loggedInAs": "Connecté en tant que",
+    "fields": {
+      "phone": "Téléphone",
+      "city": "Ville",
+      "languages": "Langues (séparées par des virgules)",
+      "goals": "Objectifs",
+      "bio": "Bio",
+      "save": "Enregistrer",
+      "saving": "Enregistrement…"
+    },
+    "success": {
+      "created": "Profil créé avec succès",
+      "saved": "Profil enregistré"
+    },
+    "errors": {
+      "sessionExpired": "Session expirée — veuillez vous reconnecter.",
+      "routeMissing": "Route introuvable (404) — vérifie que l'API expose PUT /api/profiles/me",
+      "save": "Erreur lors de l'enregistrement"
+    }
   },
-  "newsForm": {
-    "title": "Titre news",
-    "content": "Contenu (HTML accepté)",
-    "excerpt": "Extrait (optionnel)",
-    "publishNow": "Publier immédiatement",
-    "create": "Créer News"
+  "trainings": {
+    "title": "Formations"
   },
-  "errors": {
-    "deleteNews": "Erreur suppression",
-    "deleteUser": "Erreur suppression",
-    "createNews": "Erreur création news"
-  }
-},
-"forbiddenPage": {
-  "message": "Vous n'avez pas les droits nécessaires."
-},
-"inscriptionPage": {
-  "title": "Demande d'inscription",
-  "confirm": "Confirmez-vous votre inscription ?",
-  "success": "Demande envoyée. En attente de validation admin.",
-  "fields": {
-    "languageLevel": "Niveau de langue (ex: Débutant, Intermédiaire, Avancé)",
-    "preferredSchedule": "Horaire préféré",
-    "chooseFormation": "Choisir une formation",
-    "loadingLevels": "Chargement des niveaux...",
-    "chooseLevel": "Choisir un niveau",
-    "loadingSlots": "Chargement des créneaux...",
-    "chooseSlot": "Choisir un créneau horaire",
-    "chooseGender": "Sélectionner le sexe",
-    "male": "Masculin",
-    "female": "Féminin",
-    "lastName": "Nom",
-    "firstName": "Prénom",
-    "email": "Email",
-    "phone": "Téléphone",
-    "whatsapp": "WhatsApp",
-    "birthPlace": "Lieu de naissance",
-    "neighborhood": "Quartier",
-    "district": "Arrondissement",
-    "acceptFees": "J’accepte les frais d’inscription non remboursables.",
-    "submit": "Envoyer la demande",
-    "submitting": "Envoi..."
+  "timetablePage": {
+    "title": "Emploi du temps",
+    "description": "Affichage de l'emploi du temps (planning) — ajoute l'API/timetable ici.",
+    "soonTitle": "L’emploi du temps arrive bientôt ici",
+    "soon": "Vos horaires de cours seront affichés sur cette page. En attendant, consultez le planning affiché au centre."
   },
-  "errors": {
-    "loadFormations": "Impossible de charger les formations.",
-    "loadLevels": "Impossible de charger les niveaux.",
-    "loadSlots": "Impossible de charger les créneaux horaires.",
-    "required": "Tous les champs obligatoires doivent être remplis.",
-    "invalidBirthDate": "Date de naissance invalide.",
-    "minAge": "Âge minimum requis : 10 ans.",
-    "invalidPhone": "Numéro de téléphone invalide.",
-    "invalidWhatsapp": "Numéro WhatsApp invalide.",
-    "acceptFees": "Vous devez accepter les frais d'inscription.",
-    "loginRequired": "Veuillez vous connecter.",
-    "studentsOnly": "Cette page est réservée aux étudiants.",
-    "submit": "Erreur lors de l'envoi de la demande."
-  }
-},
-"myCoursesPage": {
-  "title": "Mes cours",
-  "course": "Cours",
-  "empty": "Vous n’êtes inscrit à aucun cours pour l’instant.",
-  "errors": {
-    "load": "Impossible de charger vos cours"
-  }
-},
-"myPaymentsPage": {
-  "title": "Mes paiements",
-  "payment": "Paiement",
-  "status": "Statut",
-  "empty": "Aucun paiement trouvé.",
-  "errors": {
-    "load": "Impossible de charger les paiements"
-  }
-},
-"profilePage": {
-  "title": "Mon profil",
-  "avatarAlt": "Avatar",
-  "noAvatar": "No",
-  "changePhoto": "Changer la photo",
-  "photoHint": "Format recommandé 400×400, max 2MB",
-  "loggedInAs": "Connecté en tant que",
-  "fields": {
-    "phone": "Téléphone",
-    "city": "Ville",
-    "languages": "Langues (séparées par des virgules)",
-    "goals": "Objectifs",
-    "bio": "Bio",
-    "save": "Enregistrer",
-    "saving": "Enregistrement…"
+  "notesPage": {
+    "title": "Notes",
+    "description": "Page notes — implémente selon ton modèle (ex: notes par cours).",
+    "soonTitle": "Les notes arrivent bientôt ici",
+    "soon": "Vos notes par cours seront consultables sur cette page. En attendant, demandez-les à votre formateur."
   },
-  "success": {
-    "created": "Profil créé avec succès",
-    "saved": "Profil enregistré"
+  "notFoundPage": {
+    "message": "404 - Page non trouvée"
   },
-  "errors": {
-    "sessionExpired": "Session expirée — veuillez vous reconnecter.",
-    "routeMissing": "Route introuvable (404) — vérifie que l'API expose PUT /api/profiles/me",
-    "save": "Erreur lors de l'enregistrement"
-  }
-},
-"trainings": {
-  "title": "Formations"
-},
-"timetablePage": {
-  "title": "Emploi du temps",
-  "description": "Affichage de l'emploi du temps (planning) — ajoute l'API/timetable ici."
-},
-"notesPage": {
-  "title": "Notes",
-  "description": "Page notes — implémente selon ton modèle (ex: notes par cours)."
-},
-"notFoundPage": {
-  "message": "404 - Page non trouvée"
-},
-"unauthorizedPage": {
-  "title": "Accès refusé 🚫",
-  "withRole": "Votre rôle actuel (« {{role}} ») ne vous permet pas d’accéder à cette page.",
-  "withoutRole": "Vous n’avez pas la permission d’accéder à cette page.",
-  "home": "Retour à l’accueil",
-  "logout": "Déconnexion",
-  "login": "Se connecter"
-},
-"sidebar": {
-  "dashboard": "Tableau de bord",
-  "profile": "Profil",
-  "timetable": "Emplois du temps",
-  "notes": "Notes",
-  "myCourses": "Mes cours",
-  "payments": "Paiements",
-  "assignments": "Devoirs",
-  "user": "Utilisateur"
-},
-"mediaGallery": {
-  "title": "Derniers médias",
-  "empty": "Aucun média disponible.",
-  "imageAlt": "Média"
-},
-"dashboardLayout": {
-  "title": "Tableau de bord",
-  "avatarAlt": "Avatar",
-  "user": "Utilisateur",
-  "links": {
-    "dashboard": "Tableau de bord",
-    "profile": "Mon profil",
-    "myCourses": "Mes cours",
-    "payments": "Paiements",
-    "myClasses": "Mes classes",
-    "lessons": "Leçons",
-    "students": "Étudiants",
-    "assignments": "Attributions",
-    "timetables": "Emplois du temps",
-    "registrations": "Inscriptions"
-  }
-},
-"courseCard": {
-  "coverAlt": "Image du cours",
-  "open": "Ouvrir",
-  "progress": "{{value}}%"
-},
-"langSelector": {
-  "ariaLabel": "Sélecteur de langue"
-},
-"scholarshipPromo": {
-  "sectionTitle": "Promotion",
-  "sectionSubtitle": "Appels à candidatures & bourses en cours.",
-  "title": "Bourse Réussir Bé Gou",
-  "sponsor": "Harvest Center",
-  "description": "Appel à candidatures pour une bourse de formation en langues. Cursus flexibles, mentorat et suivi.",
-  "location": "N’Djamena",
-  "quota": "Places limitées",
-  "deadline": "Date limite",
-  "applyNow": "Candidater maintenant",
-  "fillHere": "Remplir ici",
-  "lastDay": "Dernier jour",
-  "daysLeft": "Plus que {{count}} jour(s)",
-  "footerText": "Candidatures en ligne. Sélection sur dossier & motivation.",
-  "formTitle": "Formulaire de candidature"
-},
-"confirmModal": {
-  "title": "Confirmer",
-  "message": "Êtes-vous sûr ?",
-  "confirm": "Confirmer",
-  "cancel": "Annuler",
-  "wait": "Patientez…"
-},
-"dashboardSidebar": {
-  "dashboard": "Tableau de bord",
-  "studentSpace": "Espace Étudiant",
-  "teacherSpace": "Espace Formateur",
-  "home": "Accueil",
-  "profile": "Profil",
-  "myCourses": "Mes cours",
-  "payments": "Paiements",
-  "assignments": "Devoirs",
-  "registrationRequest": "Demande d'inscription",
-  "notes": "Notes",
-  "timetable": "Emploi du temps"
-},
-"accountPage": {
-  "titleLogin": "Connexion",
-  "titleRegister": "Créer un compte",
-  "fields": {
-    "firstName": "Prénom",
-    "lastName": "Nom",
-    "email": "Email",
-    "password": "Mot de passe",
-    "show": "Voir",
-    "hide": "Masquer"
-  },
-  "roles": {
-    "student": "Étudiant",
-    "teacher": "Enseignant",
-    "admin": "Administrateur"
-  },
-  "actions": {
-    "login": "Se connecter",
-    "createAccount": "Créer mon compte",
-    "loggingIn": "Connexion…",
-    "creating": "Création…"
-  },
-  "switch": {
-    "noAccount": "Pas de compte ?",
-    "create": "Créer un compte",
-    "alreadyRegistered": "Déjà inscrit ?",
+  "unauthorizedPage": {
+    "title": "Accès refusé 🚫",
+    "withRole": "Votre rôle actuel (« {{role}} ») ne vous permet pas d’accéder à cette page.",
+    "withoutRole": "Vous n’avez pas la permission d’accéder à cette page.",
+    "home": "Retour à l’accueil",
+    "logout": "Déconnexion",
     "login": "Se connecter"
   },
-  "success": {
-    "login": "Connexion réussie !",
-    "register": "Inscription réussie. En attente de validation."
+  "sidebar": {
+    "dashboard": "Tableau de bord",
+    "profile": "Profil",
+    "timetable": "Emplois du temps",
+    "notes": "Notes",
+    "myCourses": "Mes cours",
+    "payments": "Paiements",
+    "assignments": "Devoirs",
+    "user": "Utilisateur"
   },
-  "errors": {
-    "required": "Veuillez remplir tous les champs.",
-    "invalidSession": "Session invalide.",
-    "network": "Problème réseau ou extension navigateur.",
-    "auth": "Erreur d'authentification"
-  }
-},
-"adminClassDetail": {
-  "class": "Classe",
-  "course": "Cours",
-  "to": "à",
-  "createdAt": "Créée le",
-  "assignTeacher": "Assigner formateur",
-  "notFound": "Classe introuvable.",
-  "sections": {
-    "info": "Infos",
-    "courses": "Cours rattachés",
-    "timetables": "Emplois du temps"
+  "mediaGallery": {
+    "title": "Derniers médias",
+    "empty": "Aucun média disponible.",
+    "imageAlt": "Média"
   },
-  "empty": {
-    "courses": "Aucun cours rattaché.",
-    "timetables": "Aucun emploi du temps enregistré."
+  "dashboardLayout": {
+    "title": "Tableau de bord",
+    "avatarAlt": "Avatar",
+    "user": "Utilisateur",
+    "links": {
+      "dashboard": "Tableau de bord",
+      "profile": "Mon profil",
+      "myCourses": "Mes cours",
+      "payments": "Paiements",
+      "myClasses": "Mes classes",
+      "lessons": "Leçons",
+      "students": "Étudiants",
+      "assignments": "Attributions",
+      "timetables": "Emplois du temps",
+      "registrations": "Inscriptions"
+    }
   },
-  "success": {
-    "assigned": "Formateur assigné."
+  "courseCard": {
+    "coverAlt": "Image du cours",
+    "open": "Ouvrir",
+    "progress": "{{value}}%"
   },
-  "errors": {
-    "load": "Impossible de charger la classe.",
-    "assign": "Erreur lors de l'assignation."
-  }
-},
-"adminClassesPage": {
-  "title": "Gestion des classes",
-  "class": "Classe",
-  "course": "Cours",
-  "courses": "Cours",
-  "created": "Créée",
-  "assignTeacher": "Assigner formateur",
-  "empty": "Aucune classe trouvée.",
-  "success": {
-    "assigned": "Cours assigné."
+  "langSelector": {
+    "ariaLabel": "Sélecteur de langue"
   },
-  "errors": {
-    "load": "Impossible de charger les classes.",
-    "assign": "Erreur lors de l'assignation."
-  }
-},
-"adminCourseAssign": {
-  "title": "Assigner un formateur",
-  "course": "Cours",
-  "loading": "Chargement des formateurs…",
-  "chooseTeacher": "Choisir un formateur",
-  "select": "-- Sélectionner --",
-  "helper": "Si la liste est vide, vérifie que des utilisateurs ont bien le rôle formateur.",
-  "assign": "Assigner",
-  "assigning": "Assignation…",
-  "errors": {
-    "load": "Impossible de charger la liste des formateurs.",
-    "choose": "Choisir un formateur.",
-    "assign": "Erreur lors de l'assignation."
-  }
-},
-"adminCourseDetail": {
-  "course": "Cours",
-  "duration": "Durée",
-  "level": "Niveau",
-  "status": "Statut",
-  "teacher": "Formateur",
-  "active": "Actif",
-  "inactive": "Inactif",
-  "noTeacher": "Aucun formateur assigné",
-  "assignTeacher": "Assigner formateur",
-  "activate": "Activer",
-  "deactivate": "Désactiver",
-  "updating": "Mise à jour…",
-  "paid": "Payé",
-  "unpaid": "Non payé",
-  "notFound": "Cours introuvable.",
-  "sections": {
-    "info": "Informations",
-    "students": "Étudiants inscrits"
+  "scholarshipPromo": {
+    "sectionTitle": "Promotion",
+    "sectionSubtitle": "Appels à candidatures & bourses en cours.",
+    "title": "Bourse Réussir Bé Gou",
+    "sponsor": "Harvest Center",
+    "description": "Appel à candidatures pour une bourse de formation en langues. Cursus flexibles, mentorat et suivi.",
+    "location": "N’Djamena",
+    "quota": "Places limitées",
+    "deadline": "Date limite",
+    "applyNow": "Candidater maintenant",
+    "fillHere": "Remplir ici",
+    "lastDay": "Dernier jour",
+    "daysLeft": "Plus que {{count}} jour(s)",
+    "footerText": "Candidatures en ligne. Sélection sur dossier & motivation.",
+    "formTitle": "Formulaire de candidature"
   },
-  "empty": {
-    "students": "Aucun étudiant inscrit."
+  "confirmModal": {
+    "title": "Confirmer",
+    "message": "Êtes-vous sûr ?",
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "wait": "Patientez…"
   },
-  "success": {
-    "assigned": "Formateur assigné."
+  "dashboardSidebar": {
+    "dashboard": "Tableau de bord",
+    "studentSpace": "Espace Étudiant",
+    "teacherSpace": "Espace Formateur",
+    "home": "Accueil",
+    "profile": "Profil",
+    "myCourses": "Mes cours",
+    "payments": "Paiements",
+    "assignments": "Devoirs",
+    "registrationRequest": "Demande d'inscription",
+    "notes": "Notes",
+    "timetable": "Emploi du temps"
   },
-  "errors": {
-    "load": "Impossible de charger le cours.",
-    "assign": "Erreur lors de l'assignation.",
-    "status": "Erreur lors de la mise à jour du statut."
-  }
-},
+  "accountPage": {
+    "titleLogin": "Connexion",
+    "titleRegister": "Créer un compte",
+    "fields": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Email",
+      "password": "Mot de passe",
+      "show": "Voir",
+      "hide": "Masquer",
+      "hidePassword": "Masquer le mot de passe",
+      "showPassword": "Afficher le mot de passe"
+    },
+    "roles": {
+      "student": "Étudiant",
+      "teacher": "Enseignant",
+      "admin": "Administrateur"
+    },
+    "actions": {
+      "login": "Se connecter",
+      "createAccount": "Créer mon compte",
+      "loggingIn": "Connexion…",
+      "creating": "Création…",
+      "creatingAccount": "Création du compte…"
+    },
+    "switch": {
+      "noAccount": "Pas de compte ?",
+      "create": "Créer un compte",
+      "alreadyRegistered": "Déjà inscrit ?",
+      "login": "Se connecter"
+    },
+    "success": {
+      "login": "Connexion réussie !",
+      "register": "Inscription réussie. En attente de validation.",
+      "registered": "Compte créé. Vous pouvez maintenant vous connecter."
+    },
+    "errors": {
+      "required": "Veuillez remplir tous les champs.",
+      "invalidSession": "Session invalide.",
+      "network": "Problème réseau ou extension navigateur.",
+      "auth": "Erreur d'authentification",
+      "networkNew": "Le serveur ne répond pas. Vérifiez votre connexion et réessayez.",
+      "invalid": "Email ou mot de passe incorrect.",
+      "emailTaken": "Un compte existe déjà avec cet email. Connectez-vous.",
+      "failed": "La connexion a échoué."
+    },
+    "heading": {
+      "login": "Connexion",
+      "register": "Créer un compte étudiant"
+    },
+    "sub": {
+      "login": "Entrez l’email et le mot de passe de votre compte Harvest Center.",
+      "register": "Les comptes formateurs et administratifs sont créés par l’administration."
+    },
+    "tabs": {
+      "label": "Choisir une action",
+      "login": "Se connecter",
+      "register": "Créer un compte"
+    },
+    "forgot": {
+      "toggle": "Mot de passe oublié ?",
+      "body": "L’administration réinitialise votre mot de passe. Écrivez-nous avec l’email de votre compte :"
+    }
+  },
+  "adminClassDetail": {
+    "class": "Classe",
+    "course": "Cours",
+    "to": "à",
+    "createdAt": "Créée le",
+    "assignTeacher": "Assigner formateur",
+    "notFound": "Classe introuvable.",
+    "sections": {
+      "info": "Infos",
+      "courses": "Cours rattachés",
+      "timetables": "Emplois du temps"
+    },
+    "empty": {
+      "courses": "Aucun cours rattaché.",
+      "timetables": "Aucun emploi du temps enregistré."
+    },
+    "success": {
+      "assigned": "Formateur assigné."
+    },
+    "errors": {
+      "load": "Impossible de charger la classe.",
+      "assign": "Erreur lors de l'assignation."
+    }
+  },
+  "adminClassesPage": {
+    "title": "Gestion des classes",
+    "class": "Classe",
+    "course": "Cours",
+    "courses": "Cours",
+    "created": "Créée",
+    "assignTeacher": "Assigner formateur",
+    "empty": "Aucune classe trouvée.",
+    "success": {
+      "assigned": "Cours assigné."
+    },
+    "errors": {
+      "load": "Impossible de charger les classes.",
+      "assign": "Erreur lors de l'assignation."
+    }
+  },
+  "adminCourseAssign": {
+    "title": "Assigner un formateur",
+    "course": "Cours",
+    "loading": "Chargement des formateurs…",
+    "chooseTeacher": "Choisir un formateur",
+    "select": "-- Sélectionner --",
+    "helper": "Si la liste est vide, vérifie que des utilisateurs ont bien le rôle formateur.",
+    "assign": "Assigner",
+    "assigning": "Assignation…",
+    "errors": {
+      "load": "Impossible de charger la liste des formateurs.",
+      "choose": "Choisir un formateur.",
+      "assign": "Erreur lors de l'assignation."
+    }
+  },
+  "adminCourseDetail": {
+    "course": "Cours",
+    "duration": "Durée",
+    "level": "Niveau",
+    "status": "Statut",
+    "teacher": "Formateur",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "noTeacher": "Aucun formateur assigné",
+    "assignTeacher": "Assigner formateur",
+    "activate": "Activer",
+    "deactivate": "Désactiver",
+    "updating": "Mise à jour…",
+    "paid": "Payé",
+    "unpaid": "Non payé",
+    "notFound": "Cours introuvable.",
+    "sections": {
+      "info": "Informations",
+      "students": "Étudiants inscrits"
+    },
+    "empty": {
+      "students": "Aucun étudiant inscrit."
+    },
+    "success": {
+      "assigned": "Formateur assigné."
+    },
+    "errors": {
+      "load": "Impossible de charger le cours.",
+      "assign": "Erreur lors de l'assignation.",
+      "status": "Erreur lors de la mise à jour du statut."
+    }
+  },
   "admin": {
     "dashboard": {
       "title": "Tableau de bord administrateur",
@@ -1308,33 +1337,64 @@
       }
     }
   },
-"dashboardStudent": {
-  "title": "Espace étudiant",
-  "subtitle": "Tableau de bord académique",
-  "exportPdf": "📄 Télécharger le PDF",
-  "myCourses": "📚 Mes cours",
-  "myAssignments": "📝 Mes devoirs",
-  "classRanking": "🏆 Classement de la classe",
-  "noRanking": "Aucun classement disponible.",
-  "loadError": "Impossible de charger le tableau de bord étudiant.",
-  "assignments": {
-    "title": "📊 Devoirs",
-    "total": "Total",
-    "submitted": "Soumis",
-    "pending": "En attente",
-    "late": "En retard",
-    "completionRate": "Taux de complétion",
-    "excellent": "🏆 Excellent – Tous les devoirs soumis",
-    "academicRisk": "📉 Risque académique",
-    "riskLow": "Faible",
-    "riskMedium": "Moyen",
-    "riskHigh": "Élevé"
+  "dashboardStudent": {
+    "title": "Espace étudiant",
+    "subtitle": "Tableau de bord académique",
+    "exportPdf": "📄 Télécharger le PDF",
+    "myCourses": "📚 Mes cours",
+    "myAssignments": "📝 Mes devoirs",
+    "classRanking": "🏆 Classement de la classe",
+    "noRanking": "Aucun classement disponible.",
+    "loadError": "Impossible de charger le tableau de bord étudiant.",
+    "assignments": {
+      "title": "📊 Devoirs",
+      "total": "Total",
+      "submitted": "Soumis",
+      "pending": "En attente",
+      "late": "En retard",
+      "completionRate": "Taux de complétion",
+      "excellent": "🏆 Excellent – Tous les devoirs soumis",
+      "academicRisk": "📉 Risque académique",
+      "riskLow": "Faible",
+      "riskMedium": "Moyen",
+      "riskHigh": "Élevé"
+    },
+    "grades": {
+      "title": "📈 Évolution des notes",
+      "score": "Score"
+    },
+    "loadErrorNew": "Votre tableau de bord n’a pas pu être chargé. Rechargez la page dans un instant.",
+    "inscriptionPending": "Votre demande d’inscription est en cours de traitement. Vos cours et devoirs apparaîtront dès que l’administration vous aura affecté à une classe.",
+    "inscriptionRejected": "Votre demande d’inscription n’a pas été retenue. Contactez l’administration pour en savoir plus.",
+    "inscriptionCta": "Faire ma demande",
+    "inscriptionMissing": "Vous n’êtes pas encore inscrit à une formation. Déposez votre demande pour accéder à vos cours, devoirs et notes.",
+    "hello": "Bonjour {{name}}",
+    "subtitleNew": "Vos devoirs à rendre, vos cours et les annonces de votre classe.",
+    "kpi": {
+      "pending": "Devoirs à rendre",
+      "pendingHint": "sur {{count}} au total",
+      "late": "En retard",
+      "lateHint": "À rendre au plus vite",
+      "lateNone": "Aucun retard",
+      "courses": "Cours suivis",
+      "rate": "Devoirs rendus",
+      "rateHint": "{{count}} rendus"
+    },
+    "upcoming": {
+      "title": "Prochains devoirs",
+      "all": "Tous les devoirs",
+      "emptyTitle": "Rien à rendre pour l’instant",
+      "empty": "Les devoirs donnés par vos formateurs apparaîtront ici avec leur date limite."
+    },
+    "courses": {
+      "title": "Mes cours",
+      "emptyTitle": "Aucun cours",
+      "empty": "Vos cours s’afficheront ici une fois inscrit dans une classe."
+    },
+    "news": {
+      "title": "Annonces de la classe"
+    }
   },
-  "grades": {
-    "title": "📈 Évolution des notes",
-    "score": "Score"
-  }
-},
   "opportunitiesPage": {
     "backToList": "Back to opportunities",
     "notFound": "Opportunity not found.",
@@ -1421,7 +1481,6 @@
     "finalTextOpportunity": "Préparez votre candidature, renforcez votre profil et engagez-vous dans un parcours tourné vers l’excellence.",
     "finalTitleNews": "Restez connecté aux actualités qui font avancer votre avenir",
     "finalTextNews": "Suivez nos informations, découvrez nos initiatives et rejoignez une dynamique de formation ouverte sur le monde."
-
   },
   "assignmentsPage": {
     "title": "Mes devoirs",
@@ -1460,23 +1519,34 @@
       "courses": "Cours",
       "students": "Étudiants",
       "average": "Moyenne générale",
-      "revenue": "Revenus"
+      "revenue": "Revenus",
+      "averageHint": "sur 20, tous cours confondus"
     },
     "courses": {
       "title": "Mes cours",
       "empty": "Aucun cours trouvé.",
-      "meta": "{{count}} étudiants — Moyenne {{average}}"
+      "meta": "{{count}} étudiants — Moyenne {{average}}",
+      "metaNew": "{{count}} étudiants, moyenne {{average}}",
+      "emptyTitle": "Aucun cours attribué",
+      "emptyNew": "L’administration vous attribue vos cours. Ils apparaîtront ici."
     },
     "quickLesson": {
-      "title": "Publier une leçon rapide"
+      "title": "Publier une leçon rapide",
+      "titleNew": "Publier une leçon"
     },
     "chart": {
       "title": "Moyenne par cours 📈",
-      "averagePerCourse": "Moyenne par cours"
+      "averagePerCourse": "Moyenne par cours",
+      "titleNew": "Moyenne par cours",
+      "desc": "Notes sur 20",
+      "emptyTitle": "Pas encore de notes",
+      "empty": "Les moyennes s’afficheront dès les premières notes saisies."
     },
     "notifications": {
       "title": "Derniers devoirs rendus 🔔",
-      "empty": "Aucune notification."
+      "empty": "Aucune notification.",
+      "titleNew": "Devoirs rendus récemment",
+      "emptyNew": "Aucun devoir rendu pour le moment."
     },
     "fallback": {
       "untitled": "Sans titre",
@@ -1485,11 +1555,29 @@
       "justNow": "à l’instant"
     },
     "success": {
-      "lessonCreated": "Leçon créée avec succès"
+      "lessonCreated": "Leçon créée avec succès",
+      "lessonPublished": "Leçon publiée"
     },
     "errors": {
       "loadData": "Impossible de charger les données",
-      "createLesson": "Erreur lors de la création de la leçon"
+      "createLesson": "Erreur lors de la création de la leçon",
+      "publishLesson": "La leçon n’a pas pu être publiée."
+    },
+    "hello": "Bonjour {{name}}",
+    "subtitleNew": "Vos cours, les devoirs rendus par vos étudiants et leurs résultats."
+  },
+  "authLayout": {
+    "tagline": "Langues · Culture · Éducation",
+    "backToSite": "Retour au site",
+    "headline": "Un seul accès pour toute l’école.",
+    "lead": "Étudiants, formateurs et équipe administrative se connectent ici. Votre espace s’ouvre selon votre rôle.",
+    "roles": {
+      "student": "Étudiants",
+      "studentDesc": "Cours, devoirs, notes",
+      "teacher": "Formateurs",
+      "teacherDesc": "Classes, leçons, suivi",
+      "admin": "Administration",
+      "adminDesc": "Inscriptions, paiements"
     }
   }
 }

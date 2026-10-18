@@ -5,6 +5,21 @@
   --color-brand: #1F75BB;
   --color-brand-700: #155b94;
   --color-brand-800: #0d4c80;
+
+  /* Espaces connectés (connexion + tableaux de bord) */
+  --color-ink: #0E2A47;        /* bleu nuit : barre latérale, titres */
+  --color-ink-2: #17395C;
+  --color-millet: #E3A72F;     /* or du mil : l'accent "moisson", utilisé avec parcimonie */
+  --color-millet-soft: #FBF1DA;
+  --color-paper: #F4F7FA;      /* fond des espaces */
+  --color-line: #DCE4EC;
+  --color-mist: #5B6B7F;       /* texte secondaire */
+  --color-ok: #1F8A5B;
+  --color-warn: #B7791F;
+  --color-bad: #C2412D;
+
+  --font-display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  --font-ui: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 /* ——— Base ——— */
@@ -20,8 +35,52 @@
   select:focus,
   textarea:focus { @apply ring-2 ring-brand outline-none; }
 
+  /* Tailwind v4 colore les bordures avec la couleur du texte par défaut :
+     dans les espaces connectés, on revient à un gris clair. Les classes
+     border-* explicites (couche utilities) restent prioritaires. */
+  .app-ui, .app-ui *, .app-ui ::before, .app-ui ::after { border-color: var(--color-line); }
+
   /* Swiper : couleur du thème */
   :root { --swiper-theme-color: #1F75BB; }
+}
+
+/* ——— Espaces connectés ——— */
+@layer components {
+  .app-ui { font-family: var(--font-ui); color: var(--color-ink); }
+  .app-ui h1, .app-ui h2, .app-ui h3, .app-ui h4 { color: var(--color-ink); }
+  .font-display { font-family: var(--font-display); letter-spacing: -0.015em; }
+
+  /* Bande tissée : rangées d'or et de bleu, comme des épis alignés.
+     C'est la signature visuelle des espaces Harvest. */
+  .woven {
+    background-image:
+      repeating-linear-gradient(180deg,
+        var(--color-millet) 0 9px, transparent 9px 14px,
+        var(--color-brand) 14px 23px, transparent 23px 28px);
+  }
+  .woven-x {
+    background-image:
+      repeating-linear-gradient(90deg,
+        var(--color-millet) 0 18px, transparent 18px 24px,
+        var(--color-brand) 24px 42px, transparent 42px 48px);
+  }
+
+  .field {
+    @apply w-full rounded-xl border border-line bg-white px-4 py-3 text-[15px] text-ink placeholder:text-mist/70 transition;
+  }
+  .field:focus { @apply border-brand ring-4 ring-brand/15 outline-none; }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-ink px-5 py-3 text-[15px] font-semibold text-white transition hover:bg-ink-2 disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-white px-4 py-2.5 text-sm font-medium text-ink transition hover:border-ink/30 hover:bg-paper;
+  }
+  .focus-ring { @apply focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-millet/40; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-ui *, .app-ui *::before, .app-ui *::after { transition: none !important; animation: none !important; }
 }
 
 /* ——— Helpers réutilisables ——— */

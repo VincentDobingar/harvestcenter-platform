@@ -81,33 +81,33 @@
       "bannerAlt": "Harvest Center registration banner",
       "cta": "Submit an application"
     },
-  "training": {
-    "title": "Our courses",
-    "subtitle": "Progressive learning paths tailored to your pace: intensive, evening or weekend.",
-    "viewProgram": "View program →",
-    "items": {
-      "english": {
-        "title": "English",
-        "desc": "General / Business / TOEFL-IELTS Prep"
-      },
-      "chinese": {
-        "title": "Chinese (Mandarin)",
-        "desc": "Basics, conversation, professional use"
-      },
-      "spanish": {
-        "title": "Spanish",
-        "desc": "Beginner to advanced"
-      },
-      "french": {
-        "title": "French",
-        "desc": "Refresher courses, FLE"
-      },
-      "german": {
-        "title": "German",
-        "desc": "Discover or improve your German with a structured, practical, and accessible training program."
+    "training": {
+      "title": "Our courses",
+      "subtitle": "Progressive learning paths tailored to your pace: intensive, evening or weekend.",
+      "viewProgram": "View program →",
+      "items": {
+        "english": {
+          "title": "English",
+          "desc": "General / Business / TOEFL-IELTS Prep"
+        },
+        "chinese": {
+          "title": "Chinese (Mandarin)",
+          "desc": "Basics, conversation, professional use"
+        },
+        "spanish": {
+          "title": "Spanish",
+          "desc": "Beginner to advanced"
+        },
+        "french": {
+          "title": "French",
+          "desc": "Refresher courses, FLE"
+        },
+        "german": {
+          "title": "German",
+          "desc": "Discover or improve your German with a structured, practical, and accessible training program."
+        }
       }
-    }
-  },
+    },
     "why": {
       "title": "Why choose us?",
       "subtitle": "A practical teaching approach, small groups and real support all the way to success.",
@@ -190,7 +190,7 @@
         }
       }
     },
-      "gallery": {
+    "gallery": {
       "title": "In pictures",
       "subtitle": "Life at Harvest Center: classes, workshops and events.",
       "imageAlt": "Gallery {{index}}",
@@ -214,12 +214,12 @@
         "donaCorp": "Management, placement and business opportunity creation."
       }
     },
-"homeCta": {
-  "title": "Ready to get started?",
-  "subtitle": "Join our programs and progress quickly.",
-  "apply": "Apply",
-  "viewCourses": "View courses"
-}
+    "homeCta": {
+      "title": "Ready to get started?",
+      "subtitle": "Join our programs and progress quickly.",
+      "apply": "Apply",
+      "viewCourses": "View courses"
+    }
   },
   "contactPage": {
     "title": "Contact us",
@@ -231,7 +231,7 @@
       "email": "Email address",
       "subject": "Subject",
       "message": "Message",
-      "send": "Send"      
+      "send": "Send"
     },
     "badge": "Harvest Center",
     "subtitle": "Have a question, need information, or want to collaborate with us? Send us a message.",
@@ -433,598 +433,627 @@
       "academicLead": "Academic Coordinator"
     }
   },
-"footer": {
-  "tagline": "Empowering talent through languages and communication.",
-  "headOffice": "Head Office: N'Djamena - Chad",
-  "representation": "Representation: Sarh - Chad",
-  "location": "N'Djamena - Chad",
-  "emailLabel": "Email:",
-  "phoneLabel": "Phone:",
-  "rights": "All rights reserved.",
-  "links": {
-    "about": "About",
-    "courses": "Courses",
-    "why": "Why choose us?",
-    "scholarships": "Opportunities",
-    "contact": "Contact"
+  "footer": {
+    "tagline": "Empowering talent through languages and communication.",
+    "headOffice": "Head Office: N'Djamena - Chad",
+    "representation": "Representation: Sarh - Chad",
+    "location": "N'Djamena - Chad",
+    "emailLabel": "Email:",
+    "phoneLabel": "Phone:",
+    "rights": "All rights reserved.",
+    "links": {
+      "about": "About",
+      "courses": "Courses",
+      "why": "Why choose us?",
+      "scholarships": "Opportunities",
+      "contact": "Contact"
+    },
+    "logoAlt": "Harvest Center",
+    "navigationTitle": "Navigation",
+    "contactTitle": "Contact",
+    "socialTitle": "Social media",
+    "socialText": "Follow Harvest Center to discover new courses, opportunities, and news.",
+    "brandName": "Harvest Center",
+    "credit": "Created by Digital Business Services",
+    "social": {
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn",
+      "instagram": "Instagram",
+      "whatsapp": "WhatsApp"
+    }
   },
-  "logoAlt": "Harvest Center",
-  "navigationTitle": "Navigation",
-  "contactTitle": "Contact",
-  "socialTitle": "Social media",
-  "socialText": "Follow Harvest Center to discover new courses, opportunities, and news.",
-  "brandName": "Harvest Center",
-  "credit": "Created by Digital Business Services",
-  "social": {
-    "facebook": "Facebook",
-    "linkedin": "LinkedIn",
-    "instagram": "Instagram",
-    "whatsapp": "WhatsApp"
-  }
-},
-"languages": {
-  "french": "French",
-  "english": "English",
-  "chinese": "Chinese",
-  "spanish": "Spanish",
-  "german": "German"
-},
-"teamDirectoryPage": {
-  "title": "Our team",
-  "subtitle": "A passionate and committed team made up of professionals from diverse backgrounds, united by the same vision.",
-  "photoAlt": "Photo of {{name}}",
-  "languagesLabel": "Languages",
-  "roles": {
-    "coordinatorFounder": "COORDINATOR - FOUNDER",
-    "administrativeAssistant": "Administrative Assistant",
-    "marketingCommunication": "Marketing and Communication Officer",
-    "representativeSarh": "Representative Officer - Sarh",
-    "trainingAdministrativeOfficer": "Training & Administrative Officer",
-    "englishTeacher": "English Teacher",
-    "chineseTeacher": "Chinese Teacher",
-    "spanishTeacher": "Spanish Teacher",
-    "germanTeacher": "German Teacher",
-    "onlineEnglishTeacher": "Online English Teacher"
-  }
-},
-"scholarshipsPage": {
-  "title": "Scholarship opportunities",
-  "subtitle": "Discover funding opportunities available through our partners and sponsors.",
-  "searchPlaceholder": "Search for a scholarship (title, sponsor, country)",
-  "onlyOpen": "Show only open scholarships",
-  "newsTitle": "Scholarship updates",
-  "new": "New",
-  "view": "View",
-  "details": "Details",
-  "by": "By",
-  "open": "Open",
-  "closed": "Closed",
-  "deadlineLabel": "Deadline:",
-  "deadlineShort": "Deadline:",
-  "noResults": "No scholarship matches your search.",
-  "apply": "Apply",
-  "modal": {
-    "sponsor": "Sponsor",
-    "benefit": "Benefit",
-    "deadline": "Deadline",
-    "presentation": "Overview",
-    "eligibility": "Eligibility criteria",
-    "documents": "Required documents",
-    "selection": "Selection process",
-    "seeDetails": "See details"
-  }
-},
-"aboutPage": {
-  "presentation": {
-    "title": "About Harvest Center",
-    "subtitle": "Adapted learning paths and measurable results.",
-    "p1": "Based in N'Djamena, Harvest Center provides language training for students, professionals and organizations, with a competency-based approach.",
-    "p2": "Small groups, flexible schedules and targeted workshops help combine rapid progress with quality support.",
-    "imageAlt": "Harvest Center premises and learners in N'Djamena"
+  "languages": {
+    "french": "French",
+    "english": "English",
+    "chinese": "Chinese",
+    "spanish": "Spanish",
+    "german": "German"
   },
-  "coordinator": {
-    "title": "A word from the Coordinator",
-    "role": "COORDINATOR - FOUNDER",
-    "message": "Welcome to Harvest Center. Our mission is to guide every learner toward language excellence through flexible paths, active methods and concrete results.",
-    "cta": "Discover the team →",
-    "imageAlt": "Harvest Center Coordinator"
+  "teamDirectoryPage": {
+    "title": "Our team",
+    "subtitle": "A passionate and committed team made up of professionals from diverse backgrounds, united by the same vision.",
+    "photoAlt": "Photo of {{name}}",
+    "languagesLabel": "Languages",
+    "roles": {
+      "coordinatorFounder": "COORDINATOR - FOUNDER",
+      "administrativeAssistant": "Administrative Assistant",
+      "marketingCommunication": "Marketing and Communication Officer",
+      "representativeSarh": "Representative Officer - Sarh",
+      "trainingAdministrativeOfficer": "Training & Administrative Officer",
+      "englishTeacher": "English Teacher",
+      "chineseTeacher": "Chinese Teacher",
+      "spanishTeacher": "Spanish Teacher",
+      "germanTeacher": "German Teacher",
+      "onlineEnglishTeacher": "Online English Teacher"
+    }
   },
-  "vision": {
-    "title": "Our vision",
-    "subtitle": "To train autonomous communicators capable of evolving in demanding academic and professional environments.",
-    "items": {
-      "excellence": {
-        "title": "Measurable excellence",
-        "desc": "Clear goals, regular assessments and verifiable results."
-      },
-      "activePedagogy": {
-        "title": "Active pedagogy",
-        "desc": "Workshops, real-life situations and projects to anchor learning through practice."
-      },
-      "progress": {
-        "title": "Sustainable progress",
-        "desc": "Modular and flexible paths for solid, usable skills."
-      },
-      "impact": {
-        "title": "Openness & impact",
-        "desc": "Languages to open up to the world, grow professionally and serve one's community."
+  "scholarshipsPage": {
+    "title": "Scholarship opportunities",
+    "subtitle": "Discover funding opportunities available through our partners and sponsors.",
+    "searchPlaceholder": "Search for a scholarship (title, sponsor, country)",
+    "onlyOpen": "Show only open scholarships",
+    "newsTitle": "Scholarship updates",
+    "new": "New",
+    "view": "View",
+    "details": "Details",
+    "by": "By",
+    "open": "Open",
+    "closed": "Closed",
+    "deadlineLabel": "Deadline:",
+    "deadlineShort": "Deadline:",
+    "noResults": "No scholarship matches your search.",
+    "apply": "Apply",
+    "modal": {
+      "sponsor": "Sponsor",
+      "benefit": "Benefit",
+      "deadline": "Deadline",
+      "presentation": "Overview",
+      "eligibility": "Eligibility criteria",
+      "documents": "Required documents",
+      "selection": "Selection process",
+      "seeDetails": "See details"
+    }
+  },
+  "aboutPage": {
+    "presentation": {
+      "title": "About Harvest Center",
+      "subtitle": "Adapted learning paths and measurable results.",
+      "p1": "Based in N'Djamena, Harvest Center provides language training for students, professionals and organizations, with a competency-based approach.",
+      "p2": "Small groups, flexible schedules and targeted workshops help combine rapid progress with quality support.",
+      "imageAlt": "Harvest Center premises and learners in N'Djamena"
+    },
+    "coordinator": {
+      "title": "A word from the Coordinator",
+      "role": "COORDINATOR - FOUNDER",
+      "message": "Welcome to Harvest Center. Our mission is to guide every learner toward language excellence through flexible paths, active methods and concrete results.",
+      "cta": "Discover the team →",
+      "imageAlt": "Harvest Center Coordinator"
+    },
+    "vision": {
+      "title": "Our vision",
+      "subtitle": "To train autonomous communicators capable of evolving in demanding academic and professional environments.",
+      "items": {
+        "excellence": {
+          "title": "Measurable excellence",
+          "desc": "Clear goals, regular assessments and verifiable results."
+        },
+        "activePedagogy": {
+          "title": "Active pedagogy",
+          "desc": "Workshops, real-life situations and projects to anchor learning through practice."
+        },
+        "progress": {
+          "title": "Sustainable progress",
+          "desc": "Modular and flexible paths for solid, usable skills."
+        },
+        "impact": {
+          "title": "Openness & impact",
+          "desc": "Languages to open up to the world, grow professionally and serve one's community."
+        }
+      }
+    },
+    "services": {
+      "title": "Our services",
+      "subtitle": "Training programs tailored to academic and professional needs.",
+      "ctaApply": "Submit an application",
+      "ctaLearnMore": "View courses",
+      "items": {
+        "languages": {
+          "title": "Languages",
+          "desc": "Language programs tailored to academic, professional, and personal needs.",
+          "bullet1": "Courses for beginner, intermediate, and advanced learners",
+          "bullet2": "Programs in English, French, Chinese, and other languages",
+          "bullet3": "Practical communication-focused learning"
+        },
+        "schedule": {
+          "title": "Flexible schedule",
+          "desc": "Time slots designed to fit students, workers, and professionals.",
+          "bullet1": "Day, evening, and weekend classes",
+          "bullet2": "Schedules adapted to each learner’s pace",
+          "bullet3": "Learning rhythm built for steady progress"
+        },
+        "exams": {
+          "title": "Exam preparation",
+          "desc": "Focused support to succeed in academic assessments and language certifications.",
+          "bullet1": "Preparation for language tests and exams",
+          "bullet2": "Practice methods and mock sessions",
+          "bullet3": "Results-oriented academic support"
+        },
+        "smallGroups": {
+          "title": "Small groups",
+          "desc": "A more human, interactive, and effective learning environment.",
+          "bullet1": "Closer guidance from instructors",
+          "bullet2": "Active participation from every learner",
+          "bullet3": "Better trainer-learner interaction"
+        },
+        "immersion": {
+          "title": "Cultural immersion",
+          "desc": "An opening to languages through culture, practice, and interaction.",
+          "bullet1": "Discovery of cultural contexts",
+          "bullet2": "Practical and engaging learning",
+          "bullet3": "Improved speaking confidence"
+        },
+        "certificates": {
+          "title": "Certificates",
+          "desc": "Certificates recognizing the skills developed throughout the programs.",
+          "bullet1": "Recognition of completed training",
+          "bullet2": "Academic and professional value",
+          "bullet3": "Structured and trackable learning paths"
+        }
       }
     }
   },
-  "services": {
-    "title": "Our services",
-    "subtitle": "Training programs tailored to academic and professional needs.",
-    "ctaApply": "Submit an application",
-    "ctaLearnMore": "View courses",
-    "items": {
-      "languages": {
-        "title": "Languages",
-        "desc": "Language programs tailored to academic, professional, and personal needs.",
-        "bullet1": "Courses for beginner, intermediate, and advanced learners",
-        "bullet2": "Programs in English, French, Chinese, and other languages",
-        "bullet3": "Practical communication-focused learning"
-      },
-      "schedule": {
-        "title": "Flexible schedule",
-        "desc": "Time slots designed to fit students, workers, and professionals.",
-        "bullet1": "Day, evening, and weekend classes",
-        "bullet2": "Schedules adapted to each learner’s pace",
-        "bullet3": "Learning rhythm built for steady progress"
-      },
-      "exams": {
-        "title": "Exam preparation",
-        "desc": "Focused support to succeed in academic assessments and language certifications.",
-        "bullet1": "Preparation for language tests and exams",
-        "bullet2": "Practice methods and mock sessions",
-        "bullet3": "Results-oriented academic support"
-      },
-      "smallGroups": {
-        "title": "Small groups",
-        "desc": "A more human, interactive, and effective learning environment.",
-        "bullet1": "Closer guidance from instructors",
-        "bullet2": "Active participation from every learner",
-        "bullet3": "Better trainer-learner interaction"
-      },
-      "immersion": {
-        "title": "Cultural immersion",
-        "desc": "An opening to languages through culture, practice, and interaction.",
-        "bullet1": "Discovery of cultural contexts",
-        "bullet2": "Practical and engaging learning",
-        "bullet3": "Improved speaking confidence"
-      },
-      "certificates": {
-        "title": "Certificates",
-        "desc": "Certificates recognizing the skills developed throughout the programs.",
-        "bullet1": "Recognition of completed training",
-        "bullet2": "Academic and professional value",
-        "bullet3": "Structured and trackable learning paths"
-      }
+  "galleryPage": {
+    "title": "Gallery",
+    "subtitle": "A few moments from our classes, workshops and activities.",
+    "searchPlaceholder": "Search (e.g. English, workshop, HSK...)",
+    "countLabel": "image(s)",
+    "imageAlt": "Image {{index}}"
+  },
+  "mediaManagerPage": {
+    "title": "Media manager",
+    "file": "File",
+    "selected": "Selected",
+    "folder": "Folder",
+    "tags": "Tags (comma separated)",
+    "upload": "Upload",
+    "uploading": "Uploading…",
+    "reset": "Reset",
+    "refresh": "Refresh list",
+    "filterFolder": "Filter by folder",
+    "filterTag": "Filter by tag",
+    "applyFilters": "Apply filters",
+    "folderLabel": "Folder:",
+    "tagsLabel": "Tags:",
+    "open": "Open",
+    "copyUrl": "Copy URL",
+    "delete": "Delete",
+    "noMedia": "No media.",
+    "confirmDelete": "Delete this file?",
+    "success": {
+      "uploaded": "File uploaded.",
+      "uploadFinished": "Upload finished.",
+      "deleted": "Deleted.",
+      "urlCopied": "URL copied"
+    },
+    "errors": {
+      "load": "Unable to load media list.",
+      "chooseFile": "Choose a file.",
+      "upload": "Upload error",
+      "delete": "Unable to delete.",
+      "copyUrl": "Unable to copy URL."
     }
-  }
-},
-"galleryPage": {
-  "title": "Gallery",
-  "subtitle": "A few moments from our classes, workshops and activities.",
-  "searchPlaceholder": "Search (e.g. English, workshop, HSK...)",
-  "countLabel": "image(s)",
-  "imageAlt": "Image {{index}}"
-},
-"mediaManagerPage": {
-  "title": "Media manager",
-  "file": "File",
-  "selected": "Selected",
-  "folder": "Folder",
-  "tags": "Tags (comma separated)",
-  "upload": "Upload",
-  "uploading": "Uploading…",
-  "reset": "Reset",
-  "refresh": "Refresh list",
-  "filterFolder": "Filter by folder",
-  "filterTag": "Filter by tag",
-  "applyFilters": "Apply filters",
-  "folderLabel": "Folder:",
-  "tagsLabel": "Tags:",
-  "open": "Open",
-  "copyUrl": "Copy URL",
-  "delete": "Delete",
-  "noMedia": "No media.",
-  "confirmDelete": "Delete this file?",
-  "success": {
-    "uploaded": "File uploaded.",
-    "uploadFinished": "Upload finished.",
-    "deleted": "Deleted.",
-    "urlCopied": "URL copied"
   },
-  "errors": {
-    "load": "Unable to load media list.",
-    "chooseFile": "Choose a file.",
-    "upload": "Upload error",
-    "delete": "Unable to delete.",
-    "copyUrl": "Unable to copy URL."
-  }
-},
-"newsEditorPage": {
-  "title": "News manager",
-  "create": "Create",
-  "refresh": "Refresh",
-  "delete": "Delete",
-  "published": "Published",
-  "draft": "Draft",
-  "noNews": "No news.",
-  "confirmDelete": "Delete this news item?",
-  "fields": {
-    "title": "Title",
-    "content": "Content"
+  "newsEditorPage": {
+    "title": "News manager",
+    "create": "Create",
+    "refresh": "Refresh",
+    "delete": "Delete",
+    "published": "Published",
+    "draft": "Draft",
+    "noNews": "No news.",
+    "confirmDelete": "Delete this news item?",
+    "fields": {
+      "title": "Title",
+      "content": "Content"
+    },
+    "success": {
+      "created": "News created.",
+      "deleted": "Deleted."
+    },
+    "errors": {
+      "load": "Unable to load news.",
+      "required": "Title and content are required.",
+      "create": "Error while creating.",
+      "delete": "Error while deleting."
+    }
   },
-  "success": {
-    "created": "News created.",
-    "deleted": "Deleted."
+  "superAdminPage": {
+    "title": "SuperAdmin Dashboard",
+    "accessDenied": "🚫 Access denied - SuperAdmin only",
+    "newNews": "New News",
+    "mediaRecent": "Recent media",
+    "noMedia": "No media found.",
+    "news": "News",
+    "users": "Users",
+    "searchNews": "Search news...",
+    "searchUsers": "Search user...",
+    "active": "Active",
+    "inactive": "Inactive",
+    "noNews": "No news. Create one!",
+    "noUsers": "No users found",
+    "confirmDeleteNews": "Delete this news item?",
+    "confirmDeleteUser": "Delete this user?",
+    "stats": {
+      "totalUsers": "Total users",
+      "students": "Students",
+      "revenue": "Revenue"
+    },
+    "table": {
+      "title": "Title",
+      "status": "Status",
+      "date": "Date",
+      "actions": "Actions"
+    },
+    "userTable": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "actions": "Actions"
+    },
+    "newsForm": {
+      "title": "News title",
+      "content": "Content (HTML allowed)",
+      "excerpt": "Excerpt (optional)",
+      "publishNow": "Publish immediately",
+      "create": "Create News"
+    },
+    "errors": {
+      "deleteNews": "Delete error",
+      "deleteUser": "Delete error",
+      "createNews": "News creation error"
+    }
   },
-  "errors": {
-    "load": "Unable to load news.",
-    "required": "Title and content are required.",
-    "create": "Error while creating.",
-    "delete": "Error while deleting."
-  }
-},
-"superAdminPage": {
-  "title": "SuperAdmin Dashboard",
-  "accessDenied": "🚫 Access denied - SuperAdmin only",
-  "newNews": "New News",
-  "mediaRecent": "Recent media",
-  "noMedia": "No media found.",
-  "news": "News",
-  "users": "Users",
-  "searchNews": "Search news...",
-  "searchUsers": "Search user...",
-  "active": "Active",
-  "inactive": "Inactive",
-  "noNews": "No news. Create one!",
-  "noUsers": "No users found",
-  "confirmDeleteNews": "Delete this news item?",
-  "confirmDeleteUser": "Delete this user?",
-  "stats": {
-    "totalUsers": "Total users",
-    "students": "Students",
-    "revenue": "Revenue"
+  "forbiddenPage": {
+    "message": "You do not have the required permissions."
   },
-  "table": {
-    "title": "Title",
+  "inscriptionPage": {
+    "title": "Registration request",
+    "confirm": "Do you confirm your registration?",
+    "success": "Request sent. Awaiting admin validation.",
+    "fields": {
+      "languageLevel": "Language level (e.g. Beginner, Intermediate, Advanced)",
+      "preferredSchedule": "Preferred schedule",
+      "chooseFormation": "Choose a course",
+      "loadingLevels": "Loading levels...",
+      "chooseLevel": "Choose a level",
+      "loadingSlots": "Loading time slots...",
+      "chooseSlot": "Choose a time slot",
+      "chooseGender": "Select gender",
+      "male": "Male",
+      "female": "Female",
+      "lastName": "Last name",
+      "firstName": "First name",
+      "email": "Email",
+      "phone": "Phone",
+      "whatsapp": "WhatsApp",
+      "birthPlace": "Place of birth",
+      "neighborhood": "Neighborhood",
+      "district": "District",
+      "acceptFees": "I accept the non-refundable registration fees.",
+      "submit": "Submit request",
+      "submitting": "Sending..."
+    },
+    "errors": {
+      "loadFormations": "Unable to load courses.",
+      "loadLevels": "Unable to load levels.",
+      "loadSlots": "Unable to load time slots.",
+      "required": "All required fields must be completed.",
+      "invalidBirthDate": "Invalid birth date.",
+      "minAge": "Minimum required age: 10 years.",
+      "invalidPhone": "Invalid phone number.",
+      "invalidWhatsapp": "Invalid WhatsApp number.",
+      "acceptFees": "You must accept the registration fees.",
+      "loginRequired": "Please sign in.",
+      "studentsOnly": "This page is reserved for students.",
+      "submit": "Error while sending the request."
+    }
+  },
+  "myCoursesPage": {
+    "title": "My courses",
+    "course": "Course",
+    "empty": "You are not enrolled in any course yet.",
+    "errors": {
+      "load": "Unable to load your courses"
+    }
+  },
+  "myPaymentsPage": {
+    "title": "My payments",
+    "payment": "Payment",
     "status": "Status",
-    "date": "Date",
-    "actions": "Actions"
+    "empty": "No payment found.",
+    "errors": {
+      "load": "Unable to load payments"
+    }
   },
-  "userTable": {
-    "name": "Name",
-    "email": "Email",
-    "role": "Role",
-    "actions": "Actions"
+  "profilePage": {
+    "title": "My profile",
+    "avatarAlt": "Avatar",
+    "noAvatar": "No",
+    "changePhoto": "Change photo",
+    "photoHint": "Recommended format 400×400, max 2MB",
+    "loggedInAs": "Logged in as",
+    "fields": {
+      "phone": "Phone",
+      "city": "City",
+      "languages": "Languages (comma separated)",
+      "goals": "Goals",
+      "bio": "Bio",
+      "save": "Save",
+      "saving": "Saving…"
+    },
+    "success": {
+      "created": "Profile created successfully",
+      "saved": "Profile saved"
+    },
+    "errors": {
+      "sessionExpired": "Session expired — please sign in again.",
+      "routeMissing": "Route not found (404) — check that the API exposes PUT /api/profiles/me",
+      "save": "Error while saving"
+    }
   },
-  "newsForm": {
-    "title": "News title",
-    "content": "Content (HTML allowed)",
-    "excerpt": "Excerpt (optional)",
-    "publishNow": "Publish immediately",
-    "create": "Create News"
+  "trainings": {
+    "title": "Trainings"
   },
-  "errors": {
-    "deleteNews": "Delete error",
-    "deleteUser": "Delete error",
-    "createNews": "News creation error"
-  }
-},
-"forbiddenPage": {
-  "message": "You do not have the required permissions."
-},
-"inscriptionPage": {
-  "title": "Registration request",
-  "confirm": "Do you confirm your registration?",
-  "success": "Request sent. Awaiting admin validation.",
-  "fields": {
-    "languageLevel": "Language level (e.g. Beginner, Intermediate, Advanced)",
-    "preferredSchedule": "Preferred schedule",
-    "chooseFormation": "Choose a course",
-    "loadingLevels": "Loading levels...",
-    "chooseLevel": "Choose a level",
-    "loadingSlots": "Loading time slots...",
-    "chooseSlot": "Choose a time slot",
-    "chooseGender": "Select gender",
-    "male": "Male",
-    "female": "Female",
-    "lastName": "Last name",
-    "firstName": "First name",
-    "email": "Email",
-    "phone": "Phone",
-    "whatsapp": "WhatsApp",
-    "birthPlace": "Place of birth",
-    "neighborhood": "Neighborhood",
-    "district": "District",
-    "acceptFees": "I accept the non-refundable registration fees.",
-    "submit": "Submit request",
-    "submitting": "Sending..."
+  "timetablePage": {
+    "title": "Timetable",
+    "description": "Timetable display — add your timetable API here.",
+    "soonTitle": "The timetable is coming here soon",
+    "soon": "Your class times will be shown on this page. Until then, check the schedule posted at the centre."
   },
-  "errors": {
-    "loadFormations": "Unable to load courses.",
-    "loadLevels": "Unable to load levels.",
-    "loadSlots": "Unable to load time slots.",
-    "required": "All required fields must be completed.",
-    "invalidBirthDate": "Invalid birth date.",
-    "minAge": "Minimum required age: 10 years.",
-    "invalidPhone": "Invalid phone number.",
-    "invalidWhatsapp": "Invalid WhatsApp number.",
-    "acceptFees": "You must accept the registration fees.",
-    "loginRequired": "Please sign in.",
-    "studentsOnly": "This page is reserved for students.",
-    "submit": "Error while sending the request."
-  }
-},
-"myCoursesPage": {
-  "title": "My courses",
-  "course": "Course",
-  "empty": "You are not enrolled in any course yet.",
-  "errors": {
-    "load": "Unable to load your courses"
-  }
-},
-"myPaymentsPage": {
-  "title": "My payments",
-  "payment": "Payment",
-  "status": "Status",
-  "empty": "No payment found.",
-  "errors": {
-    "load": "Unable to load payments"
-  }
-},
-"profilePage": {
-  "title": "My profile",
-  "avatarAlt": "Avatar",
-  "noAvatar": "No",
-  "changePhoto": "Change photo",
-  "photoHint": "Recommended format 400×400, max 2MB",
-  "loggedInAs": "Logged in as",
-  "fields": {
-    "phone": "Phone",
-    "city": "City",
-    "languages": "Languages (comma separated)",
-    "goals": "Goals",
-    "bio": "Bio",
-    "save": "Save",
-    "saving": "Saving…"
+  "notesPage": {
+    "title": "Grades",
+    "description": "Grades page — implement according to your model (for example: grades by course).",
+    "soonTitle": "Grades are coming here soon",
+    "soon": "Your grades per course will be available on this page. Until then, ask your teacher."
   },
-  "success": {
-    "created": "Profile created successfully",
-    "saved": "Profile saved"
+  "notFoundPage": {
+    "message": "404 - Page not found"
   },
-  "errors": {
-    "sessionExpired": "Session expired — please sign in again.",
-    "routeMissing": "Route not found (404) — check that the API exposes PUT /api/profiles/me",
-    "save": "Error while saving"
-  }
-},
-"trainings": {
-  "title": "Trainings"
-},
-"timetablePage": {
-  "title": "Timetable",
-  "description": "Timetable display — add your timetable API here."
-},
-"notesPage": {
-  "title": "Grades",
-  "description": "Grades page — implement according to your model (for example: grades by course)."
-},
-"notFoundPage": {
-  "message": "404 - Page not found"
-},
-"unauthorizedPage": {
-  "title": "Access denied 🚫",
-  "withRole": "Your current role (“{{role}}”) does not allow access to this page.",
-  "withoutRole": "You do not have permission to access this page.",
-  "home": "Back to home",
-  "logout": "Logout",
-  "login": "Sign in"
-},
-"sidebar": {
-  "dashboard": "Dashboard",
-  "profile": "Profile",
-  "timetable": "Timetable",
-  "notes": "Grades",
-  "myCourses": "My courses",
-  "payments": "Payments",
-  "assignments": "Assignments",
-  "user": "User"
-},
-"mediaGallery": {
-  "title": "Latest media",
-  "empty": "No media available.",
-  "imageAlt": "Media"
-},
-"dashboardLayout": {
-  "title": "Dashboard",
-  "avatarAlt": "Avatar",
-  "user": "User",
-  "links": {
-    "dashboard": "Dashboard",
-    "profile": "My profile",
-    "myCourses": "My courses",
-    "payments": "Payments",
-    "myClasses": "My classes",
-    "lessons": "Lessons",
-    "students": "Students",
-    "assignments": "Assignments",
-    "timetables": "Timetables",
-    "registrations": "Registrations"
-  }
-},
-"courseCard": {
-  "coverAlt": "Course cover",
-  "open": "Open",
-  "progress": "{{value}}%"
-},
-"langSelector": {
-  "ariaLabel": "Language selector"
-},
-"scholarshipPromo": {
-  "sectionTitle": "Promotion",
-  "sectionSubtitle": "Open calls for applications and scholarships.",
-  "title": "Réussir Bé Gou Scholarship",
-  "sponsor": "Harvest Center",
-  "description": "Call for applications for a language training scholarship. Flexible programs, mentoring and follow-up.",
-  "location": "N'Djamena",
-  "quota": "Limited seats",
-  "deadline": "Deadline",
-  "applyNow": "Apply now",
-  "fillHere": "Fill here",
-  "lastDay": "Last day",
-  "daysLeft": "Only {{count}} day(s) left",
-  "footerText": "Online applications. Selection based on file review and motivation.",
-  "formTitle": "Application form"
-},
-"confirmModal": {
-  "title": "Confirm",
-  "message": "Are you sure?",
-  "confirm": "Confirm",
-  "cancel": "Cancel",
-  "wait": "Please wait…"
-},
-"dashboardSidebar": {
-  "dashboard": "Dashboard",
-  "studentSpace": "Student Area",
-  "teacherSpace": "Teacher Area",
-  "home": "Home",
-  "profile": "Profile",
-  "myCourses": "My Courses",
-  "payments": "Payments",
-  "assignments": "Assignments",
-  "registrationRequest": "Registration Request",
-  "notes": "Grades",
-  "timetable": "Timetable"
-},
-"accountPage": {
-  "titleLogin": "Login",
-  "titleRegister": "Create an account",
-  "fields": {
-    "firstName": "First name",
-    "lastName": "Last name",
-    "email": "Email",
-    "password": "Password",
-    "show": "Show",
-    "hide": "Hide"
-  },
-  "roles": {
-    "student": "Student",
-    "teacher": "Teacher",
-    "admin": "Administrator"
-  },
-  "actions": {
-    "login": "Sign in",
-    "createAccount": "Create my account",
-    "loggingIn": "Signing in…",
-    "creating": "Creating…"
-  },
-  "switch": {
-    "noAccount": "No account?",
-    "create": "Create an account",
-    "alreadyRegistered": "Already registered?",
+  "unauthorizedPage": {
+    "title": "Access denied 🚫",
+    "withRole": "Your current role (“{{role}}”) does not allow access to this page.",
+    "withoutRole": "You do not have permission to access this page.",
+    "home": "Back to home",
+    "logout": "Logout",
     "login": "Sign in"
   },
-  "success": {
-    "login": "Login successful!",
-    "register": "Registration successful. Waiting for approval."
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "timetable": "Timetable",
+    "notes": "Grades",
+    "myCourses": "My courses",
+    "payments": "Payments",
+    "assignments": "Assignments",
+    "user": "User"
   },
-  "errors": {
-    "required": "Please fill in all fields.",
-    "invalidSession": "Invalid session.",
-    "network": "Network issue or browser extension problem.",
-    "auth": "Authentication error"
-  }
-},
-"adminClassDetail": {
-  "class": "Class",
-  "course": "Course",
-  "to": "to",
-  "createdAt": "Created on",
-  "assignTeacher": "Assign teacher",
-  "notFound": "Class not found.",
-  "sections": {
-    "info": "Info",
-    "courses": "Attached courses",
-    "timetables": "Timetables"
+  "mediaGallery": {
+    "title": "Latest media",
+    "empty": "No media available.",
+    "imageAlt": "Media"
   },
-  "empty": {
-    "courses": "No attached course.",
-    "timetables": "No timetable recorded."
+  "dashboardLayout": {
+    "title": "Dashboard",
+    "avatarAlt": "Avatar",
+    "user": "User",
+    "links": {
+      "dashboard": "Dashboard",
+      "profile": "My profile",
+      "myCourses": "My courses",
+      "payments": "Payments",
+      "myClasses": "My classes",
+      "lessons": "Lessons",
+      "students": "Students",
+      "assignments": "Assignments",
+      "timetables": "Timetables",
+      "registrations": "Registrations"
+    }
   },
-  "success": {
-    "assigned": "Teacher assigned."
+  "courseCard": {
+    "coverAlt": "Course cover",
+    "open": "Open",
+    "progress": "{{value}}%"
   },
-  "errors": {
-    "load": "Unable to load class.",
-    "assign": "Error while assigning."
-  }
-},
-"adminClassesPage": {
-  "title": "Class management",
-  "class": "Class",
-  "course": "Course",
-  "courses": "Courses",
-  "created": "Created",
-  "assignTeacher": "Assign teacher",
-  "empty": "No class found.",
-  "success": {
-    "assigned": "Course assigned."
+  "langSelector": {
+    "ariaLabel": "Language selector"
   },
-  "errors": {
-    "load": "Unable to load classes.",
-    "assign": "Error while assigning."
-  }
-},
-"adminCourseAssign": {
-  "title": "Assign a teacher",
-  "course": "Course",
-  "loading": "Loading teachers…",
-  "chooseTeacher": "Choose a teacher",
-  "select": "-- Select --",
-  "helper": "If the list is empty, check that some users have the teacher role.",
-  "assign": "Assign",
-  "assigning": "Assigning…",
-  "errors": {
-    "load": "Unable to load teachers list.",
-    "choose": "Choose a teacher.",
-    "assign": "Error while assigning."
-  }
-},
-"adminCourseDetail": {
-  "course": "Course",
-  "duration": "Duration",
-  "level": "Level",
-  "status": "Status",
-  "teacher": "Teacher",
-  "active": "Active",
-  "inactive": "Inactive",
-  "noTeacher": "No teacher assigned",
-  "assignTeacher": "Assign teacher",
-  "activate": "Activate",
-  "deactivate": "Deactivate",
-  "updating": "Updating…",
-  "paid": "Paid",
-  "unpaid": "Unpaid",
-  "notFound": "Course not found.",
-  "sections": {
-    "info": "Information",
-    "students": "Enrolled students"
+  "scholarshipPromo": {
+    "sectionTitle": "Promotion",
+    "sectionSubtitle": "Open calls for applications and scholarships.",
+    "title": "Réussir Bé Gou Scholarship",
+    "sponsor": "Harvest Center",
+    "description": "Call for applications for a language training scholarship. Flexible programs, mentoring and follow-up.",
+    "location": "N'Djamena",
+    "quota": "Limited seats",
+    "deadline": "Deadline",
+    "applyNow": "Apply now",
+    "fillHere": "Fill here",
+    "lastDay": "Last day",
+    "daysLeft": "Only {{count}} day(s) left",
+    "footerText": "Online applications. Selection based on file review and motivation.",
+    "formTitle": "Application form"
   },
-  "empty": {
-    "students": "No student enrolled."
+  "confirmModal": {
+    "title": "Confirm",
+    "message": "Are you sure?",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "wait": "Please wait…"
   },
-  "success": {
-    "assigned": "Teacher assigned."
+  "dashboardSidebar": {
+    "dashboard": "Dashboard",
+    "studentSpace": "Student Area",
+    "teacherSpace": "Teacher Area",
+    "home": "Home",
+    "profile": "Profile",
+    "myCourses": "My Courses",
+    "payments": "Payments",
+    "assignments": "Assignments",
+    "registrationRequest": "Registration Request",
+    "notes": "Grades",
+    "timetable": "Timetable"
   },
-  "errors": {
-    "load": "Unable to load course.",
-    "assign": "Error while assigning.",
-    "status": "Error while updating status."
-  }
-},
+  "accountPage": {
+    "titleLogin": "Login",
+    "titleRegister": "Create an account",
+    "fields": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "password": "Password",
+      "show": "Show",
+      "hide": "Hide",
+      "hidePassword": "Hide password",
+      "showPassword": "Show password"
+    },
+    "roles": {
+      "student": "Student",
+      "teacher": "Teacher",
+      "admin": "Administrator"
+    },
+    "actions": {
+      "login": "Sign in",
+      "createAccount": "Create my account",
+      "loggingIn": "Signing in…",
+      "creating": "Creating…",
+      "creatingAccount": "Creating account…"
+    },
+    "switch": {
+      "noAccount": "No account?",
+      "create": "Create an account",
+      "alreadyRegistered": "Already registered?",
+      "login": "Sign in"
+    },
+    "success": {
+      "login": "Login successful!",
+      "register": "Registration successful. Waiting for approval.",
+      "registered": "Account created. You can now sign in."
+    },
+    "errors": {
+      "required": "Please fill in all fields.",
+      "invalidSession": "Invalid session.",
+      "network": "Network issue or browser extension problem.",
+      "auth": "Authentication error",
+      "networkNew": "The server is not responding. Check your connection and try again.",
+      "invalid": "Incorrect email or password.",
+      "emailTaken": "An account already exists with this email. Sign in instead.",
+      "failed": "Sign-in failed."
+    },
+    "heading": {
+      "login": "Sign in",
+      "register": "Create a student account"
+    },
+    "sub": {
+      "login": "Enter the email and password of your Harvest Center account.",
+      "register": "Teacher and staff accounts are created by the office."
+    },
+    "tabs": {
+      "label": "Choose an action",
+      "login": "Sign in",
+      "register": "Create an account"
+    },
+    "forgot": {
+      "toggle": "Forgot your password?",
+      "body": "The office resets your password. Write to us with your account email:"
+    }
+  },
+  "adminClassDetail": {
+    "class": "Class",
+    "course": "Course",
+    "to": "to",
+    "createdAt": "Created on",
+    "assignTeacher": "Assign teacher",
+    "notFound": "Class not found.",
+    "sections": {
+      "info": "Info",
+      "courses": "Attached courses",
+      "timetables": "Timetables"
+    },
+    "empty": {
+      "courses": "No attached course.",
+      "timetables": "No timetable recorded."
+    },
+    "success": {
+      "assigned": "Teacher assigned."
+    },
+    "errors": {
+      "load": "Unable to load class.",
+      "assign": "Error while assigning."
+    }
+  },
+  "adminClassesPage": {
+    "title": "Class management",
+    "class": "Class",
+    "course": "Course",
+    "courses": "Courses",
+    "created": "Created",
+    "assignTeacher": "Assign teacher",
+    "empty": "No class found.",
+    "success": {
+      "assigned": "Course assigned."
+    },
+    "errors": {
+      "load": "Unable to load classes.",
+      "assign": "Error while assigning."
+    }
+  },
+  "adminCourseAssign": {
+    "title": "Assign a teacher",
+    "course": "Course",
+    "loading": "Loading teachers…",
+    "chooseTeacher": "Choose a teacher",
+    "select": "-- Select --",
+    "helper": "If the list is empty, check that some users have the teacher role.",
+    "assign": "Assign",
+    "assigning": "Assigning…",
+    "errors": {
+      "load": "Unable to load teachers list.",
+      "choose": "Choose a teacher.",
+      "assign": "Error while assigning."
+    }
+  },
+  "adminCourseDetail": {
+    "course": "Course",
+    "duration": "Duration",
+    "level": "Level",
+    "status": "Status",
+    "teacher": "Teacher",
+    "active": "Active",
+    "inactive": "Inactive",
+    "noTeacher": "No teacher assigned",
+    "assignTeacher": "Assign teacher",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "updating": "Updating…",
+    "paid": "Paid",
+    "unpaid": "Unpaid",
+    "notFound": "Course not found.",
+    "sections": {
+      "info": "Information",
+      "students": "Enrolled students"
+    },
+    "empty": {
+      "students": "No student enrolled."
+    },
+    "success": {
+      "assigned": "Teacher assigned."
+    },
+    "errors": {
+      "load": "Unable to load course.",
+      "assign": "Error while assigning.",
+      "status": "Error while updating status."
+    }
+  },
   "admin": {
     "dashboard": {
       "title": "Admin dashboard",
@@ -1308,33 +1337,64 @@
       }
     }
   },
-"dashboardStudent": {
-  "title": "Student Area",
-  "subtitle": "Academic dashboard",
-  "exportPdf": "📄 Download PDF",
-  "myCourses": "📚 My Courses",
-  "myAssignments": "📝 My Assignments",
-  "classRanking": "🏆 Class Ranking",
-  "noRanking": "No ranking available.",
-  "loadError": "Unable to load the student dashboard.",
-  "assignments": {
-    "title": "📊 Assignments",
-    "total": "Total",
-    "submitted": "Submitted",
-    "pending": "Pending",
-    "late": "Late",
-    "completionRate": "Completion rate",
-    "excellent": "🏆 Excellent – All assignments submitted",
-    "academicRisk": "📉 Academic risk",
-    "riskLow": "Low",
-    "riskMedium": "Medium",
-    "riskHigh": "High"
+  "dashboardStudent": {
+    "title": "Student Area",
+    "subtitle": "Academic dashboard",
+    "exportPdf": "📄 Download PDF",
+    "myCourses": "📚 My Courses",
+    "myAssignments": "📝 My Assignments",
+    "classRanking": "🏆 Class Ranking",
+    "noRanking": "No ranking available.",
+    "loadError": "Unable to load the student dashboard.",
+    "assignments": {
+      "title": "📊 Assignments",
+      "total": "Total",
+      "submitted": "Submitted",
+      "pending": "Pending",
+      "late": "Late",
+      "completionRate": "Completion rate",
+      "excellent": "🏆 Excellent – All assignments submitted",
+      "academicRisk": "📉 Academic risk",
+      "riskLow": "Low",
+      "riskMedium": "Medium",
+      "riskHigh": "High"
+    },
+    "grades": {
+      "title": "📈 Grade Progress",
+      "score": "Score"
+    },
+    "loadErrorNew": "Your dashboard could not be loaded. Reload the page in a moment.",
+    "inscriptionPending": "Your registration request is being processed. Your courses and assignments will appear once the office assigns you to a class.",
+    "inscriptionRejected": "Your registration request was not accepted. Contact the office to find out more.",
+    "inscriptionCta": "Submit my request",
+    "inscriptionMissing": "You are not enrolled in a programme yet. Submit your request to access your courses, assignments and grades.",
+    "hello": "Hello {{name}}",
+    "subtitleNew": "Your assignments due, your courses and your class announcements.",
+    "kpi": {
+      "pending": "Assignments due",
+      "pendingHint": "out of {{count}} in total",
+      "late": "Overdue",
+      "lateHint": "Hand in as soon as possible",
+      "lateNone": "Nothing overdue",
+      "courses": "Courses",
+      "rate": "Handed in",
+      "rateHint": "{{count}} handed in"
+    },
+    "upcoming": {
+      "title": "Upcoming assignments",
+      "all": "All assignments",
+      "emptyTitle": "Nothing due right now",
+      "empty": "Assignments from your teachers will appear here with their due date."
+    },
+    "courses": {
+      "title": "My courses",
+      "emptyTitle": "No courses",
+      "empty": "Your courses will appear here once you are placed in a class."
+    },
+    "news": {
+      "title": "Class announcements"
+    }
   },
-  "grades": {
-    "title": "📈 Grade Progress",
-    "score": "Score"
-  }
-},
   "opportunitiesPage": {
     "backToList": "Retour aux opportunités",
     "notFound": "Opportunité introuvable.",
@@ -1459,23 +1519,34 @@
       "courses": "Courses",
       "students": "Students",
       "average": "Overall average",
-      "revenue": "Revenue"
+      "revenue": "Revenue",
+      "averageHint": "out of 20, all courses"
     },
     "courses": {
       "title": "My courses",
       "empty": "No courses found.",
-      "meta": "{{count}} students — Average {{average}}"
+      "meta": "{{count}} students — Average {{average}}",
+      "metaNew": "{{count}} students, average {{average}}",
+      "emptyTitle": "No courses assigned",
+      "emptyNew": "The office assigns your courses. They will appear here."
     },
     "quickLesson": {
-      "title": "Publish a quick lesson"
+      "title": "Publish a quick lesson",
+      "titleNew": "Publish a lesson"
     },
     "chart": {
       "title": "Average by course 📈",
-      "averagePerCourse": "Average by course"
+      "averagePerCourse": "Average by course",
+      "titleNew": "Average per course",
+      "desc": "Grades out of 20",
+      "emptyTitle": "No grades yet",
+      "empty": "Averages will show once the first grades are entered."
     },
     "notifications": {
       "title": "Latest submitted assignments 🔔",
-      "empty": "No notifications."
+      "empty": "No notifications.",
+      "titleNew": "Recently handed in",
+      "emptyNew": "Nothing handed in yet."
     },
     "fallback": {
       "untitled": "Untitled",
@@ -1484,12 +1555,29 @@
       "justNow": "just now"
     },
     "success": {
-      "lessonCreated": "Lesson created successfully"
+      "lessonCreated": "Lesson created successfully",
+      "lessonPublished": "Lesson published"
     },
     "errors": {
       "loadData": "Unable to load data",
-      "createLesson": "Error while creating the lesson"
+      "createLesson": "Error while creating the lesson",
+      "publishLesson": "The lesson could not be published."
+    },
+    "hello": "Hello {{name}}",
+    "subtitleNew": "Your courses, the work your students hand in and their results."
+  },
+  "authLayout": {
+    "tagline": "Language · Culture · Education",
+    "backToSite": "Back to the website",
+    "headline": "One sign-in for the whole school.",
+    "lead": "Students, teachers and staff sign in here. Your space opens according to your role.",
+    "roles": {
+      "student": "Students",
+      "studentDesc": "Courses, assignments, grades",
+      "teacher": "Teachers",
+      "teacherDesc": "Classes, lessons, follow-up",
+      "admin": "Office",
+      "adminDesc": "Registrations, payments"
     }
   }
 }
-

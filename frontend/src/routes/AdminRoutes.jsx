@@ -1,15 +1,12 @@
 // src/routes/AdminRoutes.jsx
 import React, { lazy, Suspense } from "react";
+import { Navigate } from "react-router-dom";
 import RequireRole from "@/components/RequireRole";
 import NotFound from "@/pages/NotFound";
 import PageLoader from "@/components/ui/PageLoader";
 
-import AdminLayout from "@/layouts/AdminLayout";
-import SuperAdminLayout from "@/layouts/SuperAdminLayout";
+import AppShell from "@/layouts/AppShell";
 
-const AdminLogin = lazy(() => import("@/pages/admin/AdminLogin"));
-const AdminForgotPassword = lazy(() => import("@/pages/admin/AdminForgotPassword"));
-const AdminResetPassword = lazy(() => import("@/pages/admin/AdminResetPassword"));
 const AdminDashboard = lazy(() => import("@/pages/admin/AdminDashboard"));
 
 const SuperAdminDashboard = lazy(() => import("@/pages/superadmin/SuperAdminDashboard"));
@@ -35,21 +32,24 @@ const withSuspense = (Component) => (
   </Suspense>
 );
 
+// Anciennes adresses de connexion admin : tout passe par la page unique.
+const toLogin = <Navigate to="/account?tab=login" replace />;
 const adminPublicRoutes = [
-  { path: "/admin/login", element: withSuspense(AdminLogin) },
-  { path: "/admin/forgot", element: withSuspense(AdminForgotPassword) },
-  { path: "/admin/reset-password/:token", element: withSuspense(AdminResetPassword) },
+  { path: "/admin/login", element: toLogin },
+  { path: "/admin/forgot", element: toLogin },
+  { path: "/admin/reset-password/:token", element: toLogin },
 ];
 
 const adminProtectedRoutes = {
   path: "/admin",
   element: (
-    <RequireRole allowed={["admin", "administrateur", "administrator", "secretaire", "superadmin"]}>
-      <AdminLayout />
+    <RequireRole allowed={["admin", "superadmin"]}>
+      <AppShell />
     </RequireRole>
   ),
   children: [
     { index: true, element: withSuspense(AdminDashboard) },
+    { path: "dashboard", element: <Navigate to="/admin" replace /> },
     { path: "inscriptions/demandes", element: withSuspense(AdminInscriptionRequestsPage) },
     { path: "students", element: withSuspense(AdminStudentsPage) },
     { path: "students/:id", element: withSuspense(AdminStudentDetail) },
@@ -68,7 +68,7 @@ const superAdminRoutes = {
   path: "/superadmin",
   element: (
     <RequireRole allowed={["superadmin"]}>
-      <SuperAdminLayout />
+      <AppShell />
     </RequireRole>
   ),
   children: [

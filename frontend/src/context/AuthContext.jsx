@@ -24,6 +24,9 @@ const normalizeRole = (role) => {
     formateur: "teacher",
 
     admin: "admin",
+    administrateur: "admin",
+    administrator: "admin",
+    secretaire: "admin",
     superadmin: "superadmin",
     super_admin: "superadmin",
   };
@@ -35,7 +38,7 @@ const getDashboardPath = (role) => {
   const normalizedRole = normalizeRole(role);
 
   if (normalizedRole === "superadmin") return "/superadmin";
-  if (normalizedRole === "admin") return "/admin/dashboard";
+  if (normalizedRole === "admin") return "/admin";
   if (normalizedRole === "teacher") return "/dashboard/teacher";
   if (normalizedRole === "student") return "/dashboard/student";
 
@@ -100,7 +103,11 @@ export function AuthProvider({ children }) {
       setUser(null);
       return null;
     } finally {
-      if (isMounted.current) {
+      // Une requête annulée (démontage, double montage en mode strict) ne doit
+      // pas terminer le chargement : la requête suivante s'en charge. Sinon les
+      // pages protégées croient l'utilisateur déconnecté et le renvoient vers
+      // la connexion en perdant la page demandée.
+      if (isMounted.current && !signal?.aborted) {
         setBooting(false);
       }
     }

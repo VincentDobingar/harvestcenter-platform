@@ -1,55 +1,35 @@
 // src/pages/teacher/TeacherDashboard.jsx
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast";
+import { BookOpen, Users, GraduationCap, Inbox } from "lucide-react";
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 import api from "@/utils/api";
 import QuickLessonForm from "@/components/QuickLessonForm";
 import { useAuth } from "@/context/AuthContext";
 import { rowsFromResponse } from "@/utils/normalize";
-import { toAbsoluteUrl } from "@/utils/url";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import { Bar } from "react-chartjs-2";
-import toast from "react-hot-toast";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import { PageHeader, StatCard, StatGrid, Panel, EmptyState, Notice, SkeletonGrid } from "@/components/dash";
+import { CHART } from "@/components/dash/chartTheme";
 
 export default function TeacherDashboard() {
-  const { t } = useTranslation();
-  const { user, logout } = useAuth();
+  const { t, i18n } = useTranslation();
+  const { user } = useAuth();
+  const locale = i18n.resolvedLanguage?.startsWith("en") ? "en-GB" : "fr-FR";
 
   const [courses, setCourses] = useState([]);
-  const [dashboardStats, setDashboardStats] = useState({});
-  const [chartData, setChartData] = useState({ labels: [], datasets: [] });
+  const [stats, setStats] = useState({});
+  const [chartRows, setChartRows] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(null);
 
-  const show = (v) => (v === null || v === undefined || v === "" ? "—" : v);
-
   useEffect(() => {
     let mounted = true;
+    if (!user?.id) return undefined;
 
-    async function loadAll() {
-      if (!user?.id) return;
-
+    (async () => {
       setLoading(true);
       setErr(null);
-
       try {
         const [coursesRes, statsRes, chartRes, notifRes] = await Promise.all([
           api.get("/teacher/courses").catch(() => ({ data: [] })),
@@ -57,36 +37,23 @@ export default function TeacherDashboard() {
           api.get("/teacher/chart-stats").catch(() => ({ data: [] })),
           api.get("/teacher/notifications").catch(() => ({ data: [] })),
         ]);
-
         if (!mounted) return;
-
         setCourses(rowsFromResponse(coursesRes.data));
-        setDashboardStats(statsRes.data || {});
+        setStats(statsRes.data || {});
         setNotifications(Array.isArray(notifRes.data) ? notifRes.data : []);
-
-        const chartRows = Array.isArray(chartRes.data) ? chartRes.data : [];
-        const chartLabels = chartRows.map((c) => c.title || t("teacherDashboard.fallback.untitled"));
-        const chartGrades = chartRows.map((c) => Number(c.avg_grade || 0));
-
-        setChartData({
-          labels: chartLabels,
-          datasets: [
-            {
-              label: t("teacherDashboard.chart.averagePerCourse"),
-              data: chartGrades,
-              backgroundColor: "rgba(54, 162, 235, 0.6)",
-            },
-          ],
-        });
+        setChartRows(
+          (Array.isArray(chartRes.data) ? chartRes.data : []).map((c) => ({
+            name: c.title || t("teacherDashboard.fallback.untitled", { defaultValue: "Sans titre" }),
+            value: Number(Number(c.avg_grade || 0).toFixed(2)),
+          }))
+        );
       } catch (e) {
-        console.error("TeacherDashboard loadAll error:", e);
-        if (mounted) setErr(t("teacherDashboard.errors.loadData"));
+        console.error("TeacherDashboard load error:", e);
+        if (mounted) setErr(t("teacherDashboard.errors.loadData", { defaultValue: "Les données n’ont pas pu être chargées." }));
       } finally {
         if (mounted) setLoading(false);
       }
-    }
-
-    loadAll();
+    })();
 
     return () => {
       mounted = false;
@@ -100,191 +67,137 @@ export default function TeacherDashboard() {
     if (payload.file) fd.append("media", payload.file);
 
     try {
-      await api.post("/lessons", fd, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
+      await api.post("/lessons", fd, { headers: { "Content-Type": "multipart/form-data" } });
       const r = await api.get("/teacher/courses");
       setCourses(rowsFromResponse(r.data));
-      toast.success(t("teacherDashboard.success.lessonCreated"));
+      toast.success(t("teacherDashboard.success.lessonPublished", { defaultValue: "Leçon publiée" }));
     } catch (e) {
       console.error("Erreur création leçon:", e);
-      setErr(t("teacherDashboard.errors.createLesson"));
-      toast.error(t("teacherDashboard.errors.createLesson"));
+      toast.error(t("teacherDashboard.errors.publishLesson", { defaultValue: "La leçon n’a pas pu être publiée." }));
     }
   }
 
-  async function handleLogout() {
-    try {
-      await logout();
-    } catch (e) {
-      console.error("Logout error:", e);
-    }
-  }
+  const firstName = user?.first_name || String(user?.email || "").split("@")[0];
+  const average = Number(stats.averageGrade || 0);
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <header className="mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-100">
-            <img
-              src={toAbsoluteUrl(user?.avatar_url || "/images/avatar-placeholder.png")}
-              alt={t("teacherDashboard.avatarAlt")}
-              className="w-full h-full object-cover"
-            />
-          </div>
+    <div className="space-y-6">
+      <PageHeader
+        title={t("teacherDashboard.hello", { name: firstName, defaultValue: "Bonjour {{name}}" })}
+        subtitle={t("teacherDashboard.subtitleNew", {
+          defaultValue: "Vos cours, les devoirs rendus par vos étudiants et leurs résultats.",
+        })}
+      />
 
-          <div>
-            <h1 className="text-2xl font-bold">{t("teacherDashboard.title")}</h1>
-            <div className="text-sm text-gray-500">
-              {t("teacherDashboard.welcome", {
-                name: show(user?.full_name || `${user?.first_name || ""} ${user?.last_name || ""}`.trim()),
-              })}
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button
-            onClick={handleLogout}
-            className="px-3 py-2 border rounded text-sm"
-          >
-            {t("teacherDashboard.actions.logout")}
-          </button>
-
-          <Link
-            to="/dashboard/profile"
-            className="px-3 py-2 border rounded text-sm"
-          >
-            {t("teacherDashboard.actions.profile")}
-          </Link>
-        </div>
-      </header>
+      {err && <Notice tone="bad">{err}</Notice>}
 
       {loading ? (
-        <div>{t("teacherDashboard.states.loading")}</div>
-      ) : err ? (
-        <div className="text-red-600">{err}</div>
+        <SkeletonGrid count={3} />
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 flex flex-col gap-6">
-            <section className="bg-white p-4 rounded shadow grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-              <div>
-                <div className="text-gray-500 text-sm">{t("teacherDashboard.stats.courses")}</div>
-                <div className="text-lg font-bold">{dashboardStats.totalCourses || 0}</div>
-              </div>
+        <StatGrid cols={3}>
+          <StatCard
+            primary
+            icon={BookOpen}
+            label={t("teacherDashboard.stats.courses", { defaultValue: "Cours" })}
+            value={stats.totalCourses || courses.length || 0}
+            to="/dashboard/my-courses"
+          />
+          <StatCard
+            icon={Users}
+            label={t("teacherDashboard.stats.students", { defaultValue: "Étudiants" })}
+            value={stats.totalStudents || 0}
+          />
+          <StatCard
+            icon={GraduationCap}
+            label={t("teacherDashboard.stats.average", { defaultValue: "Moyenne générale" })}
+            value={average ? average.toLocaleString(locale, { maximumFractionDigits: 2 }) : "—"}
+            hint={t("teacherDashboard.stats.averageHint", { defaultValue: "sur 20, tous cours confondus" })}
+          />
+        </StatGrid>
+      )}
 
-              <div>
-                <div className="text-gray-500 text-sm">{t("teacherDashboard.stats.students")}</div>
-                <div className="text-lg font-bold">{dashboardStats.totalStudents || 0}</div>
-              </div>
-
-              <div>
-                <div className="text-gray-500 text-sm">{t("teacherDashboard.stats.average")}</div>
-                <div className="text-lg font-bold">
-                  {Number(dashboardStats.averageGrade || 0).toFixed(2)}
-                </div>
-              </div>
-
-              <div>
-                <div className="text-gray-500 text-sm">{t("teacherDashboard.stats.revenue")}</div>
-                <div className="text-lg font-bold">
-                  {dashboardStats.totalRevenue || 0} FCFA
-                </div>
-              </div>
-            </section>
-
-            <section className="bg-white p-4 rounded shadow">
-              <h2 className="text-lg font-semibold mb-3">{t("teacherDashboard.courses.title")}</h2>
-
-              {Array.isArray(courses) && courses.length > 0 ? (
-                <div className="space-y-3">
+      {!loading && (
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="space-y-6 lg:col-span-2">
+            <Panel title={t("teacherDashboard.courses.title", { defaultValue: "Mes cours" })} bodyClassName="!p-0">
+              {courses.length ? (
+                <ul className="divide-y divide-line">
                   {courses.map((c) => (
-                    <div
-                      key={c.id}
-                      className="p-3 border rounded flex justify-between items-center"
-                    >
-                      <div>
-                        <div className="font-medium">{c.title}</div>
-                        <div className="text-sm text-gray-500">
-                          {t("teacherDashboard.courses.meta", {
-                            count: c.students_count || 0,
-                            average: Number(c.average_grade || 0).toFixed(2),
-                          })}
-                        </div>
-                      </div>
-
-                      <div className="flex gap-2">
-                        <Link
-                          to={`/teacher/lecons/${c.id}`}
-                          className="px-3 py-1 border rounded text-sm"
-                        >
-                          {t("teacherDashboard.actions.view")}
-                        </Link>
-                        <Link
-                          to={`/teacher/lecons/${c.id}/edit`}
-                          className="px-3 py-1 border rounded text-sm"
-                        >
-                          {t("teacherDashboard.actions.edit")}
-                        </Link>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-gray-500">{t("teacherDashboard.courses.empty")}</div>
-              )}
-            </section>
-
-            <section className="bg-white p-4 rounded shadow">
-              <h2 className="text-lg font-semibold mb-3">
-                {t("teacherDashboard.quickLesson.title")}
-              </h2>
-              <QuickLessonForm onCreate={handleCreateLesson} />
-            </section>
-
-            <section className="bg-white p-4 rounded shadow">
-              <h2 className="text-lg font-semibold mb-3">
-                {t("teacherDashboard.chart.title")}
-              </h2>
-              <Bar
-                data={chartData}
-                options={{
-                  responsive: true,
-                  plugins: { legend: { display: false } },
-                }}
-              />
-            </section>
-          </div>
-
-          <aside className="flex flex-col gap-6">
-            <section className="bg-white p-4 rounded shadow">
-              <h2 className="text-lg font-semibold mb-3">
-                {t("teacherDashboard.notifications.title")}
-              </h2>
-
-              {notifications.length > 0 ? (
-                <ul className="text-sm space-y-2">
-                  {notifications.map((n, idx) => (
-                    <li key={idx}>
-                      {(n.student_name || n.student || t("teacherDashboard.fallback.unknownStudent"))}
-                      {" — "}
-                      {(n.assignment_title || n.assignment || t("teacherDashboard.fallback.unknownAssignment"))}
-                      {" ("}
-                      {n.created_at
-                        ? new Date(n.created_at).toLocaleString()
-                        : t("teacherDashboard.fallback.justNow")}
-                      {")"}
+                    <li key={c.id} className="flex items-center justify-between gap-4 px-5 py-3.5">
+                      <p className="min-w-0 truncate font-medium text-ink">{c.title}</p>
+                      <p className="shrink-0 text-[13px] tabular-nums text-mist">
+                        {t("teacherDashboard.courses.metaNew", {
+                          count: c.students_count || 0,
+                          average: Number(c.average_grade || 0).toFixed(1),
+                          defaultValue: "{{count}} étudiants, moyenne {{average}}",
+                        })}
+                      </p>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <div className="text-gray-500 text-sm">
-                  {t("teacherDashboard.notifications.empty")}
+                <div className="p-5">
+                  <EmptyState title={t("teacherDashboard.courses.emptyTitle", { defaultValue: "Aucun cours attribué" })}>
+                    {t("teacherDashboard.courses.emptyNew", {
+                      defaultValue: "L’administration vous attribue vos cours. Ils apparaîtront ici.",
+                    })}
+                  </EmptyState>
                 </div>
               )}
-            </section>
-          </aside>
+            </Panel>
+
+            <Panel
+              title={t("teacherDashboard.chart.titleNew", { defaultValue: "Moyenne par cours" })}
+              description={t("teacherDashboard.chart.desc", { defaultValue: "Notes sur 20" })}
+            >
+              {chartRows.length ? (
+                <div className="h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartRows} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
+                      <CartesianGrid vertical={false} stroke={CHART.grid} />
+                      <XAxis dataKey="name" tick={CHART.tick} axisLine={false} tickLine={false} interval={0} />
+                      <YAxis domain={[0, 20]} tick={CHART.tick} axisLine={false} tickLine={false} />
+                      <Tooltip cursor={{ fill: CHART.cursor }} contentStyle={CHART.tooltip} />
+                      <Bar dataKey="value" name="Moyenne" fill={CHART.primary} radius={[6, 6, 0, 0]} maxBarSize={48} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              ) : (
+                <EmptyState title={t("teacherDashboard.chart.emptyTitle", { defaultValue: "Pas encore de notes" })}>
+                  {t("teacherDashboard.chart.empty", { defaultValue: "Les moyennes s’afficheront dès les premières notes saisies." })}
+                </EmptyState>
+              )}
+            </Panel>
+          </div>
+
+          <div className="space-y-6">
+            <Panel title={t("teacherDashboard.notifications.titleNew", { defaultValue: "Devoirs rendus récemment" })} bodyClassName="!p-0">
+              {notifications.length ? (
+                <ul className="divide-y divide-line">
+                  {notifications.slice(0, 8).map((n, idx) => (
+                    <li key={n.id || idx} className="px-5 py-3">
+                      <p className="text-sm font-medium text-ink">
+                        {n.student_name || n.student || t("teacherDashboard.fallback.unknownStudent", { defaultValue: "Étudiant" })}
+                      </p>
+                      <p className="text-[13px] text-mist">
+                        {n.assignment_title || n.assignment || t("teacherDashboard.fallback.unknownAssignment", { defaultValue: "Devoir" })}
+                        {n.created_at ? `, ${new Date(n.created_at).toLocaleDateString(locale, { day: "numeric", month: "short" })}` : ""}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="flex items-center gap-3 px-5 py-6 text-sm text-mist">
+                  <Inbox className="h-5 w-5" />
+                  {t("teacherDashboard.notifications.emptyNew", { defaultValue: "Aucun devoir rendu pour le moment." })}
+                </div>
+              )}
+            </Panel>
+
+            <Panel title={t("teacherDashboard.quickLesson.titleNew", { defaultValue: "Publier une leçon" })}>
+              <QuickLessonForm onCreate={handleCreateLesson} />
+            </Panel>
+          </div>
         </div>
       )}
     </div>

@@ -1,12 +1,8 @@
 // routes/PublicRoutes.jsx
-import React, { lazy, Suspense } from "react";
+// Site public (avec la barre de navigation du site) + page de connexion
+// unique. Les espaces connectés sont dans DashboardRoutes / AdminRoutes.
+import React from "react";
 import MainLayout from "@/layouts/MainLayout";
-import DashboardLayout from "@/layouts/DashboardLayout";
-import ProtectedRoute from "@/routes/ProtectedRoute";
-import PageLoader from "@/components/ui/PageLoader";
-
-import { studentRoutes } from "./studentRoutes";
-import { teacherRoutes } from "./teacherRoutes";
 
 // Public pages
 import Home from "@/pages/Home";
@@ -22,23 +18,15 @@ import Unauthorized from "@/pages/Unauthorized";
 import Opportunities from "@/pages/Opportunities";
 import Actualites from "@/pages/Actualites";
 import ActualiteDetail from "@/pages/ActualiteDetail";
-import OpportunityDetail from "@/pages/OpportunityDetail"; 
-
-// Dashboard core
-const DashboardIndex = lazy(() => import("@/pages/dashboard/DashboardIndex"));
-const Profile = lazy(() => import("@/pages/Profile"));
-const MyCourses = lazy(() => import("@/pages/MyCourses"));
-const Assignments = lazy(() => import("@/pages/Assignments"));
-const Notes = lazy(() => import("@/pages/Notes"));
-const Timetable = lazy(() => import("@/pages/Timetable"));
-
-const withSuspense = (Component) => (
-  <Suspense fallback={<PageLoader />}>
-    <Component />
-  </Suspense>
-);
+import OpportunityDetail from "@/pages/OpportunityDetail";
 
 export const publicRoutes = [
+  // Connexion / création de compte : une seule page pour tous les rôles,
+  // en plein écran (sans la barre du site).
+  { path: "/account", element: <Account /> },
+  { path: "/login", element: <Account /> },
+  { path: "/register", element: <Account /> },
+
   {
     path: "/",
     element: <MainLayout />,
@@ -54,34 +42,6 @@ export const publicRoutes = [
       { path: "contact", element: <Contact /> },
       { path: "courses", element: <Courses /> },
       { path: "inscription", element: <Inscription /> },
-
-      { path: "account", element: <Account /> },
-      { path: "login", element: <Account /> },
-      { path: "register", element: <Account /> },
-
-      {
-        element: <ProtectedRoute />,
-        children: [
-          {
-            path: "dashboard",
-            element: <DashboardLayout />,
-            children: [
-              { index: true, element: withSuspense(DashboardIndex) },
-              { path: "profile", element: withSuspense(Profile) },
-              { path: "my-courses", element: withSuspense(MyCourses) },
-              { path: "assignments", element: withSuspense(Assignments) },
-              { path: "notes", element: withSuspense(Notes) },
-              { path: "timetable", element: withSuspense(Timetable) },
-
-              ...studentRoutes,
-              ...teacherRoutes,
-
-              { path: "*", element: <NotFound /> },
-            ],
-          },
-        ],
-      },
-
       { path: "unauthorized", element: <Unauthorized /> },
       { path: "*", element: <NotFound /> },
     ],

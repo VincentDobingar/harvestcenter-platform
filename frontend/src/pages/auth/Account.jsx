@@ -1,37 +1,63 @@
 // src/pages/auth/Account.jsx
+// Page de connexion unique pour tous les rôles (étudiant, formateur,
+// admin, superadmin). Après connexion, chacun est envoyé vers son espace.
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
+import { Eye, EyeOff, Loader2, Mail, MessageCircle } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import AuthLayout from "@/layouts/AuthLayout";
+import PageLoader from "@/components/ui/PageLoader";
+
+const EMPTY_FORM = { email: "", password: "", first_name: "", last_name: "" };
+
+function Field({ id, label, children, hint }) {
+  return (
+    <div className="space-y-1.5">
+      <label htmlFor={id} className="block text-sm font-medium text-ink">
+        {label}
+      </label>
+      {children}
+      {hint && <p className="text-xs text-mist">{hint}</p>}
+    </div>
+  );
+}
 
 export default function Account() {
   const { t } = useTranslation();
-  const { login, register, gotoByRole } = useAuth();
+  const { user, booting, login, register, gotoByRole } = useAuth();
   const nav = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const initialTab = searchParams.get("tab");
-  const [isLogin, setIsLogin] = useState(initialTab !== "register");
-  const [loading, setLoading] = useState(false);
-
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-    first_name: "",
-    last_name: "",
-    role: "student",
-  });
-
+  const isRegisterPath = location.pathname === "/register";
+  const [isLogin, setIsLogin] = useState(
+    !isRegisterPath && searchParams.get("tab") !== "register"
+  );
+  const [form, setForm] = useState(EMPTY_FORM);
   const [showPwd, setShowPwd] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const tab = searchParams.get("tab");
-    setIsLogin(tab !== "register");
-  }, [searchParams]);
+    setIsLogin(!isRegisterPath && searchParams.get("tab") !== "register");
+  }, [searchParams, isRegisterPath]);
+
+  // Déjà connecté : on renvoie directement vers son espace.
+  useEffect(() => {
+    if (!booting && user) {
+      const from = location.state?.from?.pathname;
+      if (from && !["/account", "/login", "/register"].includes(from)) nav(from, { replace: true });
+      else gotoByRole(user, nav);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only react to session changes
+  }, [booting, user]);
 
   function switchTab(loginMode) {
+    setError("");
+    setShowHelp(false);
     setIsLogin(loginMode);
     setSearchParams(loginMode ? { tab: "login" } : { tab: "register" });
   }
@@ -39,177 +65,224 @@ export default function Account() {
   function handleChange(e) {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+    if (error) setError("");
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setError("");
 
+    const email = form.email.trim();
+    if (!email || !form.password.trim() || (!isLogin && (!form.first_name.trim() || !form.last_name.trim()))) {
+      setError(t("accountPage.errors.required", { defaultValue: "Remplissez tous les champs." }));
+      return;
+    }
+
+    setLoading(true);
     try {
       if (isLogin) {
-        if (!form.email.trim() || !form.password.trim()) {
-          toast.error(t("accountPage.errors.required"));
-          return;
-        }
+        const loggedUser = await login(email.toLowerCase(), form.password);
+        toast.success(t("accountPage.success.login", { defaultValue: "Connexion réussie" }));
 
-        setLoading(true);
-
-        const user = await login(form.email.trim(), form.password);
-
-        if (user?.role) {
-          toast.success(t("accountPage.success.login"));
-
-          const next = location.state?.next || location.state?.from?.pathname;
-
-          if (next) {
-            nav(next, { replace: true });
-          } else {
-            gotoByRole(user, nav);
-          }
+        const next = location.state?.next || location.state?.from?.pathname;
+        if (next && next !== "/account" && next !== "/login") {
+          nav(next, { replace: true });
         } else {
-          toast.error(t("accountPage.errors.invalidSession"));
+          gotoByRole(loggedUser, nav);
         }
       } else {
-        if (
-          !form.email.trim() ||
-          !form.password.trim() ||
-          !form.first_name.trim() ||
-          !form.last_name.trim()
-        ) {
-          toast.error(t("accountPage.errors.required"));
-          return;
-        }
-
-        setLoading(true);
-
-        const payload = {
+        await register({
           first_name: form.first_name.trim(),
           last_name: form.last_name.trim(),
-          email: form.email.trim(),
+          email,
           password: form.password,
           role: "student",
-        };
-
-        await register(payload);
-
-        toast.success(t("accountPage.success.register"));
+        });
+        toast.success(
+          t("accountPage.success.registered", {
+            defaultValue: "Compte créé. Vous pouvez maintenant vous connecter.",
+          })
+        );
+        setForm((prev) => ({ ...EMPTY_FORM, email: prev.email }));
         switchTab(true);
       }
     } catch (err) {
-      console.error("Account auth error:", err);
+      const status = err?.response?.status;
+      let message = err?.response?.data?.message;
 
-      const message =
-        err?.response?.data?.message ||
-        (err?.code === "ERR_NETWORK"
-          ? t("accountPage.errors.network")
-          : err?.message) ||
-        t("accountPage.errors.auth");
+      if (!message && err?.code === "ERR_NETWORK") {
+        message = t("accountPage.errors.networkNew", {
+          defaultValue: "Le serveur ne répond pas. Vérifiez votre connexion et réessayez.",
+        });
+      }
+      if (status === 401 && isLogin) {
+        message = t("accountPage.errors.invalid", {
+          defaultValue: "Email ou mot de passe incorrect.",
+        });
+      }
+      if (status === 409) {
+        message = t("accountPage.errors.emailTaken", {
+          defaultValue: "Un compte existe déjà avec cet email. Connectez-vous.",
+        });
+      }
 
-      toast.error(message);
+      setError(message || err?.message || t("accountPage.errors.failed", { defaultValue: "La connexion a échoué." }));
     } finally {
       setLoading(false);
     }
   }
 
-  return (
-    <div className="min-h-[80vh] grid place-items-center p-4">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-md bg-white rounded-2xl shadow p-6 space-y-4"
-      >
-        <h1 className="text-2xl font-bold text-center">
-          {isLogin
-            ? t("accountPage.titleLogin")
-            : t("accountPage.titleRegister")}
-        </h1>
+  if (booting) return <PageLoader />;
 
+  return (
+    <AuthLayout>
+      <div>
+        <h2 className="font-display text-[1.9rem] font-semibold leading-tight text-ink">
+          {isLogin
+            ? t("accountPage.heading.login", { defaultValue: "Connexion" })
+            : t("accountPage.heading.register", { defaultValue: "Créer un compte étudiant" })}
+        </h2>
+        <p className="mt-2 text-[15px] text-mist">
+          {isLogin
+            ? t("accountPage.sub.login", { defaultValue: "Entrez l’email et le mot de passe de votre compte Harvest Center." })
+            : t("accountPage.sub.register", {
+                defaultValue: "Les comptes formateurs et administratifs sont créés par l’administration.",
+              })}
+        </p>
+      </div>
+
+      <div
+        role="tablist"
+        aria-label={t("accountPage.tabs.label", { defaultValue: "Choisir une action" })}
+        className="mt-7 grid grid-cols-2 rounded-xl bg-white p-1 ring-1 ring-line"
+      >
+        {[
+          { mode: true, label: t("accountPage.tabs.login", { defaultValue: "Se connecter" }) },
+          { mode: false, label: t("accountPage.tabs.register", { defaultValue: "Créer un compte" }) },
+        ].map((tab) => (
+          <button
+            key={String(tab.mode)}
+            type="button"
+            role="tab"
+            aria-selected={isLogin === tab.mode}
+            onClick={() => switchTab(tab.mode)}
+            className={`focus-ring rounded-lg px-3 py-2 text-sm font-semibold transition ${
+              isLogin === tab.mode ? "bg-ink text-white" : "text-mist hover:text-ink"
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-4">
         {!isLogin && (
-          <>
-            <input
-              name="first_name"
-              value={form.first_name}
-              onChange={handleChange}
-              className="w-full border rounded-xl p-3"
-              placeholder={t("accountPage.fields.firstName")}
-              required
-            />
-            <input
-              name="last_name"
-              value={form.last_name}
-              onChange={handleChange}
-              className="w-full border rounded-xl p-3"
-              placeholder={t("accountPage.fields.lastName")}
-              required
-            />
-          </>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field id="first_name" label={t("accountPage.fields.firstName", { defaultValue: "Prénom" })}>
+              <input id="first_name" name="first_name" autoComplete="given-name" value={form.first_name} onChange={handleChange} className="field" />
+            </Field>
+            <Field id="last_name" label={t("accountPage.fields.lastName", { defaultValue: "Nom" })}>
+              <input id="last_name" name="last_name" autoComplete="family-name" value={form.last_name} onChange={handleChange} className="field" />
+            </Field>
+          </div>
         )}
 
-        <input
-          name="email"
-          type="email"
-          value={form.email}
-          onChange={handleChange}
-          className="w-full border rounded-xl p-3"
-          placeholder={t("accountPage.fields.email")}
-          required
-        />
-
-        <div className="relative">
+        <Field id="email" label={t("accountPage.fields.email", { defaultValue: "Email" })}>
           <input
-            name="password"
-            type={showPwd ? "text" : "password"}
-            value={form.password}
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            inputMode="email"
+            value={form.email}
             onChange={handleChange}
-            className="w-full border rounded-xl p-3 pr-12"
-            placeholder={t("accountPage.fields.password")}
-            required
+            className="field"
+            placeholder="nom@exemple.com"
           />
-          <button
-            type="button"
-            onClick={() => setShowPwd((s) => !s)}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-sm"
-          >
-            {showPwd
-              ? t("accountPage.fields.hide")
-              : t("accountPage.fields.show")}
-          </button>
-        </div>
+        </Field>
 
-        <button type="submit" disabled={loading} className="w-full btn-brand">
+        <Field
+          id="password"
+          label={t("accountPage.fields.password", { defaultValue: "Mot de passe" })}
+        >
+          <div className="relative">
+            <input
+              id="password"
+              name="password"
+              type={showPwd ? "text" : "password"}
+              autoComplete={isLogin ? "current-password" : "new-password"}
+              value={form.password}
+              onChange={handleChange}
+              className="field pr-12"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPwd((s) => !s)}
+              aria-label={
+                showPwd
+                  ? t("accountPage.fields.hidePassword", { defaultValue: "Masquer le mot de passe" })
+                  : t("accountPage.fields.showPassword", { defaultValue: "Afficher le mot de passe" })
+              }
+              className="focus-ring absolute right-2 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-lg text-mist hover:text-ink"
+            >
+              {showPwd ? <EyeOff className="h-[18px] w-[18px]" /> : <Eye className="h-[18px] w-[18px]" />}
+            </button>
+          </div>
+        </Field>
+
+        {error && (
+          <p role="alert" className="rounded-xl border border-bad/25 bg-bad/5 px-4 py-3 text-sm text-bad">
+            {error}
+          </p>
+        )}
+
+        <button type="submit" disabled={loading} className="btn-primary focus-ring w-full">
+          {loading && <Loader2 className="h-4 w-4 animate-spin" />}
           {loading
             ? isLogin
-              ? t("accountPage.actions.loggingIn")
-              : t("accountPage.actions.creating")
+              ? t("accountPage.actions.loggingIn", { defaultValue: "Connexion…" })
+              : t("accountPage.actions.creatingAccount", { defaultValue: "Création du compte…" })
             : isLogin
-            ? t("accountPage.actions.login")
-            : t("accountPage.actions.createAccount")}
+            ? t("accountPage.actions.login", { defaultValue: "Se connecter" })
+            : t("accountPage.actions.createAccount", { defaultValue: "Créer mon compte" })}
         </button>
-
-        <p className="text-center text-sm">
-          {isLogin ? (
-            <>
-              {t("accountPage.switch.noAccount")}{" "}
-              <button
-                type="button"
-                onClick={() => switchTab(false)}
-                className="text-blue-600 underline"
-              >
-                {t("accountPage.switch.create")}
-              </button>
-            </>
-          ) : (
-            <>
-              {t("accountPage.switch.alreadyRegistered")}{" "}
-              <button
-                type="button"
-                onClick={() => switchTab(true)}
-                className="text-blue-600 underline"
-              >
-                {t("accountPage.switch.login")}
-              </button>
-            </>
-          )}
-        </p>
       </form>
-    </div>
+
+      {isLogin && (
+        <div className="mt-5">
+          <button
+            type="button"
+            onClick={() => setShowHelp((s) => !s)}
+            aria-expanded={showHelp}
+            className="focus-ring rounded text-sm font-medium text-brand hover:text-brand-800"
+          >
+            {t("accountPage.forgot.toggle", { defaultValue: "Mot de passe oublié ?" })}
+          </button>
+
+          {showHelp && (
+            <div className="mt-3 rounded-xl border border-millet/40 bg-millet-soft px-4 py-3 text-sm text-ink">
+              <p>
+                {t("accountPage.forgot.body", {
+                  defaultValue: "L’administration réinitialise votre mot de passe. Écrivez-nous avec l’email de votre compte :",
+                })}
+              </p>
+              <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1.5">
+                <a className="inline-flex items-center gap-1.5 font-medium underline-offset-2 hover:underline" href="mailto:contact@harvestcentertd.org">
+                  <Mail className="h-4 w-4" /> contact@harvestcentertd.org
+                </a>
+                <a
+                  className="inline-flex items-center gap-1.5 font-medium underline-offset-2 hover:underline"
+                  href="https://wa.me/23566680200"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <MessageCircle className="h-4 w-4" /> WhatsApp
+                </a>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </AuthLayout>
   );
 }

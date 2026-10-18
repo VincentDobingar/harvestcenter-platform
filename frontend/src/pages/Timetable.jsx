@@ -1,13 +1,21 @@
+// src/pages/Timetable.jsx
+// Pas encore branchée sur l'API des emplois du temps : état clair en attendant.
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { PageHeader, Panel, EmptyState } from "@/components/dash";
 
 export default function Timetable() {
   const { t } = useTranslation();
-
   return (
-    <div className="max-w-4xl mx-auto p-4 bg-white rounded shadow">
-      <h1 className="text-2xl font-bold mb-4">{t("timetablePage.title")}</h1>
-      <p>{t("timetablePage.description")}</p>
+    <div>
+      <PageHeader title={t("timetablePage.title", { defaultValue: "Emploi du temps" })} />
+      <Panel>
+        <EmptyState title={t("timetablePage.soonTitle", { defaultValue: "L’emploi du temps arrive bientôt ici" })}>
+          {t("timetablePage.soon", {
+            defaultValue: "Vos horaires de cours seront affichés sur cette page. En attendant, consultez le planning affiché au centre.",
+          })}
+        </EmptyState>
+      </Panel>
     </div>
   );
 }
