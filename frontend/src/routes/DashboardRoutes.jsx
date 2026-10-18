@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { teacherRoutes } from "@/routes/TeacherRoutes";
-import { studentRoutes } from "@/routes/StudentRoutes";
+import { teacherRoutes } from "@/routes/teacherRoutes";
+import { studentRoutes } from "@/routes/studentRoutes";
 import { useAuth } from "@/context/AuthContext";
 import PageLoader from "@/components/ui/PageLoader";
 
