@@ -126,6 +126,94 @@ export function Notice({ tone = "info", children, action }) {
   );
 }
 
+/** Champ de formulaire : libellé, contrôle, aide facultative. */
+export function Field({ id, label, hint, children, className = "" }) {
+  return (
+    <div className={`space-y-1.5 ${className}`}>
+      {label && (
+        <label htmlFor={id} className="block text-sm font-medium text-ink">
+          {label}
+        </label>
+      )}
+      {children}
+      {hint && <p className="text-xs text-mist">{hint}</p>}
+    </div>
+  );
+}
+
+const BADGE_TONES = {
+  ok: "bg-ok/10 text-ok",
+  warn: "bg-millet-soft text-warn",
+  bad: "bg-bad/10 text-bad",
+  info: "bg-brand/10 text-brand",
+  muted: "bg-paper text-mist",
+  ink: "bg-ink text-white",
+};
+
+export function Badge({ tone = "muted", children, className = "" }) {
+  return (
+    <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${BADGE_TONES[tone] || BADGE_TONES.muted} ${className}`}>
+      {children}
+    </span>
+  );
+}
+
+/** Interrupteur accessible (case à cocher stylée). */
+export function Switch({ id, checked, onChange, label, hint }) {
+  return (
+    <label htmlFor={id} className="flex cursor-pointer items-start gap-3">
+      <span className="relative mt-0.5 inline-flex shrink-0">
+        <input id={id} type="checkbox" className="peer sr-only" checked={checked} onChange={onChange} />
+        <span className="h-6 w-11 rounded-full bg-line transition peer-checked:bg-ok peer-focus-visible:ring-4 peer-focus-visible:ring-millet/40" />
+        <span className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow transition peer-checked:translate-x-5" />
+      </span>
+      <span>
+        <span className="block text-sm font-medium text-ink">{label}</span>
+        {hint && <span className="block text-xs text-mist">{hint}</span>}
+      </span>
+    </label>
+  );
+}
+
+/** Onglets de filtre compacts (Tout / Publiés / Brouillons…). */
+export function Segmented({ value, onChange, options, label }) {
+  return (
+    <div role="tablist" aria-label={label} className="inline-flex rounded-xl bg-paper p-1 ring-1 ring-line">
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          role="tab"
+          aria-selected={value === o.value}
+          onClick={() => onChange(o.value)}
+          className={`focus-ring rounded-lg px-3 py-1.5 text-[13px] font-semibold transition ${
+            value === o.value ? "bg-white text-ink shadow-sm" : "text-mist hover:text-ink"
+          }`}
+        >
+          {o.label}
+          {o.count != null && <span className="ml-1.5 tabular-nums text-mist">{o.count}</span>}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export function ListSkeleton({ rows = 5 }) {
+  return (
+    <ul className="divide-y divide-line" aria-busy="true" aria-label="Chargement">
+      {Array.from({ length: rows }).map((_, i) => (
+        <li key={i} className="flex items-center gap-4 px-5 py-4">
+          <div className="h-12 w-12 animate-pulse rounded-lg bg-paper" />
+          <div className="flex-1 space-y-2">
+            <div className="h-3.5 w-2/3 animate-pulse rounded bg-paper" />
+            <div className="h-3 w-1/3 animate-pulse rounded bg-paper" />
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export function SkeletonGrid({ count = 4 }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-busy="true" aria-label="Chargement">
