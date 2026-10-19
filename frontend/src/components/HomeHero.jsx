@@ -1,221 +1,166 @@
-// src/components/HomeHero.jsx 
-import React from "react";
+// src/components/HomeHero.jsx
+// Accueil : photo du centre en fond, promesse, deux actions, dernière
+// actualité en direct et chiffres clés.
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { CheckCircle2, Play, ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination, EffectFade } from "swiper/modules";
+import { Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/pagination";
 import "swiper/css/effect-fade";
+import api from "@/utils/api";
+import { localizeNews, newsDate, newsHref, newsImage } from "@/components/site/news";
 
-const HERO_BACKGROUND_SLIDES = [
+const HERO_SLIDES = [
   "/images/hero/harvest-center.jpg",
-  "/images/hero/harvest-centerA.jpg",
-  "/images/hero/harvest-centerB.jpg",
   "/images/hero/students.jpg",
+  "/images/hero/harvest-centerA.jpg",
   "/images/hero/students2.jpg",
+  "/images/hero/harvest-centerB.jpg",
   "/images/hero/students3.jpg",
   "/images/hero/students1.jpg",
-].filter(Boolean);
+];
 
-const HERO_CARD_SLIDES = [
-  "/images/hero/harvest-center.jpg",
-  "/images/hero/harvest-centerA.jpg",
-  "/images/hero/harvest-centerB.jpg",
-  "/images/hero/students.jpg",
-  "/images/hero/students2.jpg",
-  "/images/hero/students3.jpg",
-  "/images/hero/students1.jpg",
-].filter(Boolean);
+function LatestNews({ lang }) {
+  const en = String(lang).startsWith("en");
+  const [item, setItem] = useState(null);
+
+  useEffect(() => {
+    let alive = true;
+    api
+      .get("/news", { params: { limit: 1, lang } })
+      .then((res) => {
+        const row = res.data?.rows?.[0];
+        if (alive && row) setItem(localizeNews(row, lang));
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [lang]);
+
+  if (!item) return null;
+
+  return (
+    <Link
+      to={newsHref(item)}
+      className="group flex items-center gap-4 rounded-2xl border border-white/15 bg-white/[0.08] p-3 pr-5 backdrop-blur-md transition hover:bg-white/[0.14] focus-ring"
+    >
+      <img src={newsImage(item.image_url)} alt="" className="h-16 w-20 shrink-0 rounded-xl object-cover" />
+      <span className="min-w-0">
+        <span className="flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.14em] text-millet">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-millet opacity-60" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-millet" />
+          </span>
+          {en ? "Latest news" : "Dernière actualité"} · {newsDate(item.created_at, lang, { day: "numeric", month: "short" })}
+        </span>
+        <span className="mt-1 block font-semibold leading-snug text-white line-clamp-2">{item.title}</span>
+      </span>
+      <ArrowUpRight className="ml-auto h-5 w-5 shrink-0 text-white/60 transition group-hover:text-white" />
+    </Link>
+  );
+}
 
 export default function HomeHero() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.resolvedLanguage || "fr";
 
-  const bullets = [
-    "home.hero.bullets.0",
-    "home.hero.bullets.1",
-    "home.hero.bullets.2",
-  ];
-
+  const bullets = [0, 1, 2].map((i) => t(`home.hero.bullets.${i}`));
   const stats = [
     {
-      valueKey: "home.hero.stats.learners.value",
-      labelKey: "home.hero.stats.learners.label",
+      value: t("home.hero.floating.value").replace(/\s*(apprenants|learners)\s*$/i, ""),
+      label: lang.startsWith("en") ? "Learners since 2018" : "Apprenants depuis 2018",
     },
-    {
-      valueKey: "home.hero.stats.certifications.value",
-      labelKey: "home.hero.stats.certifications.label",
-    },
-    {
-      valueKey: "home.hero.stats.partners.value",
-      labelKey: "home.hero.stats.partners.label",
-    },
+    { value: t("home.hero.stats.certifications.value"), label: t("home.hero.stats.certifications.label") },
+    { value: t("home.hero.stats.learners.value"), label: t("home.hero.stats.learners.label") },
+    { value: t("home.hero.stats.partners.value"), label: t("home.hero.stats.partners.label") },
   ];
 
   return (
-    <section className="relative overflow-hidden bg-slate-950">
-      {/* Background slider fullscreen */}
-      <div className="absolute inset-0 z-0">
+    <section className="relative isolate overflow-hidden bg-ink">
+      <div className="absolute inset-0 -z-10" aria-hidden="true">
         <Swiper
           modules={[Autoplay, EffectFade]}
-          autoplay={{ delay: 4500, disableOnInteraction: false }}
+          autoplay={{ delay: 5500, disableOnInteraction: false }}
           loop
           effect="fade"
-          speed={1400}
+          speed={1600}
           allowTouchMove={false}
           className="h-full w-full"
         >
-          {HERO_BACKGROUND_SLIDES.map((src, i) => (
-            <SwiperSlide key={`bg-${i}`}>
+          {HERO_SLIDES.map((src, i) => (
+            <SwiperSlide key={src}>
               <img
                 src={src}
                 alt=""
-                aria-hidden="true"
-                className="h-full w-full object-cover scale-105"
+                className="h-full w-full object-cover"
                 loading={i === 0 ? "eager" : "lazy"}
+                onError={(e) => (e.currentTarget.style.visibility = "hidden")}
               />
             </SwiperSlide>
           ))}
         </Swiper>
       </div>
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-r from-ink via-ink/90 to-ink/40" />
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-transparent to-transparent" />
+      <div aria-hidden="true" className="woven absolute inset-y-0 left-0 w-2.5 md:w-3" />
 
-      {/* Overlays sombres */}
-      <div className="absolute inset-0 z-10 bg-slate-950/70" />
-      <div className="absolute inset-0 z-10 bg-gradient-to-r from-slate-950/95 via-slate-950/78 to-slate-900/72" />
-      <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.22),transparent_30%)]" />
-      <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_bottom_right,rgba(14,165,233,0.16),transparent_30%)]" />
+      <div className="mx-auto max-w-7xl px-4 pb-10 pt-20 md:pb-14 md:pt-28 lg:pt-32">
+        <div className="max-w-3xl">
+          <p className="flex items-center gap-3 text-[13px] font-semibold uppercase tracking-[0.2em] text-millet">
+            <span aria-hidden="true" className="h-px w-10 bg-millet" />
+            {t("home.hero.badge")}
+          </p>
 
-      <div
-        aria-hidden
-        className="absolute z-10 -top-20 right-0 h-72 w-72 rounded-full bg-white/10 blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="absolute z-10 -bottom-20 left-0 h-72 w-72 rounded-full bg-blue-400/10 blur-3xl"
-      />
+          <h1 className="mt-6 font-display text-[2.75rem] font-semibold leading-[1.02] !text-white sm:text-[3.6rem] lg:text-[4.6rem]">
+            {t("home.hero.title")}
+          </h1>
 
-      <div className="relative z-20 max-w-7xl mx-auto px-4 pt-16 md:pt-24 pb-16 md:pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-14 items-center">
-          <div className="text-white">
-            <span className="inline-flex items-center gap-2 text-xs md:text-sm font-semibold bg-white/10 border border-white/15 rounded-full px-4 py-2 backdrop-blur-sm shadow-lg">
-              <Sparkles className="w-4 h-4" />
-              {t("home.hero.badge")}
-            </span>
+          <p className="mt-6 max-w-2xl text-[17px] leading-8 text-white/80 md:text-[19px]">{t("home.hero.subtitle")}</p>
 
-            <h1 className="mt-5 text-4xl md:text-5xl xl:text-6xl font-extrabold leading-[1.1] tracking-tight text-white">
-              {t("home.hero.title")}
-            </h1>
-
-            <p className="mt-5 text-white/80 md:text-lg leading-8 max-w-2xl">
-              {t("home.hero.subtitle")}
-            </p>
-
-            <ul className="mt-7 grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl">
-              {bullets.map((key) => (
-                <li
-                  key={key}
-                  className="flex items-start gap-3 rounded-2xl bg-white/5 border border-white/10 px-4 py-3 backdrop-blur-sm"
-                >
-                  <CheckCircle2 className="w-5 h-5 mt-0.5 text-sky-300 shrink-0" />
-                  <span className="text-white/90">{t(key)}</span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link
-                to="/inscription"
-                className="inline-flex items-center justify-center rounded-2xl bg-white text-slate-900 font-semibold px-6 py-3 shadow-xl hover:bg-slate-100 transition"
-              >
-                {t("home.hero.ctaApply")}
-              </Link>
-
-              <Link
-                to="/courses"
-                className="inline-flex items-center justify-center rounded-2xl border border-white/30 text-white px-6 py-3 font-semibold hover:bg-white/10 transition"
-              >
-                {t("home.hero.ctaCourses")}
-              </Link>
-
-              <Link
-                to="/about"
-                className="inline-flex items-center gap-3 text-white/90 hover:text-white transition"
-              >
-                <span className="inline-flex items-center justify-center w-11 h-11 rounded-full border border-white/30 bg-white/5 backdrop-blur-sm">
-                  <Play className="w-4 h-4 fill-current" />
+          <ul className="mt-7 flex flex-col gap-2.5 text-[15px] text-white/85 sm:flex-row sm:flex-wrap sm:gap-x-6">
+            {bullets.map((b) => (
+              <li key={b} className="flex items-center gap-2.5">
+                <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-millet/20 text-millet">
+                  <Check className="h-3.5 w-3.5" strokeWidth={3} />
                 </span>
-                {t("home.hero.ctaDiscover")}
-              </Link>
-            </div>
-          </div>
+                {b}
+              </li>
+            ))}
+          </ul>
 
-          <div className="relative">
-            <div className="rounded-[2rem] bg-white/10 backdrop-blur-md border border-white/10 p-3 shadow-2xl">
-              <div className="overflow-hidden rounded-[1.5rem] aspect-[5/4] bg-slate-200">
-                <Swiper
-                  modules={[Autoplay, Pagination, EffectFade]}
-                  autoplay={{ delay: 3200, disableOnInteraction: false }}
-                  loop
-                  effect="fade"
-                  speed={900}
-                  pagination={{ clickable: true }}
-                  className="h-full"
-                >
-                  {HERO_CARD_SLIDES.map((src, i) => (
-                    <SwiperSlide key={i}>
-                      <img
-                        src={src}
-                        alt={t("home.hero.slideAlt", { index: i + 1 })}
-                        className="w-full h-full object-cover"
-                        loading={i === 0 ? "eager" : "lazy"}
-                      />
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-              </div>
-
-              <div className="p-4">
-                <p className="text-sm text-white/85 leading-6">
-                  {t("home.hero.cardText")}
-                </p>
-              </div>
-            </div>
-
-            <div className="absolute -top-4 -left-4 bg-white text-slate-900 rounded-2xl px-4 py-3 shadow-xl border border-slate-200">
-              <p className="text-sm font-bold text-blue-700">
-                {t("home.hero.floating.value")}
-              </p>
-              <p className="text-xs text-slate-500">
-                {t("home.hero.floating.label")}
-              </p>
-            </div>
-
-            <div className="absolute -bottom-5 -right-3 hidden md:flex items-center gap-2 bg-slate-900 text-white rounded-2xl px-4 py-3 shadow-xl border border-white/10">
-              <span className="inline-flex w-8 h-8 rounded-full bg-emerald-500/20 items-center justify-center">
-                <ArrowRight className="w-4 h-4 text-emerald-300" />
-              </span>
-              <span className="text-sm font-medium">
-                {t("home.hero.ctaCourses")}
-              </span>
-            </div>
+          <div className="mt-10 flex flex-wrap items-center gap-3">
+            <Link
+              to="/inscription"
+              className="group inline-flex items-center gap-2 rounded-full bg-millet px-7 py-3.5 text-[15px] font-semibold text-ink shadow-[0_10px_30px_-10px_rgba(227,167,47,0.7)] transition hover:bg-[#f0b743] focus-ring"
+            >
+              {t("home.hero.ctaApply")}
+              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+            </Link>
+            <Link
+              to="/courses"
+              className="inline-flex items-center gap-2 rounded-full border border-white/30 px-7 py-3.5 text-[15px] font-semibold text-white transition hover:border-white/60 hover:bg-white/10 focus-ring"
+            >
+              {t("home.hero.ctaCourses")}
+            </Link>
           </div>
         </div>
 
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {stats.map((s) => (
-            <div
-              key={s.labelKey}
-              className="rounded-3xl bg-white/10 backdrop-blur-sm border border-white/10 p-5 text-center shadow-lg"
-            >
-              <div className="text-3xl font-extrabold text-white">
-                {t(s.valueKey)}
+        <div className="mt-14 grid items-end gap-6 lg:mt-20 lg:grid-cols-[minmax(0,1fr)_400px]">
+          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-4">
+            {stats.map((s) => (
+              <div key={s.label} className="bg-ink/70 px-5 py-5 backdrop-blur-sm">
+                <dt className="sr-only">{s.label}</dt>
+                <dd>
+                  <span className="block font-display text-[1.7rem] font-semibold leading-none text-white md:text-[2rem]">{s.value}</span>
+                  <span className="mt-2 block text-[13px] leading-5 text-white/65">{s.label}</span>
+                </dd>
               </div>
-              <div className="text-sm text-white/75 mt-1">
-                {t(s.labelKey)}
-              </div>
-            </div>
-          ))}
+            ))}
+          </dl>
+          <LatestNews lang={lang} />
         </div>
       </div>
     </section>

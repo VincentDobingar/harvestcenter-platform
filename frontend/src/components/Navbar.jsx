@@ -29,6 +29,7 @@ export default function Navbar() {
   const links = [
     { labelKey: "nav.home", to: "/", type: "route" },
     { labelKey: "nav.about", to: "/about", type: "route" },
+    { labelKey: "nav.news", to: "/actualites", type: "route" },
     { labelKey: "nav.opportunities", to: "/opportunites", type: "route" },
     { labelKey: "nav.courses", to: "/courses", type: "route" },
     { labelKey: "nav.contact", to: "/contact", type: "route" },

@@ -13,7 +13,8 @@
     "scholarships": "Opportunités",
     "courses": "Formations",
     "contact": "Contact",
-    "opportunities": "Opportunités"
+    "opportunities": "Opportunités",
+    "news": "Actualités"
   },
   "auth": {
     "login": "Connexion",
@@ -485,7 +486,8 @@
       "spanishTeacher": "Spanish Teacher",
       "germanTeacher": "German Teacher",
       "onlineEnglishTeacher": "Online English Teacher"
-    }
+    },
+    "backToAbout": "Retour à la présentation"
   },
   "scholarshipsPage": {
     "title": "Offres de bourses",

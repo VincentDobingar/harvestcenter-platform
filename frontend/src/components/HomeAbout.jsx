@@ -1,65 +1,57 @@
+// src/components/HomeAbout.jsx
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { CheckCircle2 } from "lucide-react";
-import Section from "@/components/ui/Section";
+import { ArrowRight, Check } from "lucide-react";
+import SectionHeading from "@/components/site/SectionHeading";
 
 export default function HomeAbout() {
-  const { t } = useTranslation();
-
-  const features = [
-    "home.about.features.0",
-    "home.about.features.1",
-    "home.about.features.2",
-    "home.about.features.3",
-  ];
+  const { t, i18n } = useTranslation();
+  const en = (i18n.resolvedLanguage || "fr").startsWith("en");
+  const features = [0, 1, 2, 3].map((i) => t(`home.about.features.${i}`));
 
   return (
-    <Section id="about">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-14 items-center">
+    <section id="about" className="bg-white">
+      <div className="mx-auto grid max-w-7xl items-center gap-14 px-4 py-20 md:py-28 lg:grid-cols-2 lg:gap-20">
         <div className="relative">
-          <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-blue-100 to-sky-50 blur-2xl opacity-70" />
-          <div className="relative overflow-hidden rounded-[2rem] shadow-2xl border border-slate-200 bg-white">
+          <div className="overflow-hidden rounded-[28px] bg-paper">
             <img
               src="/images/harvest-class.jpg"
               alt={t("home.about.imageAlt")}
-              className="w-full h-80 md:h-[430px] object-cover"
+              className="h-[340px] w-full object-cover md:h-[500px]"
+              loading="lazy"
             />
+          </div>
+          <div aria-hidden="true" className="woven-x absolute -bottom-3 left-8 right-8 h-1.5 rounded-full" />
+          <div className="absolute -bottom-8 right-6 rounded-2xl bg-ink px-6 py-5 text-white shadow-[0_24px_48px_-20px_rgba(14,42,71,0.6)] md:right-[-28px]">
+            <p className="font-display text-[2rem] font-semibold leading-none text-millet">2018</p>
+            <p className="mt-1.5 text-sm text-white/75">{en ? "Training in N’Djamena since" : "Former à N’Djamena depuis"}</p>
           </div>
         </div>
 
-        <div className="space-y-6">
-          <div>
-            <span className="inline-flex rounded-full bg-blue-50 text-blue-700 text-sm font-semibold px-4 py-2 border border-blue-100">
-              Harvest Center
-            </span>
+        <div>
+          <SectionHeading eyebrow={en ? "The centre" : "Le centre"} title={t("home.about.title")} intro={t("home.about.intro")} />
+          <p className="mt-5 text-[16px] leading-8 text-ink/80">{t("home.about.description")}</p>
 
-            <h2 className="mt-4 text-3xl md:text-4xl font-bold text-slate-900 leading-tight">
-              {t("home.about.title")}
-            </h2>
-
-            <p className="mt-3 text-lg text-slate-600 leading-8">
-              {t("home.about.intro")}
-            </p>
-          </div>
-
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6">
-            <p className="text-slate-700 leading-8">
-              {t("home.about.description")}
-            </p>
-          </div>
-
-          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {features.map((key) => (
-              <li
-                key={key}
-                className="flex items-start gap-3 bg-gradient-to-br from-white to-slate-50 rounded-2xl border border-slate-200 shadow-sm px-4 py-4"
-              >
-                <CheckCircle2 className="w-5 h-5 text-blue-700 mt-0.5 shrink-0" />
-                <span className="text-slate-700 font-medium">{t(key)}</span>
+          <ul className="mt-8 grid gap-x-8 gap-y-4 sm:grid-cols-2">
+            {features.map((f) => (
+              <li key={f} className="flex items-start gap-3 border-t border-line pt-4 text-[15px] font-medium text-ink">
+                <Check className="mt-0.5 h-5 w-5 shrink-0 text-millet" strokeWidth={2.5} />
+                {f}
               </li>
             ))}
           </ul>
+
+          <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
+            <Link to="/about" className="group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 font-semibold text-white transition hover:bg-ink-2 focus-ring">
+              {t("home.hero.ctaDiscover")}
+              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+            </Link>
+            <Link to="/equipe" className="font-semibold text-ink underline decoration-millet decoration-2 underline-offset-[6px] hover:text-brand focus-ring rounded">
+              {en ? "Meet the team" : "Rencontrer l’équipe"}
+            </Link>
+          </div>
         </div>
       </div>
-    </Section>
+    </section>
   );
 }

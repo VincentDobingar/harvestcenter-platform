@@ -113,7 +113,7 @@ export default function HomePartners() {
       centered
     >
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(320px,0.9fr)_minmax(0,1.1fr)] items-stretch">
-        <div className="h-full rounded-[2rem] border border-slate-200 bg-slate-950 p-8 text-white shadow-xl">
+        <div className="h-full rounded-[2rem] border border-slate-200 bg-ink p-8 text-white shadow-xl">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-white/90">
             <Handshake className="h-4 w-4" />
             Harvest Center

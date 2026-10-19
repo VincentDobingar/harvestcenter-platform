@@ -7,8 +7,8 @@ import { useTranslation } from "react-i18next";
 function InfoCard({ icon: Icon, children }) {
   return (
     <li className="flex items-start gap-4 bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
-      <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center shrink-0">
-        <Icon className="w-5 h-5 text-blue-700" />
+      <div className="w-12 h-12 rounded-2xl bg-millet-soft flex items-center justify-center shrink-0">
+        <Icon className="w-5 h-5 text-ink" />
       </div>
       <div className="text-slate-700 leading-7">{children}</div>
     </li>
@@ -57,14 +57,15 @@ export default function HomeContact({ showForm = true }) {
         </div>
 
         {showForm && (
-          <div className="bg-gradient-to-br from-blue-700 to-sky-600 rounded-3xl p-8 text-white shadow-xl">
-            <h3 className="text-3xl md:text-4xl font-extrabold leading-tight tracking-tight text-white drop-shadow-[0_3px_14px_rgba(0,0,0,0.35)]">
+          <div className="relative overflow-hidden bg-ink rounded-[28px] p-8 md:p-10 text-white">
+            <div aria-hidden="true" className="woven absolute inset-y-0 right-0 w-2.5" />
+            <h3 className="font-display text-[2rem] md:text-[2.4rem] font-semibold leading-tight !text-white">
               {t("home.contact.bannerTitle", {
                 defaultValue: "Prêt à rejoindre Harvest Center ?",
               })}
             </h3>
 
-            <p className="mt-4 text-white/95 leading-8 text-base md:text-lg drop-shadow-[0_2px_10px_rgba(0,0,0,0.25)]">
+            <p className="mt-4 text-white/75 leading-8 text-base md:text-[17px]">
               {t("home.contact.bannerText", {
                 defaultValue:
                   "Déposez votre demande d’inscription et découvrez nos formations linguistiques adaptées à votre projet.",
@@ -84,7 +85,7 @@ export default function HomeContact({ showForm = true }) {
             <div className="mt-6">
               <Link
                 to="/inscription"
-                className="inline-flex items-center gap-2 rounded-2xl bg-white text-blue-700 px-6 py-3 font-semibold hover:bg-slate-100 transition"
+                className="inline-flex items-center gap-2 rounded-full bg-millet text-ink px-6 py-3 font-semibold hover:bg-[#f0b743] transition"
               >
                 {t("home.contact.cta", {
                   defaultValue: "Faire une demande d’inscription",

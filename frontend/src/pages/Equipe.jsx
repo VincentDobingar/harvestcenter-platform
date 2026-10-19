@@ -1,7 +1,8 @@
 // 📁 src/pages/Equipe.jsx
 import Section from "@/components/ui/Section";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Check, Languages } from "lucide-react";
+import { ArrowLeft, Check, Languages } from "lucide-react";
 
 const BRAND_BLUE = "#1F75BB";
 const BRAND_BLUE_SOFT = "#E9F4FB";
@@ -256,11 +257,21 @@ export default function Equipe() {
 
   return (
     <main className="pt-6">
-      <div className="text-center mb-10">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-[#1F75BB]">
+      <nav aria-label={t("teamDirectoryPage.backToAbout")} className="max-w-6xl mx-auto px-4">
+        <Link
+          to="/about"
+          className="group inline-flex items-center gap-2 rounded-full border border-line bg-white px-4 py-2 text-sm font-semibold text-ink shadow-sm transition hover:border-ink/30 hover:bg-paper focus-ring"
+        >
+          <ArrowLeft className="h-4 w-4 transition group-hover:-translate-x-0.5" />
+          {t("teamDirectoryPage.backToAbout")}
+        </Link>
+      </nav>
+
+      <div className="text-center mt-6 mb-10 px-4">
+        <h1 className="font-display text-[2.2rem] md:text-[3rem] font-semibold leading-tight !text-ink">
           {t("teamDirectoryPage.title")}
         </h1>
-        <p className="mt-4 text-gray-600 max-w-3xl mx-auto">
+        <p className="mt-4 text-mist text-[17px] leading-8 max-w-3xl mx-auto">
           {t("teamDirectoryPage.subtitle")}
         </p>
       </div>
@@ -272,6 +283,16 @@ export default function Equipe() {
           ))}
         </div>
       </Section>
+
+      <div className="max-w-6xl mx-auto px-4 pb-16 text-center">
+        <Link
+          to="/about"
+          className="inline-flex items-center gap-2 font-semibold text-brand hover:text-brand-800 focus-ring rounded"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          {t("teamDirectoryPage.backToAbout")}
+        </Link>
+      </div>
     </main>
   );
 }

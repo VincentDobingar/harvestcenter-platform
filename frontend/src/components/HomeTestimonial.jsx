@@ -102,7 +102,7 @@ function TestimonialCard({ item, t }) {
           </div>
 
           <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center shrink-0 border border-white/10">
-            <Quote className="w-5 h-5 text-sky-300" />
+            <Quote className="w-5 h-5 text-millet" />
           </div>
         </div>
 
@@ -124,11 +124,9 @@ export default function HomeTestimonial() {
   return (
     <section
       id="temoignages"
-      className="relative overflow-hidden bg-slate-950 px-4 py-16 md:py-20"
+      className="relative overflow-hidden bg-ink px-4 py-20 md:py-28"
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.20),transparent_30%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(14,165,233,0.14),transparent_28%)]" />
+      <div aria-hidden="true" className="woven absolute inset-y-0 left-0 w-2.5" />
 
       <div
         aria-hidden
@@ -136,7 +134,7 @@ export default function HomeTestimonial() {
       />
       <div
         aria-hidden
-        className="absolute -bottom-16 left-0 h-72 w-72 rounded-full bg-blue-400/10 blur-3xl"
+        className="absolute -bottom-16 left-0 h-72 w-72 rounded-full bg-brand/20 blur-3xl"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto">
@@ -148,7 +146,7 @@ export default function HomeTestimonial() {
             })}
           </span>
 
-          <h2 className="mt-5 text-3xl md:text-4xl font-bold tracking-tight text-white">
+          <h2 className="mt-5 font-display text-[2rem] md:text-[2.6rem] font-semibold leading-[1.1] !text-white">
             {t("home.testimonials.title")}
           </h2>
 
@@ -168,7 +166,7 @@ export default function HomeTestimonial() {
               768: { slidesPerView: 2, spaceBetween: 20 },
               1024: { slidesPerView: 3, spaceBetween: 24 },
             }}
-            className="!pb-12 [&_.swiper-pagination-bullet]:bg-white/40 [&_.swiper-pagination-bullet-active]:!bg-white"
+            className="!pb-12 [&_.swiper-pagination-bullet]:bg-white/40 [&_.swiper-pagination-bullet-active]:!bg-millet"
           >
             {testimonials.map((item) => (
               <SwiperSlide key={item.key} className="!h-auto">

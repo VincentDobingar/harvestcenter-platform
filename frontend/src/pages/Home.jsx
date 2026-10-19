@@ -11,40 +11,28 @@ import HomeNews from "@/components/HomeNews";
 
 export default function Home() {
   return (
-    <main className="space-y-24">
+    <main>
       <HomeHero />
-      <section className="max-w-7xl mx-auto px-4">
-        <HomeAbout />
-      </section>
-      <section className="max-w-7xl mx-auto px-4">
-        <HomeTraining />
-      </section>
-      <section className="bg-white">
-        <div className="max-w-7xl mx-auto px-4 py-16">
-          <HomeWhyUs />
+      <HomeAbout />
+      <HomeTraining />
+      <HomeNews />
+      <HomeWhyUs />
+      <div className="bg-white">
+        <div className="mx-auto max-w-7xl">
+          <HomeGalerie />
         </div>
-      </section>
-      <section className="bg-white">
-        <div className="max-w-7xl mx-auto px-4 py-16">
-          <HomeNews />
-        </div>
-      </section>
-      <section className="max-w-7xl mx-auto px-4">
-        <HomeGalerie />
-      </section>
-      <section className="bg-white">
-        <div className="max-w-7xl mx-auto px-4 py-16">
+      </div>
+      <div className="border-t border-line bg-paper">
+        <div className="mx-auto max-w-7xl">
           <HomePartners />
         </div>
-      </section>
-      <section className="bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 py-16">
-          <HomeTestimonial />
+      </div>
+      <HomeTestimonial />
+      <div className="bg-white">
+        <div className="mx-auto max-w-7xl">
+          <HomeContact />
         </div>
-      </section>
-      <section className="max-w-7xl mx-auto px-4">
-        <HomeContact />
-      </section>
+      </div>
     </main>
   );
 }

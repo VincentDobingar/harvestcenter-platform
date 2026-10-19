@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import api, { BASE_URL } from "@/utils/api";
+import ScholarshipNews from "@/components/site/ScholarshipNews";
 import {
   Search,
   CalendarDays,
@@ -162,10 +163,9 @@ export default function Opportunities() {
 
   return (
     <main className="bg-slate-50 min-h-screen">
-      <section className="relative overflow-hidden bg-slate-950 text-white">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.22),transparent_35%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(14,165,233,0.16),transparent_30%)]" />
+      <section className="relative overflow-hidden bg-ink text-white">
+        <div aria-hidden="true" className="woven absolute inset-y-0 right-0 hidden w-3 opacity-90 md:block" />
+        <div aria-hidden="true" className="absolute -right-24 -top-24 h-80 w-80 rounded-full bg-brand/30 blur-3xl" />
 
         <div className="relative max-w-7xl mx-auto px-4 py-16 md:py-24">
           <div className="max-w-4xl">
@@ -175,7 +175,7 @@ export default function Opportunities() {
               })}
             </span>
 
-            <h1 className="mt-5 text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-white">
+            <h1 className="mt-5 font-display text-[2.6rem] md:text-[4rem] font-semibold leading-[1.05] !text-white">
               {t("opportunitiesPage.title", {
                 defaultValue: "Opportunities",
               })}
@@ -191,7 +191,7 @@ export default function Opportunities() {
             <div className="mt-8 flex flex-wrap gap-4">
               <Link
                 to="/inscription"
-                className="inline-flex items-center gap-2 rounded-2xl bg-white text-slate-900 px-6 py-3 font-semibold hover:bg-slate-100 transition"
+                className="inline-flex items-center gap-2 rounded-full bg-millet text-ink px-6 py-3 font-semibold hover:bg-[#f0b743] transition"
               >
                 {t("opportunitiesPage.ctaRegister", {
                   defaultValue: "Submit an application",
@@ -211,6 +211,14 @@ export default function Opportunities() {
           </div>
         </div>
       </section>
+
+      <ScholarshipNews lang={lang} />
+
+      <div className="max-w-7xl mx-auto px-4">
+        <h2 className="font-display text-[2rem] md:text-[2.6rem] font-semibold leading-[1.1] !text-ink">
+          {lang.startsWith("en") ? "Open calls" : "Appels en cours"}
+        </h2>
+      </div>
 
       <section className="max-w-7xl mx-auto px-4 py-8 md:py-10">
         <div className="grid sm:grid-cols-3 gap-4">

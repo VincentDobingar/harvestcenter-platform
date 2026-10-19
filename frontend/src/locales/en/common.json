@@ -13,7 +13,8 @@
     "scholarships": "Opportunities",
     "courses": "Courses",
     "contact": "Contact",
-    "opportunities": "Opportunities"
+    "opportunities": "Opportunities",
+    "news": "News"
   },
   "auth": {
     "login": "Login",
@@ -485,7 +486,8 @@
       "spanishTeacher": "Spanish Teacher",
       "germanTeacher": "German Teacher",
       "onlineEnglishTeacher": "Online English Teacher"
-    }
+    },
+    "backToAbout": "Back to About"
   },
   "scholarshipsPage": {
     "title": "Scholarship opportunities",

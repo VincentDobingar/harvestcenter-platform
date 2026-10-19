@@ -16,14 +16,15 @@ export default function Section({
             centered ? "text-center" : ""
           }`}
         >
+          <span aria-hidden="true" className={`woven-x mb-5 block h-1.5 w-16 rounded-full ${centered ? "mx-auto" : ""}`} />
           {title && (
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
+            <h2 className="font-display text-[2rem] md:text-[2.6rem] font-semibold leading-[1.1] !text-ink">
               {title}
             </h2>
           )}
 
           {subtitle && (
-            <p className="mt-4 text-slate-600 text-base md:text-lg leading-8">
+            <p className="mt-4 text-mist text-base md:text-[17px] leading-8">
               {subtitle}
             </p>
           )}

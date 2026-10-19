@@ -1,9 +1,11 @@
 // controllers/news.controller.js
 import db from "../config/db.js";
+import { buildNewsListQuery } from "../utils/newsQuery.js";
 
+// GET /api/news?limit=&page=&q=&topic=bourses
 export const listPublicNews = async (req, res) => {
   try {
-    const limit = Math.min(20, Math.max(1, Number(req.query.limit) || 10));
+    const { limit, page, offset, whereSql, params } = buildNewsListQuery(req.query);
 
     const [rows] = await db.query(
       `
@@ -20,16 +22,22 @@ export const listPublicNews = async (req, res) => {
         created_at,
         updated_at
       FROM news
-      WHERE is_active = 1
-      ORDER BY created_at DESC
-      LIMIT ?
+      WHERE ${whereSql}
+      ORDER BY created_at DESC, id DESC
+      LIMIT ? OFFSET ?
       `,
-      [limit]
+      [...params, limit, offset]
     );
+
+    const [[{ total }]] = await db.query(`SELECT COUNT(*) AS total FROM news WHERE ${whereSql}`, params);
 
     return res.json({
       success: true,
       rows,
+      total: Number(total) || 0,
+      page,
+      limit,
+      pages: Math.max(1, Math.ceil((Number(total) || 0) / limit)),
     });
   } catch (error) {
     console.error("listPublicNews error:", error);
