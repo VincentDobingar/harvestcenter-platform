@@ -155,13 +155,14 @@ export default function Footer() {
             </span>
 
             <a
-              href="https://votre-site.com"
+              href="https://dbs-africa.org"
+              aria-label="Digital Business Services Africa (dbs-africa.org)"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-medium text-white transition hover:text-sky-300"
+              className="inline-flex items-center gap-2 font-medium text-white transition hover:text-millet"
             >
               {t("footer.credit", {
-                defaultValue: "Créé par Dobingar Guiryambaye Vincent",
+                defaultValue: "Entièrement créé par Digital Business Services Africa",
               })}
               <ArrowUpRight className="h-4 w-4" />
             </a>
