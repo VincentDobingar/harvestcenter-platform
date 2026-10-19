@@ -1580,6 +1580,7 @@
       "teacherDesc": "Classes, lessons, follow-up",
       "admin": "Office",
       "adminDesc": "Registrations, payments"
-    }
+    },
+    "backHome": "Back to home"
   }
 }

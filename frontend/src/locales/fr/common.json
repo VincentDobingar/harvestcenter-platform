@@ -1580,6 +1580,7 @@
       "teacherDesc": "Classes, leçons, suivi",
       "admin": "Administration",
       "adminDesc": "Inscriptions, paiements"
-    }
+    },
+    "backHome": "Retour à l’accueil"
   }
 }

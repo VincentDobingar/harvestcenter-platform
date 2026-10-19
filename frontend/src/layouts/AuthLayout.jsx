@@ -4,7 +4,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Home } from "lucide-react";
 
 export default function AuthLayout({ children }) {
   const { t } = useTranslation();
@@ -38,12 +38,10 @@ export default function AuthLayout({ children }) {
 
             <Link
               to="/"
-              className="focus-ring inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm text-white/80 hover:text-white"
+              className="focus-ring hidden items-center gap-1.5 rounded-lg px-2 py-1 text-sm text-white/80 hover:text-white sm:inline-flex"
             >
               <ArrowLeft className="h-4 w-4" />
-              <span className="hidden sm:inline">
-                {t("authLayout.backToSite", { defaultValue: "Retour au site" })}
-              </span>
+              <span>{t("authLayout.backToSite", { defaultValue: "Retour au site" })}</span>
             </Link>
           </div>
 
@@ -78,7 +76,16 @@ export default function AuthLayout({ children }) {
 
       {/* Formulaire */}
       <main className="flex items-start justify-center px-5 py-10 sm:px-8 lg:items-center lg:py-12">
-        <div className="w-full max-w-[420px]">{children}</div>
+        <div className="w-full max-w-[420px]">
+          <Link
+            to="/"
+            className="focus-ring group mb-8 inline-flex items-center gap-2 rounded-full border border-line bg-white px-4 py-2 text-sm font-semibold text-ink shadow-sm transition hover:border-ink/30 hover:bg-paper"
+          >
+            <Home className="h-4 w-4 text-mist transition group-hover:text-ink" />
+            {t("authLayout.backHome", { defaultValue: "Retour à l’accueil" })}
+          </Link>
+          {children}
+        </div>
       </main>
     </div>
   );
