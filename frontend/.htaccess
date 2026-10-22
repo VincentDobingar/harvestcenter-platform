@@ -42,6 +42,18 @@ RewriteRule ^cgi-bin(/.*)?$ - [L,NC]
   </If>
 </IfModule>
 
+# Anciennes versions restées en cache chez les visiteurs (constaté le
+# 2026-10-22) : avant l'en-tête no-cache ci-dessus, les navigateurs ont gardé
+# l'ancienne page d'accueil plusieurs semaines. Cette ancienne application
+# demande /config.json sans paramètre (la nouvelle ajoute ?v=2) : on lui
+# répond en vidant le cache du navigateur, la visite suivante charge la
+# nouvelle version. Peut être retiré après décembre 2026.
+<IfModule mod_headers.c>
+  <If "%{REQUEST_URI} == '/config.json' && %{QUERY_STRING} == ''">
+    Header always set Clear-Site-Data "\"cache\""
+  </If>
+</IfModule>
+
 # Servir config.json sans cache
 <Files "config.json">
   Header set Cache-Control "no-cache, no-store, must-revalidate"
